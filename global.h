@@ -2,6 +2,7 @@
 
 #include "mpeg2enc.h"
 #include "gettimeofday.h"
+#include "signalshooter.h"
 #include <QString>
 
 #ifndef GLOBAL
@@ -302,3 +303,4 @@ EXTERN int intravlc_tab[3], intravlc; /* intra vlc format (I,P,B,current) */
 EXTERN int altscan_tab[3], altscan; /* alternate scan (I,P,B,current) */
 EXTERN int repeatfirst; /* repeat first field after second field */
 EXTERN int prog_frame; /* progressive frame */
+EXTERN SignalShooter* signalshooter;

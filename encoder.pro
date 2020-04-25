@@ -21,6 +21,7 @@ SOURCES += \
     display.cpp \
     gettimeofday.cpp \
     idct.cpp \
+    main.cpp \
     motion.cpp \
     mpeg2enc.cpp \
     predict.cpp \
@@ -33,6 +34,7 @@ SOURCES += \
     quantize.cpp \
     ratectl.cpp \
     readpic.cpp \
+    signalshooter.cpp \
     stats.cpp \
     transfrm.cpp \
     writepic.cpp
@@ -43,6 +45,7 @@ HEADERS += \
     gettimeofday.h \
     global.h \
     mpeg2enc.h \
+    signalshooter.h \
     vlc.h
 
 FORMS += \

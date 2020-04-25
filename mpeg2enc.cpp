@@ -16,8 +16,10 @@ static void readparmfile (char *fname);
 static void readquantmat (void);
 
 
-int main(int argc,char *argv[])
+int mainORI(int argc,char *argv[])
 {
+  signalshooter =new SignalShooter();
+
   if (argc!=3)
   {
     printf("\n%s, %s\n",version,author);
