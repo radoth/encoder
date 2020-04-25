@@ -2,28 +2,28 @@
 
 
 
-#include <stdio.h>
+#include <cstdio>
 #include "config.h"
 #include "global.h"
 
 /* private prototypes */
-static void predict_mb _ANSI_ARGS_((
+static void predict_mb (
   unsigned char *oldref[], unsigned char *newref[], unsigned char *cur[],
   int lx, int bx, int by, int pict_type, int pict_struct, int mb_type,
   int motion_type, int secondfield,
-  int PMV[2][2][2], int mv_field_sel[2][2], int dmvector[2]));
+  int PMV[2][2][2], int mv_field_sel[2][2], int dmvector[2]);
 
-static void pred _ANSI_ARGS_((unsigned char *src[], int sfield,
+static void pred (unsigned char *src[], int sfield,
   unsigned char *dst[], int dfield,
-  int lx, int w, int h, int x, int y, int dx, int dy, int addflag));
+  int lx, int w, int h, int x, int y, int dx, int dy, int addflag);
 
-static void pred_comp _ANSI_ARGS_((unsigned char *src, unsigned char *dst,
-  int lx, int w, int h, int x, int y, int dx, int dy, int addflag));
+static void pred_comp (unsigned char *src, unsigned char *dst,
+  int lx, int w, int h, int x, int y, int dx, int dy, int addflag);
 
-static void calc_DMV _ANSI_ARGS_((int DMV[][2], int *dmvector, int mvx,
-  int mvy));
+static void calc_DMV (int DMV[][2], int *dmvector, int mvx,
+  int mvy);
 
-static void clearblock _ANSI_ARGS_((unsigned char *cur[], int i0, int j0));
+static void clearblock (unsigned char *cur[], int i0, int j0);
 
 
 /* 为完整的图像形成预测
@@ -36,10 +36,7 @@ static void clearblock _ANSI_ARGS_((unsigned char *cur[], int i0, int j0));
 
  */
 
-void predict(reff,refb,cur,secondfield,mbi)
-unsigned char *reff[],*refb[],*cur[3];
-int secondfield;
-struct mbinfo *mbi;
+void predict(unsigned char *reff[],unsigned char *refb[],unsigned char *cur[3],int secondfield,struct mbinfo *mbi)
 {
   int i, j, k;
 
@@ -79,17 +76,8 @@ struct mbinfo *mbi;
 
  */
 
-static void predict_mb(oldref,newref,cur,lx,bx,by,pict_type,pict_struct,
-  mb_type,motion_type,secondfield,PMV,mv_field_sel,dmvector)
-unsigned char *oldref[],*newref[],*cur[];
-int lx;
-int bx,by;
-int pict_type;
-int pict_struct;
-int mb_type;
-int motion_type;
-int secondfield;
-int PMV[2][2][2], mv_field_sel[2][2], dmvector[2];
+static void predict_mb(unsigned char *oldref[],unsigned char *newref[],unsigned char *cur[],int lx,int bx,int by,int pict_type,int pict_struct,
+  int mb_type,int motion_type,int secondfield,int PMV[2][2][2],int mv_field_sel[2][2],int dmvector[2])
 {
   int addflag, currentfield;
   unsigned char **predframe;
@@ -289,16 +277,7 @@ int PMV[2][2][2], mv_field_sel[2][2], dmvector[2];
  * dx,dy:   半像素运动向量
  * addflag: 存储或加预测
  */
-static void pred(src,sfield,dst,dfield,lx,w,h,x,y,dx,dy,addflag)
-unsigned char *src[];
-int sfield;
-unsigned char *dst[];
-int dfield;
-int lx;
-int w, h;
-int x, y;
-int dx, dy;
-int addflag;
+static void pred(unsigned char *src[],int sfield,unsigned char *dst[],int dfield,int lx,int w,int h,int x,int y,int dx,int dy,int addflag)
 {
   int cc;
 
@@ -337,14 +316,7 @@ int addflag;
  */
 
 
-static void pred_comp(src,dst,lx,w,h,x,y,dx,dy,addflag)
-unsigned char *src;
-unsigned char *dst;
-int lx;
-int w, h;
-int x, y;
-int dx, dy;
-int addflag;
+static void pred_comp(unsigned char *src,unsigned char *dst,int lx,int w,int h,int x,int y,int dx,int dy,int addflag)
 {
   int xint, xh, yint, yh;
   int i, j;
@@ -432,10 +404,7 @@ int addflag;
 
 
 
-static void calc_DMV(DMV,dmvector,mvx,mvy)
-int DMV[][2];
-int *dmvector;
-int mvx, mvy;
+static void calc_DMV(int DMV[][2],int *dmvector,int mvx,int mvy)
 {
   if (pict_struct==FRAME_PICTURE)
   {
@@ -474,9 +443,7 @@ int mvx, mvy;
   }
 }
 
-static void clearblock(cur,i0,j0)
-unsigned char *cur[];
-int i0, j0;
+static void clearblock(unsigned char *cur[],int i0,int j0)
 {
   int i, j, w, h;
   unsigned char *p;

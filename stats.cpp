@@ -2,19 +2,17 @@
 
 
 
-#include <stdio.h>
-#include <math.h>
+#include <cstdio>
+#include <cmath>
 #include "config.h"
 #include "global.h"
 
 /* private prototypes */
-static void calcSNR1 _ANSI_ARGS_((unsigned char *org, unsigned char *rec,
-  int lx, int w, int h, double *pv, double *pe));
+static void calcSNR1 (unsigned char *org, unsigned char *rec,
+  int lx, int w, int h, double *pv, double *pe);
 
 
-void calcSNR(org,rec)
-unsigned char *org[3];
-unsigned char *rec[3];
+void calcSNR(unsigned char *org[3],unsigned char *rec[3])
 {
   int w,h,offs;
   double v,e;
@@ -45,11 +43,7 @@ unsigned char *rec[3];
     v, e, 10.0*log10(255.0*255.0/e), 10.0*log10(v/e));
 }
 
-static void calcSNR1(org,rec,lx,w,h,pv,pe)
-unsigned char *org;
-unsigned char *rec;
-int lx,w,h;
-double *pv,*pe;
+static void calcSNR1(unsigned char *org,unsigned char *rec,int lx,int w,int h,double *pv,double *pe)
 {
   int i, j;
   double v1, s1, s2, e2;

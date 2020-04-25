@@ -12,16 +12,16 @@
 #define W7 565  /* 2048*sqrt(2)*cos(7*pi/16) */
 
 /* global declarations */
-void init_idct _ANSI_ARGS_((void));
-void idct _ANSI_ARGS_((short *block));
+void init_idct (void);
+void idct (short *block);
 
 /* private data */
 static short iclip[1024]; /* clipping table */
 static short *iclp;
 
 /* private prototypes */
-static void idctrow _ANSI_ARGS_((short *blk));
-static void idctcol _ANSI_ARGS_((short *blk));
+static void idctrow (short *blk);
+static void idctcol (short *blk);
 
 /* row (horizontal) IDCT
  *
@@ -33,8 +33,7 @@ static void idctcol _ANSI_ARGS_((short *blk));
  *        c[1..7] = 128*sqrt(2)
  */
 
-static void idctrow(blk)
-short *blk;
+static void idctrow(short *blk)
 {
   int x0, x1, x2, x3, x4, x5, x6, x7, x8;
 
@@ -95,8 +94,7 @@ short *blk;
  * where: c[0]    = 1/1024
  *        c[1..7] = (1/1024)*sqrt(2)
  */
-static void idctcol(blk)
-short *blk;
+static void idctcol(short *blk)
 {
   int x0, x1, x2, x3, x4, x5, x6, x7, x8;
 
@@ -150,8 +148,7 @@ short *blk;
 }
 
 /* two dimensional inverse discrete cosine transform */
-void idct(block)
-short *block;
+void idct(short *block)
 {
   int i;
 

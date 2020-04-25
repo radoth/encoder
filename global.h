@@ -2,6 +2,7 @@
 
 #include "mpeg2enc.h"
 #include "gettimeofday.h"
+#include <QString>
 
 #ifndef GLOBAL
 #define EXTERN extern
@@ -12,105 +13,105 @@
 /* prototypes of global functions */
 
 /* conform.c */
-void range_checks _ANSI_ARGS_((void));
-void profile_and_level_checks _ANSI_ARGS_(());
+void range_checks ();
+void profile_and_level_checks ();
 
 /* fdctref.c */
-void init_fdct _ANSI_ARGS_((void));
-void fdct _ANSI_ARGS_((short *block));
+void init_fdct (void);
+void fdct (short *block);
 
 /* idct.c */
-void idct _ANSI_ARGS_((short *block));
-void init_idct _ANSI_ARGS_((void));
+void idct (short *block);
+void init_idct (void);
 
 /* motion.c */
-void motion_estimation _ANSI_ARGS_((unsigned char *oldorg, unsigned char *neworg,
+void motion_estimation (unsigned char *oldorg, unsigned char *neworg,
   unsigned char *oldref, unsigned char *newref, unsigned char *cur,
   unsigned char *curref, int sxf, int syf, int sxb, int syb,
-  struct mbinfo *mbi, int secondfield, int ipflag));
+  struct mbinfo *mbi, int secondfield, int ipflag);
 
 /* mpeg2enc.c */
-void error _ANSI_ARGS_((char *text));
+void error (QString text);
 
 /* predict.c */
-void predict _ANSI_ARGS_((unsigned char *reff[], unsigned char *refb[],
-  unsigned char *cur[3], int secondfield, struct mbinfo *mbi));
+void predict (unsigned char *reff[], unsigned char *refb[],
+  unsigned char *cur[3], int secondfield, struct mbinfo *mbi);
 
 /* putbits.c */
-void initbits _ANSI_ARGS_((void));
-void putbits _ANSI_ARGS_((int val, int n));
-void alignbits _ANSI_ARGS_((void));
-int bitcount _ANSI_ARGS_((void));
+void initbits (void);
+void putbits (int val, int n);
+void alignbits (void);
+int bitcount (void);
 
 /* puthdr.c */
-void putseqhdr _ANSI_ARGS_((void));
-void putseqext _ANSI_ARGS_((void));
-void putseqdispext _ANSI_ARGS_((void));
-void putuserdata _ANSI_ARGS_((char *userdata));
-void putgophdr _ANSI_ARGS_((int frame, int closed_gop));
-void putpicthdr _ANSI_ARGS_((void));
-void putpictcodext _ANSI_ARGS_((void));
-void putseqend _ANSI_ARGS_((void));
+void putseqhdr (void);
+void putseqext (void);
+void putseqdispext (void);
+void putuserdata (char *userdata);
+void putgophdr (int frame, int closed_gop);
+void putpicthdr (void);
+void putpictcodext (void);
+void putseqend (void);
 
 /* putmpg.c */
-void putintrablk _ANSI_ARGS_((short *blk, int cc));
-void putnonintrablk _ANSI_ARGS_((short *blk));
-void putmv _ANSI_ARGS_((int dmv, int f_code));
+void putintrablk (short *blk, int cc);
+void putnonintrablk (short *blk);
+void putmv (int dmv, int f_code);
 
 /* putpic.c */
-void putpict _ANSI_ARGS_((unsigned char *frame));
+void putpict (unsigned char *frame);
 
 /* putseq.c */
-void putseq _ANSI_ARGS_((void));
+void putseq (void);
 
 /* putvlc.c */
-void putDClum _ANSI_ARGS_((int val));
-void putDCchrom _ANSI_ARGS_((int val));
-void putACfirst _ANSI_ARGS_((int run, int val));
-void putAC _ANSI_ARGS_((int run, int signed_level, int vlcformat));
-void putaddrinc _ANSI_ARGS_((int addrinc));
-void putmbtype _ANSI_ARGS_((int pict_type, int mb_type));
-void putmotioncode _ANSI_ARGS_((int motion_code));
-void putdmv _ANSI_ARGS_((int dmv));
-void putcbp _ANSI_ARGS_((int cbp));
+void putDClum (int val);
+void putDCchrom (int val);
+void putACfirst (int run, int val);
+void putAC (int run, int signed_level, int vlcformat);
+void putaddrinc (int addrinc);
+void putmbtype (int pict_type, int mb_type);
+void putmotioncode (int motion_code);
+void putdmv (int dmv);
+void putcbp (int cbp);
 
 /* quantize.c */
-int quant_intra _ANSI_ARGS_((short *src, short *dst, int dc_prec,
-  unsigned char *quant_mat, int mquant));
-int quant_non_intra _ANSI_ARGS_((short *src, short *dst,
-  unsigned char *quant_mat, int mquant));
-void iquant_intra _ANSI_ARGS_((short *src, short *dst, int dc_prec,
-  unsigned char *quant_mat, int mquant));
-void iquant_non_intra _ANSI_ARGS_((short *src, short *dst,
-  unsigned char *quant_mat, int mquant));
+int quant_intra (short *src, short *dst, int dc_prec,
+  unsigned char *quant_mat, int mquant);
+int quant_non_intra (short *src, short *dst,
+  unsigned char *quant_mat, int mquant);
+void iquant_intra (short *src, short *dst, int dc_prec,
+  unsigned char *quant_mat, int mquant);
+void iquant_non_intra (short *src, short *dst,
+  unsigned char *quant_mat, int mquant);
 
 /* ratectl.c */
-void rc_init_seq _ANSI_ARGS_((void));
-void rc_init_GOP _ANSI_ARGS_((int np, int nb));
-void rc_init_pict _ANSI_ARGS_((unsigned char *frame));
-void rc_update_pict _ANSI_ARGS_((void));
-int rc_start_mb _ANSI_ARGS_((void));
-int rc_calc_mquant _ANSI_ARGS_((int j));
-void vbv_end_of_picture _ANSI_ARGS_((void));
-void calc_vbv_delay _ANSI_ARGS_((void));
+void rc_init_seq (void);
+void rc_init_GOP (int np, int nb);
+void rc_init_pict (unsigned char *frame);
+void rc_update_pict (void);
+int rc_start_mb (void);
+int rc_calc_mquant (int j);
+void vbv_end_of_picture (void);
+void calc_vbv_delay (void);
 
 /* readpic.c */
-void readframe _ANSI_ARGS_((char *fname, unsigned char *frame[],int framenum));
+void readframe (char *fname, unsigned char *frame[],int framenum);
 
 /* stats.c */
-void calcSNR _ANSI_ARGS_((unsigned char *org[3], unsigned char *rec[3]));
-void stats _ANSI_ARGS_((void));
+void calcSNR (unsigned char *org[3], unsigned char *rec[3]);
+void stats (void);
 
 /* transfrm.c */
-void transform _ANSI_ARGS_((unsigned char *pred[], unsigned char *cur[],
-  struct mbinfo *mbi, short blocks[][64]));
-void itransform _ANSI_ARGS_((unsigned char *pred[], unsigned char *cur[],
-  struct mbinfo *mbi, short blocks[][64]));
-void dct_type_estimation _ANSI_ARGS_((unsigned char *pred, unsigned char *cur,
-  struct mbinfo *mbi));
+void transform (unsigned char *pred[], unsigned char *cur[],
+  struct mbinfo *mbi, short blocks[][64]);
+void itransform (unsigned char *pred[], unsigned char *cur[],
+  struct mbinfo *mbi, short blocks[][64]);
+void dct_type_estimation (unsigned char *pred, unsigned char *cur,
+  struct mbinfo *mbi);
 
 /* writepic.c */
-  void writeframe _ANSI_ARGS_((char *fname, unsigned char *frame[]));
+  void writeframe (char *fname, unsigned char *frame[]);
 
 
 /* global variables */

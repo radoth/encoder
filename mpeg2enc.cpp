@@ -2,22 +2,21 @@
 
 
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 
 #define GLOBAL /* used by global.h */
 #include "config.h"
 #include "global.h"
+#include <QString>
 
 /* private prototypes */
-static void init _ANSI_ARGS_((void));
-static void readparmfile _ANSI_ARGS_((char *fname));
-static void readquantmat _ANSI_ARGS_((void));
+static void init (void);
+static void readparmfile (char *fname);
+static void readquantmat (void);
 
 
-int main(argc,argv)
-int argc;
-char *argv[];
+int main(int argc,char *argv[])
 {
   if (argc!=3)
   {
@@ -122,16 +121,14 @@ static void init()
   }
 }
 
-void error(text)
-char *text;
+void error(QString text)
 {
-  fprintf(stderr,text);
+  fprintf(stderr,text.toStdString().c_str());
   putc('\n',stderr);
   exit(1);
 }
 
-static void readparmfile(fname)
-char *fname;
+static void readparmfile(char *fname)
 {
   int i;
   int h,m,s,f;

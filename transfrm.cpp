@@ -2,22 +2,19 @@
 
 
 
-#include <stdio.h>
-#include <math.h>
+#include <cstdio>
+#include <cmath>
 #include "config.h"
 #include "global.h"
 
 /* private prototypes*/
-static void add_pred _ANSI_ARGS_((unsigned char *pred, unsigned char *cur,
-  int lx, short *blk));
-static void sub_pred _ANSI_ARGS_((unsigned char *pred, unsigned char *cur,
-  int lx, short *blk));
+static void add_pred (unsigned char *pred, unsigned char *cur,
+  int lx, short *blk);
+static void sub_pred (unsigned char *pred, unsigned char *cur,
+  int lx, short *blk);
 
 /* subtract prediction and transform prediction error */
-void transform(pred,cur,mbi,blocks)
-unsigned char *pred[], *cur[];
-struct mbinfo *mbi;
-short blocks[][64];
+void transform(unsigned char *pred[],unsigned char *cur[],struct mbinfo *mbi,short blocks[][64])
 {
   int i, j, i1, j1, k, n, cc, offs, lx;
 
@@ -83,10 +80,7 @@ short blocks[][64];
 }
 
 /* inverse transform prediction error and add prediction */
-void itransform(pred,cur,mbi,blocks)
-unsigned char *pred[],*cur[];
-struct mbinfo *mbi;
-short blocks[][64];
+void itransform(unsigned char *pred[],unsigned char *cur[],struct mbinfo *mbi,short blocks[][64])
 {
   int i, j, i1, j1, k, n, cc, offs, lx;
 
@@ -153,10 +147,7 @@ short blocks[][64];
 }
 
 /* add prediction and prediction error, saturate to 0...255 */
-static void add_pred(pred,cur,lx,blk)
-unsigned char *pred, *cur;
-int lx;
-short *blk;
+static void add_pred(unsigned char *pred,unsigned char *cur,int lx,short *blk)
 {
   int i, j;
 
@@ -171,10 +162,7 @@ short *blk;
 }
 
 /* subtract prediction from block data */
-static void sub_pred(pred,cur,lx,blk)
-unsigned char *pred, *cur;
-int lx;
-short *blk;
+static void sub_pred(unsigned char *pred,unsigned char *cur,int lx,short *blk)
 {
   int i, j;
 
@@ -193,9 +181,7 @@ short *blk;
  *
  * preliminary version: based on inter-field correlation
  */
-void dct_type_estimation(pred,cur,mbi)
-unsigned char *pred,*cur;
-struct mbinfo *mbi;
+void dct_type_estimation(unsigned char *pred,unsigned char *cur,struct mbinfo *mbi)
 {
   short blk0[128], blk1[128];
   int i, j, i0, j0, k, offs, s0, s1, sq0, sq1, s01;

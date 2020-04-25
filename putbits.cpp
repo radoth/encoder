@@ -1,7 +1,7 @@
 /* putbits.c, ±ÈÌØÊä³ö                                             */
 
 
-#include <stdio.h>
+#include <cstdio>
 #include "config.h"
 
 extern FILE *outfile; /* the only global var we need here */
@@ -19,9 +19,7 @@ void initbits()
 }
 
 /* write rightmost n (0<=n<=32) bits of val to outfile */
-void putbits(val,n)
-int val;
-int n;
+void putbits(int val,int n)
 {
   int i;
   unsigned int mask;

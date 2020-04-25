@@ -2,15 +2,15 @@
 
 
 
-#include <stdio.h>
-#include <math.h>
+#include <cstdio>
+#include <cmath>
 
 #include "config.h"
 #include "global.h"
 
 /* private prototypes */
-static void calc_actj _ANSI_ARGS_((unsigned char *frame));
-static double var_sblk _ANSI_ARGS_((unsigned char *p, int lx));
+static void calc_actj (unsigned char *frame);
+static double var_sblk (unsigned char *p, int lx);
 
 /* rate control variables */
 int Xi, Xp, Xb, r, d0i, d0p, d0b;
@@ -57,8 +57,7 @@ void rc_init_seq()
   fprintf(statfile," initial average activity: avg_act=%.1f\n", avg_act);
 }
 
-void rc_init_GOP(np,nb)
-int np,nb;
+void rc_init_GOP(int np,int nb)
 {
   R += (int) floor((1 + np + nb) * bit_rate / frame_rate + 0.5);
   Np = fieldpic ? 2*np+1 : np;
@@ -74,8 +73,7 @@ int np,nb;
    be modified to fit image content */
 
 /* Step 1: compute target bits for current picture being coded */
-void rc_init_pict(frame)
-unsigned char *frame;
+void rc_init_pict(unsigned char *frame)
 {
   double Tmin;
 
@@ -110,8 +108,7 @@ unsigned char *frame;
   fprintf(statfile," target number of bits: T=%d\n",T);
 }
 
-static void calc_actj(frame)
-unsigned char *frame;
+static void calc_actj(unsigned char *frame)
 {
   int i,j,k;
   unsigned char *p;
@@ -238,8 +235,7 @@ int rc_start_mb()
 }
 
 /* Step 2: measure virtual buffer - estimated buffer discrepancy */
-int rc_calc_mquant(j)
-int j;
+int rc_calc_mquant(int j)
 {
   int mquant;
   double dj, Qj, actj, N_actj;
@@ -302,9 +298,7 @@ int j;
 }
 
 /* compute variance of 8x8 block */
-static double var_sblk(p,lx)
-unsigned char *p;
-int lx;
+static double var_sblk(unsigned char *p,int lx)
 {
   int i, j;
   unsigned int v, s, s2;

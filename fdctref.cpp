@@ -2,7 +2,7 @@
 
 
 
-#include <math.h>
+#include <cmath>
 
 #include "config.h"
 
@@ -15,8 +15,8 @@
 #endif
 
 /* 全局声明 */
-void init_fdct _ANSI_ARGS_((void));
-void fdct _ANSI_ARGS_((short *block));
+void init_fdct (void);
+void fdct (short *block);
 
 static double c[8][8]; /* 变换系数 */
 
@@ -34,8 +34,7 @@ void init_fdct()
   }
 }
 
-void fdct(block)
-short *block;
+void fdct(short *block)
 {
   int i, j, k;
   double s;

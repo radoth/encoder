@@ -1,14 +1,12 @@
 /* putmpg.c, 块和运动向量编码函数*/
 
 
-#include <stdio.h>
+#include <cstdio>
 #include "config.h"
 #include "global.h"
 
 /* generate variable length codes for an intra-coded block (6.2.6, 6.3.17) */
-void putintrablk(blk,cc)
-short *blk;
-int cc;
+void putintrablk(short *blk,int cc)
 {
   int n, dct_diff, run, signed_level;
 
@@ -44,8 +42,7 @@ int cc;
 }
 
 /* generate variable length codes for a non-intra-coded block (6.2.6, 6.3.17) */
-void putnonintrablk(blk)
-short *blk;
+void putnonintrablk(short *blk)
 {
   int n, run, signed_level, first;
 
@@ -79,8 +76,7 @@ short *blk;
 }
 
 /* generate variable length code for a motion vector component (7.6.3.1) */
-void putmv(dmv,f_code)
-int dmv,f_code;
+void putmv(int dmv,int f_code)
 {
   int r_size, f, vmin, vmax, dv, temp, motion_code, motion_residual;
 

@@ -1,24 +1,20 @@
 /* quantize.c, 量化和逆量化函数*/
 
 
-#include <stdio.h>
+#include <cstdio>
 #include "config.h"
 #include "global.h"
 
-static void iquant1_intra _ANSI_ARGS_((short *src, short *dst,
-  int dc_prec, unsigned char *quant_mat, int mquant));
-static void iquant1_non_intra _ANSI_ARGS_((short *src, short *dst,
-  unsigned char *quant_mat, int mquant));
+static void iquant1_intra (short *src, short *dst,
+  int dc_prec, unsigned char *quant_mat, int mquant);
+static void iquant1_non_intra (short *src, short *dst,
+  unsigned char *quant_mat, int mquant);
 
 /* 在趋近于0时该量化器的补偿为1/8stepsize
 （但DC系数例外）
  */
 
-int quant_intra(src,dst,dc_prec,quant_mat,mquant)
-short *src, *dst;
-int dc_prec;
-unsigned char *quant_mat;
-int mquant;
+int quant_intra(short *src,short *dst,int dc_prec,unsigned char *quant_mat,int mquant)
 {
   int i;
   int x, y, d;
@@ -60,10 +56,7 @@ int mquant;
 
 /*接下来的quant_non_intra是对非帧内方式的量化*/
 
-int quant_non_intra(src,dst,quant_mat,mquant)
-short *src, *dst;
-unsigned char *quant_mat;
-int mquant;
+int quant_non_intra(short *src,short *dst,unsigned char *quant_mat,int mquant)
 {
   int i;
   int x, y, d;
@@ -95,11 +88,7 @@ int mquant;
 }
 
 /* 帧内图像的逆量化 */
-void iquant_intra(src,dst,dc_prec,quant_mat,mquant)
-short *src, *dst;
-int dc_prec;
-unsigned char *quant_mat;
-int mquant;
+void iquant_intra(short *src,short *dst,int dc_prec,unsigned char *quant_mat,int mquant)
 {
   int i, val, sum;
 
@@ -122,10 +111,7 @@ int mquant;
 }
 
 /* 非帧内图像的逆量化 */
-void iquant_non_intra(src,dst,quant_mat,mquant)
-short *src, *dst;
-unsigned char *quant_mat;
-int mquant;
+void iquant_non_intra(short *src,short *dst,unsigned char *quant_mat,int mquant)
 {
   int i, val, sum;
 
@@ -149,11 +135,7 @@ int mquant;
 }
 
 /* 对MPEG-1图像量化的子函数 */
-static void iquant1_intra(src,dst,dc_prec,quant_mat,mquant)
-short *src, *dst;
-int dc_prec;
-unsigned char *quant_mat;
-int mquant;
+static void iquant1_intra(short *src,short *dst,int dc_prec,unsigned char *quant_mat,int mquant)
 {
   int i, val;
 
@@ -171,10 +153,7 @@ int mquant;
 }
 
 /* 非帧内图像的逆量化 */
-static void iquant1_non_intra(src,dst,quant_mat,mquant)
-short *src, *dst;
-unsigned char *quant_mat;
-int mquant;
+static void iquant1_non_intra(short *src,short *dst,unsigned char *quant_mat,int mquant)
 {
   int i, val;
 

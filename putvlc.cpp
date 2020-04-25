@@ -2,33 +2,29 @@
 
 
 
-#include <stdio.h>
+#include <cstdio>
 
 #include "config.h"
 #include "global.h"
 #include "vlc.h"
 
 /* 函数声明 */
-static void putDC _ANSI_ARGS_((sVLCtable *tab, int val));
+static void putDC (sVLCtable *tab, int val);
 
 /* 为亮度DC系数产生可变长编码 */
-void putDClum(val)
-int val;
+void putDClum(int val)
 {
   putDC(DClumtab,val);
 }
 
 /* 为色度DC系数产生可变长编码 */
-void putDCchrom(val)
-int val;
+void putDCchrom(int val)
 {
   putDC(DCchromtab,val);
 }
 
 //为DC系数产生可变长的编码
-static void putDC(tab,val)
-sVLCtable *tab;
-int val;
+static void putDC(sVLCtable *tab,int val)
 {
   int absval, size;
 
@@ -64,8 +60,7 @@ int val;
 }
 
 /*为非帧内方式的块的第一个AC系数进行VLC编码*/
-void putACfirst(run,val)
-int run,val;
+void putACfirst(int run,int val)
 {
   if (run==0 && (val==1 || val==-1)) /* 对这两个条件下的值要区别对待*/
     putbits(2|(val<0),2); 
@@ -74,8 +69,7 @@ int run,val;
 }
 
 /*对其他的DCT系数进行编码。*/
-void putAC(run,signed_level,vlcformat)
-int run,signed_level,vlcformat;
+void putAC(int run,int signed_level,int vlcformat)
 {
   int level, len;
   VLCtable *ptab = NULL;
@@ -141,8 +135,7 @@ int run,signed_level,vlcformat;
 }
 
 /* 为macroblock_address_increment 进行VLC编码 */
-void putaddrinc(addrinc)
-int addrinc;
+void putaddrinc(int addrinc)
 {
   while (addrinc>33)
   {
@@ -154,16 +147,14 @@ int addrinc;
 }
 
 /* 为macroblock_type 进行VLC */
-void putmbtype(pict_type,mb_type)
-int pict_type,mb_type;
+void putmbtype(int pict_type,int mb_type)
 {
   putbits(mbtypetab[pict_type-1][mb_type].code,
           mbtypetab[pict_type-1][mb_type].len);
 }
 
 /* 为motion_code 进行VLC */
-void putmotioncode(motion_code)
-int motion_code;
+void putmotioncode(int motion_code)
 {
   int abscode;
 
@@ -174,8 +165,7 @@ int motion_code;
 }
 
 /* 为dmvector[t]进行VLC根据表 B-11 */
-void putdmv(dmv)
-int dmv;
+void putdmv(int dmv)
 {
   if (dmv==0)
     putbits(0,1);
@@ -187,8 +177,7 @@ int dmv;
 
 /* 为编码块的模式coded_block_pattern 进行VLC，
 对于 4:2:2, 4:4:4 图像格式的块不进行 */
-void putcbp(cbp)
-int cbp;
+void putcbp(int cbp)
 {
   putbits(cbptable[cbp].code,cbptable[cbp].len);
 }

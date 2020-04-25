@@ -2,63 +2,63 @@
 
 
 
-#include <stdio.h>
+#include <cstdio>
 #include "config.h"
 #include "global.h"
 
 /* private prototypes */
 
-static void frame_ME _ANSI_ARGS_((unsigned char *oldorg, unsigned char *neworg,
+static void frame_ME (unsigned char *oldorg, unsigned char *neworg,
   unsigned char *oldref, unsigned char *newref, unsigned char *cur,
-  int i, int j, int sxf, int syf, int sxb, int syb, struct mbinfo *mbi));
+  int i, int j, int sxf, int syf, int sxb, int syb, struct mbinfo *mbi);
 
-static void field_ME _ANSI_ARGS_((unsigned char *oldorg, unsigned char *neworg,
+static void field_ME (unsigned char *oldorg, unsigned char *neworg,
   unsigned char *oldref, unsigned char *newref, unsigned char *cur,
   unsigned char *curref, int i, int j, int sxf, int syf, int sxb, int syb,
-  struct mbinfo *mbi, int secondfield, int ipflag));
+  struct mbinfo *mbi, int secondfield, int ipflag);
 
-static void frame_estimate _ANSI_ARGS_((unsigned char *org,
+static void frame_estimate (unsigned char *org,
   unsigned char *ref, unsigned char *mb,
   int i, int j,
   int sx, int sy, int *iminp, int *jminp, int *imintp, int *jmintp,
   int *iminbp, int *jminbp, int *dframep, int *dfieldp,
-  int *tselp, int *bselp, int imins[2][2], int jmins[2][2]));
+  int *tselp, int *bselp, int imins[2][2], int jmins[2][2]);
 
-static void field_estimate _ANSI_ARGS_((unsigned char *toporg,
+static void field_estimate (unsigned char *toporg,
   unsigned char *topref, unsigned char *botorg, unsigned char *botref,
   unsigned char *mb, int i, int j, int sx, int sy, int ipflag,
   int *iminp, int *jminp, int *imin8up, int *jmin8up, int *imin8lp,
   int *jmin8lp, int *dfieldp, int *d8p, int *selp, int *sel8up, int *sel8lp,
-  int *iminsp, int *jminsp, int *dsp));
+  int *iminsp, int *jminsp, int *dsp);
 
-static void dpframe_estimate _ANSI_ARGS_((unsigned char *ref,
+static void dpframe_estimate (unsigned char *ref,
   unsigned char *mb, int i, int j, int iminf[2][2], int jminf[2][2],
   int *iminp, int *jminp, int *imindmvp, int *jmindmvp,
-  int *dmcp, int *vmcp));
+  int *dmcp, int *vmcp);
 
-static void dpfield_estimate _ANSI_ARGS_((unsigned char *topref,
+static void dpfield_estimate (unsigned char *topref,
   unsigned char *botref, unsigned char *mb,
   int i, int j, int imins, int jmins, int *imindmvp, int *jmindmvp,
-  int *dmcp, int *vmcp));
+  int *dmcp, int *vmcp);
 
-static int fullsearch _ANSI_ARGS_((unsigned char *org, unsigned char *ref,
+static int fullsearch (unsigned char *org, unsigned char *ref,
   unsigned char *blk,
   int lx, int i0, int j0, int sx, int sy, int h, int xmax, int ymax,
-  int *iminp, int *jminp));
+  int *iminp, int *jminp);
 
-static int dist1 _ANSI_ARGS_((unsigned char *blk1, unsigned char *blk2,
-  int lx, int hx, int hy, int h, int distlim));
+static int dist1 (unsigned char *blk1, unsigned char *blk2,
+  int lx, int hx, int hy, int h, int distlim);
 
-static int dist2 _ANSI_ARGS_((unsigned char *blk1, unsigned char *blk2,
-  int lx, int hx, int hy, int h));
+static int dist2 (unsigned char *blk1, unsigned char *blk2,
+  int lx, int hx, int hy, int h);
 
-static int bdist1 _ANSI_ARGS_((unsigned char *pf, unsigned char *pb,
-  unsigned char *p2, int lx, int hxf, int hyf, int hxb, int hyb, int h));
+static int bdist1 (unsigned char *pf, unsigned char *pb,
+  unsigned char *p2, int lx, int hxf, int hyf, int hxb, int hyb, int h);
 
-static int bdist2 _ANSI_ARGS_((unsigned char *pf, unsigned char *pb,
-  unsigned char *p2, int lx, int hxf, int hyf, int hxb, int hyb, int h));
+static int bdist2 (unsigned char *pf, unsigned char *pb,
+  unsigned char *p2, int lx, int hxf, int hyf, int hxb, int hyb, int h);
 
-static int variance _ANSI_ARGS_((unsigned char *p, int lx));
+static int variance (unsigned char *p, int lx);
 
 /*
  * 前向和交织帧的运动估计
@@ -78,12 +78,10 @@ static int variance _ANSI_ARGS_((unsigned char *p, int lx));
  *mv_field_sel: 顶部/底部场
  *motion_type: MC_FIELD, MC_16X8
  */
-void motion_estimation(oldorg,neworg,oldref,newref,cur,curref,
-  sxf,syf,sxb,syb,mbi,secondfield,ipflag)
-unsigned char *oldorg,*neworg,*oldref,*newref,*cur,*curref;
-int sxf,syf,sxb,syb;
-struct mbinfo *mbi;
-int secondfield,ipflag;
+void motion_estimation (unsigned char *oldorg, unsigned char *neworg,
+  unsigned char *oldref, unsigned char *newref, unsigned char *cur,
+  unsigned char *curref, int sxf, int syf, int sxb, int syb,
+  struct mbinfo *mbi, int secondfield, int ipflag)
 {
   int i, j;
 
@@ -92,7 +90,7 @@ int secondfield,ipflag;
   {
     for (i=0; i<width; i+=16)
     {
-		 /*根据图像结构的类型来判断是进行帧预测还是场预测*/     
+         /*根据图像结构的类型来判断是进行帧预测还是场预测*/
       if (pict_struct==FRAME_PICTURE)
         frame_ME(oldorg,neworg,oldref,newref,cur,i,j,sxf,syf,sxb,syb,mbi);
       else
@@ -111,10 +109,7 @@ int secondfield,ipflag;
     putc('\n',stderr);
 }
 
-static void frame_ME(oldorg,neworg,oldref,newref,cur,i,j,sxf,syf,sxb,syb,mbi)
-unsigned char *oldorg,*neworg,*oldref,*newref,*cur;
-int i,j,sxf,syf,sxb,syb;
-struct mbinfo *mbi;
+static void frame_ME(unsigned char *oldorg,unsigned char *neworg,unsigned char *oldref,unsigned char *newref,unsigned char *cur,int i,int j,int sxf,int syf,int sxb,int syb,struct mbinfo *mbi)
 {
   int imin,jmin,iminf,jminf,iminr,jminr;
   int imint,jmint,iminb,jminb;
@@ -448,12 +443,8 @@ struct mbinfo *mbi;
  *motion_type: MC_FIELD, MC_16X8
 
  */
-static void field_ME(oldorg,neworg,oldref,newref,cur,curref,i,j,
-  sxf,syf,sxb,syb,mbi,secondfield,ipflag)
-unsigned char *oldorg,*neworg,*oldref,*newref,*cur,*curref;
-int i,j,sxf,syf,sxb,syb;
-struct mbinfo *mbi;
-int secondfield,ipflag;
+static void field_ME(unsigned char *oldorg,unsigned char *neworg,unsigned char *oldref,unsigned char *newref,unsigned char *cur,unsigned char *curref,int i,int j,
+  int sxf,int syf,int sxb,int syb,struct mbinfo *mbi,int secondfield,int ipflag)
 {
   int w2;
   unsigned char *mb, *toporg, *topref, *botorg, *botref;
@@ -732,18 +723,11 @@ int secondfield,ipflag;
 /*
  * 帧图像运动估计
  *
- 
+
  */
-static void frame_estimate(org,ref,mb,i,j,sx,sy,
-  iminp,jminp,imintp,jmintp,iminbp,jminbp,dframep,dfieldp,tselp,bselp,
-  imins,jmins)
-unsigned char *org,*ref,*mb;
-int i,j,sx,sy;
-int *iminp,*jminp;
-int *imintp,*jmintp,*iminbp,*jminbp;
-int *dframep,*dfieldp;
-int *tselp,*bselp;
-int imins[2][2],jmins[2][2];
+static void frame_estimate(unsigned char *org,unsigned char *ref,unsigned char *mb,int i,int j,int sx,int sy,
+  int *iminp,int *jminp,int *imintp,int *jmintp,int *iminbp,int *jminbp,int *dframep,int *dfieldp,int *tselp,int *bselp,
+  int imins[2][2],int jmins[2][2])
 {
   int dt,db,dmint,dminb;
   int imint,iminb,jmint,jminb;
@@ -817,17 +801,9 @@ int imins[2][2],jmins[2][2];
  *iminsp，jminsp，dsp：最佳同奇偶性预测场的位置和距离
  */
 
-static void field_estimate(toporg,topref,botorg,botref,mb,i,j,sx,sy,ipflag,
-  iminp,jminp,imin8up,jmin8up,imin8lp,jmin8lp,dfieldp,d8p,selp,sel8up,sel8lp,
-  iminsp,jminsp,dsp)
-unsigned char *toporg, *topref, *botorg, *botref, *mb;
-int i,j,sx,sy;
-int ipflag;
-int *iminp, *jminp;
-int *imin8up, *jmin8up, *imin8lp, *jmin8lp;
-int *dfieldp,*d8p;
-int *selp, *sel8up, *sel8lp;
-int *iminsp, *jminsp, *dsp;
+static void field_estimate(unsigned char *toporg,unsigned char *topref,unsigned char *botorg,unsigned char *botref,unsigned char *mb,int i,int j,int sx,int sy,int ipflag,
+  int *iminp,int *jminp,int *imin8up,int *jmin8up,int *imin8lp,int *jmin8lp,int *dfieldp,int *d8p,int *selp,int *sel8up,int *sel8lp,
+  int *iminsp,int *jminsp,int *dsp)
 {
   int dt, db, imint, jmint, iminb, jminb, notop, nobot;
 
@@ -929,14 +905,8 @@ int *iminsp, *jminsp, *dsp;
   }
 }
 
-static void dpframe_estimate(ref,mb,i,j,iminf,jminf,
-  iminp,jminp,imindmvp, jmindmvp, dmcp, vmcp)
-unsigned char *ref, *mb;
-int i,j;
-int iminf[2][2], jminf[2][2];
-int *iminp, *jminp;
-int *imindmvp, *jmindmvp;
-int *dmcp,*vmcp;
+static void dpframe_estimate(unsigned char *ref,unsigned char *mb,int i,int j,int iminf[2][2],int jminf[2][2],
+  int *iminp,int *jminp,int *imindmvp, int *jmindmvp,int * dmcp, int *vmcp)
 {
   int pref,ppred,delta_x,delta_y;
   int is,js,it,jt,ib,jb,it0,jt0,ib0,jb0;
@@ -1089,32 +1059,27 @@ int *dmcp,*vmcp;
   *vmcp = vmc;
 }
 
-static void dpfield_estimate(topref,botref,mb,i,j,imins,jmins,
-  imindmvp, jmindmvp, dmcp, vmcp)
-unsigned char *topref, *botref, *mb;
-int i,j;
-int imins, jmins;
-int *imindmvp, *jmindmvp;
-int *dmcp,*vmcp;
+static void dpfield_estimate(unsigned char *topref,unsigned char *botref,unsigned char *mb,int i,int j,int imins,int jmins,
+  int *imindmvp, int *jmindmvp, int *dmcp, int *vmcp)
 {
   unsigned char *sameref, *oppref;
   int io0,jo0,io,jo,delta_x,delta_y,mvxs,mvys,mvxo0,mvyo0;
   int imino,jmino,imindmv,jmindmv,vmc_dp,local_dist;
 
- 
+
   /* Assign opposite and same reference pointer */
   if (pict_struct==TOP_FIELD)
   {
-    sameref = topref;    
+    sameref = topref;
     oppref = botref;
   }
-  else 
+  else
   {
     sameref = botref;
     oppref = topref;
   }
 
-  
+
   mvxs = imins - (i<<1);
   mvys = jmins - (j<<1);
 
@@ -1185,8 +1150,8 @@ int *dmcp,*vmcp;
 /*
  全搜索块匹配
 
- blk：块的左上角像素坐标 
-h：块的高度 
+ blk：块的左上角像素坐标
+h：块的高度
 lx：在参考块中，垂直相邻的像素之间的距离（以字节为单位）
 org：源参考图像的左上角像素的坐标
 ref：重建参考图像的左上角像素的坐标
@@ -1196,10 +1161,7 @@ xmax，ymax：搜索区域的右边界和下边界
 iminp，jminp：指向存储结果的指针
 */
 
-static int fullsearch(org,ref,blk,lx,i0,j0,sx,sy,h,xmax,ymax,iminp,jminp)
-unsigned char *org,*ref,*blk;
-int lx,i0,j0,sx,sy,h,xmax,ymax;
-int *iminp,*jminp;
+static int fullsearch(unsigned char *org,unsigned char *ref,unsigned char *blk,int lx,int i0,int j0,int sx,int sy,int h,int xmax,int ymax,int *iminp,int *jminp)
 {
   int i,j,imin,jmin,ilow,ihigh,jlow,jhigh;
   int d,dmin;
@@ -1292,10 +1254,7 @@ int *iminp,*jminp;
  *h：块的高度（通常为8或16）
  *distlim：极值，如果结果超过该值则放弃之。
  */
-static int dist1(blk1,blk2,lx,hx,hy,h,distlim)
-unsigned char *blk1,*blk2;
-int lx,hx,hy,h;
-int distlim;
+static int dist1(unsigned char *blk1,unsigned char *blk2,int lx,int hx,int hy,int h,int distlim)
 {
   unsigned char *p1,*p1a,*p2;
   int i,j;
@@ -1387,11 +1346,9 @@ int distlim;
 
 /*
  * 两个块之间均方误差
- 
+
  */
-static int dist2(blk1,blk2,lx,hx,hy,h)
-unsigned char *blk1,*blk2;
-int lx,hx,hy,h;
+static int dist2(unsigned char *blk1,unsigned char *blk2,int lx,int hx,int hy,int h)
 {
   unsigned char *p1,*p1a,*p2;
   int i,j;
@@ -1459,11 +1416,9 @@ int lx,hx,hy,h;
 /*
  *(16*h) 块和双向预测之间的绝对误差
  *
- 
+
  */
-static int bdist1(pf,pb,p2,lx,hxf,hyf,hxb,hyb,h)
-unsigned char *pf,*pb,*p2;
-int lx,hxf,hyf,hxb,hyb,h;
+static int bdist1(unsigned char *pf,unsigned char *pb,unsigned char *p2,int lx,int hxf,int hyf,int hxb,int hyb,int h)
 {
   unsigned char *pfa,*pfb,*pfc,*pba,*pbb,*pbc;
   int i,j;
@@ -1508,9 +1463,7 @@ int lx,hxf,hyf,hxb,hyb,h;
 /*
  * (16*h) 块和双向预测之间的均方误差
  */
-static int bdist2(pf,pb,p2,lx,hxf,hyf,hxb,hyb,h)
-unsigned char *pf,*pb,*p2;
-int lx,hxf,hyf,hxb,hyb,h;
+static int bdist2(unsigned char *pf,unsigned char *pb,unsigned char *p2,int lx,int hxf,int hyf,int hxb,int hyb,int h)
 {
   unsigned char *pfa,*pfb,*pfc,*pba,*pbb,*pbc;
   int i,j;
@@ -1554,9 +1507,7 @@ int lx,hxf,hyf,hxb,hyb,h;
  * p:  块左上角像素的地址
  * lx: 相邻像素的垂直距离（以字节为单位）
  */
-static int variance(p,lx)
-unsigned char *p;
-int lx;
+static int variance(unsigned char *p,int lx)
 {
   int i,j;
   unsigned int v,s,s2;

@@ -1,18 +1,17 @@
 /* putpic.c, 块和运动向量编码函数*/
 
 
-#include <stdio.h>
+#include <cstdio>
 #include "config.h"
 #include "global.h"
 
 /* private prototypes */
-static void putmvs _ANSI_ARGS_((int MV[2][2][2], int PMV[2][2][2],
+static void putmvs (int MV[2][2][2], int PMV[2][2][2],
   int mv_field_sel[2][2], int dmvector[2], int s, int motion_type,
-  int hor_f_code, int vert_f_code));
+  int hor_f_code, int vert_f_code);
 
 /* quantization / variable length encoding of a complete picture */
-void putpict(frame)
-unsigned char *frame;
+void putpict(unsigned char *frame)
 {
   int i, j, k, comp, cc;
   int mb_type;
@@ -268,12 +267,8 @@ unsigned char *frame;
  * this routine also updates the predictions for motion vectors (PMV)
  */
  
-static void putmvs(MV,PMV,mv_field_sel,dmvector,s,motion_type,
-  hor_f_code,vert_f_code)
-int MV[2][2][2],PMV[2][2][2];
-int mv_field_sel[2][2];
-int dmvector[2];
-int s,motion_type,hor_f_code,vert_f_code;
+static void putmvs(int MV[2][2][2],int PMV[2][2][2],int mv_field_sel[2][2],int dmvector[2],int s,int motion_type,
+  int hor_f_code,int vert_f_code)
 {
   if (pict_struct==FRAME_PICTURE)
   {

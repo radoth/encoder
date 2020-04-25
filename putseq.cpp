@@ -1,8 +1,8 @@
 /* putseq.c, 和序列有关的程序*/
 
 
-#include <stdio.h>
-#include <string.h>
+#include <cstdio>
+#include <cstring>
 #include "config.h"
 #include "global.h"
 

@@ -16,26 +16,26 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    conform.c \
-    fdctref.c \
-    gettimeofday.c \
-    idct.c \
+    conform.cpp \
+    fdctref.cpp \
     display.cpp \
-    motion.c \
-    mpeg2enc.c \
-    predict.c \
-    putbits.c \
-    puthdr.c \
-    putmpg.c \
-    putpic.c \
-    putseq.c \
-    putvlc.c \
-    quantize.c \
-    ratectl.c \
-    readpic.c \
-    stats.c \
-    transfrm.c \
-    writepic.c
+    gettimeofday.cpp \
+    idct.cpp \
+    motion.cpp \
+    mpeg2enc.cpp \
+    predict.cpp \
+    putbits.cpp \
+    puthdr.cpp \
+    putmpg.cpp \
+    putpic.cpp \
+    putseq.cpp \
+    putvlc.cpp \
+    quantize.cpp \
+    ratectl.cpp \
+    readpic.cpp \
+    stats.cpp \
+    transfrm.cpp \
+    writepic.cpp
 
 HEADERS += \
     config.h \

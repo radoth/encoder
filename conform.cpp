@@ -1,8 +1,8 @@
 /* conform.c, Ò»ÖÂÐÔ¼ì²â*/
 
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 
 #include "config.h"
 #include "global.h"

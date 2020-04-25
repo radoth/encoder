@@ -1,13 +1,13 @@
 /* puthdr.c, 产生头信息                                         */
 
 
-#include <stdio.h>
-#include <math.h>
+#include <cstdio>
+#include <cmath>
 #include "config.h"
 #include "global.h"
 
 /* private prototypes */
-static int frametotc _ANSI_ARGS_((int frame));
+static int frametotc (int frame);
 
 void putseqhdr()
 {
@@ -77,8 +77,7 @@ void putseqdispext()
  *
  * string must not emulate start codes
  */
-void putuserdata(userdata)
-char *userdata;
+void putuserdata(char *userdata)
 {
   alignbits();
   putbits(USER_START_CODE,32); /* user_data_start_code */
@@ -90,8 +89,7 @@ char *userdata;
  *
  * uses tc0 (timecode of first frame) and frame0 (number of first frame)
  */
-void putgophdr(frame,closed_gop)
-int frame,closed_gop;
+void putgophdr(int frame,int closed_gop)
 {
   int tc;
 
@@ -107,8 +105,7 @@ int frame,closed_gop;
  *
  * drop_frame not implemented
  */
-static int frametotc(frame)
-int frame;
+static int frametotc(int frame)
 {
   int fps, pict, sec, minute, hour, tc;
 

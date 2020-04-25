@@ -1,24 +1,66 @@
 /* readpic.c, ¶ÁÈ¡Ô´Í¼Ïñ*/
 
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include "config.h"
 #include "global.h"
 
 /* private prototypes */
-static void read_y_u_v _ANSI_ARGS_((char *fname, unsigned char *frame[]));
-static void read_yuv _ANSI_ARGS_((char *fname, unsigned char *frame[],int framenum));
-static void read_ppm _ANSI_ARGS_((char *fname, unsigned char *frame[]));
-static void border_extend _ANSI_ARGS_((unsigned char *frame, int w1, int h1,
-  int w2, int h2));
-static void conv444to422 _ANSI_ARGS_((unsigned char *src, unsigned char *dst));
-static void conv422to420 _ANSI_ARGS_((unsigned char *src, unsigned char *dst));
+static void read_y_u_v (char *fname, unsigned char *frame[]);
+static void read_yuv (char *fname, unsigned char *frame[],int framenum);
+static void read_ppm (char *fname, unsigned char *frame[]);
+static void border_extend (unsigned char *frame, int w1, int h1,
+  int w2, int h2);
+static void conv444to422 (unsigned char *src, unsigned char *dst);
+static void conv422to420 (unsigned char *src, unsigned char *dst);
 
-void readframe(fname,frame, framenum)
-char *fname;
-unsigned char *frame[];
-int framenum;
+/* pbm_getc() and pbm_getint() are essentially taken from
+ * PBMPLUS (C) Jef Poskanzer
+ * but without error/EOF checking
+ */
+char pbm_getc(FILE* file)
+{
+  char ch;
+
+  ch = getc(file);
+
+  if (ch=='#')
+  {
+    do
+    {
+      ch = getc(file);
+    }
+    while (ch!='\n' && ch!='\r');
+  }
+
+  return ch;
+}
+
+int pbm_getint(FILE* file)
+{
+  char ch;
+  int i;
+
+  do
+  {
+    ch = pbm_getc(file);
+  }
+  while (ch==' ' || ch=='\t' || ch=='\n' || ch=='\r');
+
+  i = 0;
+  do
+  {
+    i = i*10 + ch-'0';
+    ch = pbm_getc(file);
+  }
+  while (ch>='0' && ch<='9');
+
+  return i;
+}
+
+
+void readframe(char *fname,unsigned char *frame[], int framenum)
 {
   switch (inputtype)
   {
@@ -36,9 +78,7 @@ int framenum;
   }
 }
 
-static void read_y_u_v(fname,frame)
-char *fname;
-unsigned char *frame[];
+static void read_y_u_v(char *fname,unsigned char *frame[])
 {
   int i;
   int chrom_hsize, chrom_vsize;
@@ -84,10 +124,7 @@ unsigned char *frame[];
   border_extend(frame[2],chrom_hsize,chrom_vsize,chrom_width,chrom_height);
 }
 
-static void read_yuv(fname,frame,framenum)
-char *fname;
-unsigned char *frame[];
-int framenum;
+static void read_yuv(char *fname,unsigned char *frame[],int framenum)
 {
   int i;
   int chrom_hsize, chrom_vsize;
@@ -125,9 +162,7 @@ int framenum;
   fclose(fd);
 }
 
-static void read_ppm(fname,frame)
-char *fname;
-unsigned char *frame[];
+static void read_ppm(char *fname,unsigned char *frame[])
 {
   int i, j;
   int r, g, b;
@@ -230,9 +265,7 @@ unsigned char *frame[];
   }
 }
 
-static void border_extend(frame,w1,h1,w2,h2)
-unsigned char *frame;
-int w1,h1,w2,h2;
+static void border_extend(unsigned char *frame,int w1,int h1,int w2,int h2)
 {
   int i, j;
   unsigned char *fp;
@@ -257,8 +290,7 @@ int w1,h1,w2,h2;
 }
 
 /* horizontal filter and 2:1 subsampling */
-static void conv444to422(src,dst)
-unsigned char *src, *dst;
+static void conv444to422(unsigned char *src,unsigned char *dst)
 {
   int i, j, im5, im4, im3, im2, im1, ip1, ip2, ip3, ip4, ip5, ip6;
 
@@ -317,8 +349,7 @@ unsigned char *src, *dst;
 }
 
 /* vertical filter and 2:1 subsampling */
-static void conv422to420(src,dst)
-unsigned char *src, *dst;
+static void conv422to420(unsigned char *src,unsigned char *dst)
 {
   int w, i, j, jm6, jm5, jm4, jm3, jm2, jm1;
   int jp1, jp2, jp3, jp4, jp5, jp6;
@@ -424,48 +455,3 @@ unsigned char *src, *dst;
   }
 }
 
-/* pbm_getc() and pbm_getint() are essentially taken from
- * PBMPLUS (C) Jef Poskanzer
- * but without error/EOF checking
- */
-char pbm_getc(file)
-FILE* file;
-{
-  char ch;
-
-  ch = getc(file);
-
-  if (ch=='#')
-  {
-    do
-    {
-      ch = getc(file);
-    }
-    while (ch!='\n' && ch!='\r');
-  }
-
-  return ch;
-}
-
-int pbm_getint(file)
-FILE* file;
-{
-  char ch;
-  int i;
-
-  do
-  {
-    ch = pbm_getc(file);
-  }
-  while (ch==' ' || ch=='\t' || ch=='\n' || ch=='\r');
-
-  i = 0;
-  do
-  {
-    i = i*10 + ch-'0';
-    ch = pbm_getc(file);
-  }
-  while (ch>='0' && ch<='9');
-
-  return i;
-}

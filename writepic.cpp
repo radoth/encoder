@@ -2,14 +2,13 @@
 
 
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include "config.h"
 #include "global.h"
 
-void writeframe(fname,frame)
-char *fname;
-unsigned char *frame[];
+void writeframe(char *fname,unsigned char *frame[])
+
 {
   int chrom_hsize, chrom_vsize;
   char name[128];
