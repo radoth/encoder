@@ -11,7 +11,7 @@ static void putmvs (int MV[2][2][2], int PMV[2][2][2],
   int hor_f_code, int vert_f_code);
 
 /* quantization / variable length encoding of a complete picture */
-void putpict(unsigned char *frame)
+bool putpict(unsigned char *frame)
 {
   int i, j, k, comp, cc;
   int mb_type;
@@ -234,10 +234,12 @@ void putpict(unsigned char *frame)
           if (mb_type & MB_INTRA)
           {
             cc = (comp<4) ? 0 : (comp&1)+1;
-            putintrablk(blocks[k*block_count+comp],cc);
+            if(putintrablk(blocks[k*block_count+comp],cc)==false)
+                return false;
           }
           else
-            putnonintrablk(blocks[k*block_count+comp]);
+            if(putnonintrablk(blocks[k*block_count+comp])==false)
+                return false;
         }
       }
 
@@ -259,6 +261,7 @@ void putpict(unsigned char *frame)
 
   rc_update_pict();
   vbv_end_of_picture();
+  return true;
 }
 
 

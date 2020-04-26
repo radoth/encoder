@@ -7,9 +7,9 @@
 #include "global.h"
 
 /* private prototypes */
-static void read_y_u_v (char *fname, unsigned char *frame[]);
-static void read_yuv (char *fname, unsigned char *frame[],int framenum);
-static void read_ppm (char *fname, unsigned char *frame[]);
+static bool read_y_u_v (char *fname, unsigned char *frame[]);
+static bool read_yuv (char *fname, unsigned char *frame[],int framenum);
+static bool read_ppm (char *fname, unsigned char *frame[]);
 static void border_extend (unsigned char *frame, int w1, int h1,
   int w2, int h2);
 static void conv444to422 (unsigned char *src, unsigned char *dst);
@@ -60,25 +60,30 @@ int pbm_getint(FILE* file)
 }
 
 
-void readframe(char *fname,unsigned char *frame[], int framenum)
+bool readframe(char *fname,unsigned char *frame[], int framenum)
 {
   switch (inputtype)
   {
   case T_Y_U_V:
-    read_y_u_v(fname,frame);
+    if(read_y_u_v(fname,frame)==false)
+        return false;
     break;
   case T_YUV:
-    read_yuv(fname,frame,framenum);
+    if(read_yuv(fname,frame,framenum)==false)
+        return false;
     break;
   case T_PPM:
-    read_ppm(fname,frame);
+    if(read_ppm(fname,frame)==false)
+        return false;
     break;
   default:
     break;
   }
+
+  return true;
 }
 
-static void read_y_u_v(char *fname,unsigned char *frame[])
+static bool read_y_u_v(char *fname,unsigned char *frame[])
 {
   int i;
   int chrom_hsize, chrom_vsize;
@@ -94,7 +99,7 @@ static void read_y_u_v(char *fname,unsigned char *frame[])
   if (!(fd = fopen(name,"rb")))
   {
     sprintf(errortext,"Couldn't open %s\n",name);
-    error(errortext);
+    {error(errortext);return false;}
   }
   for (i=0; i<vertical_size; i++)
     fread(frame[0]+i*width,1,horizontal_size,fd);
@@ -105,7 +110,7 @@ static void read_y_u_v(char *fname,unsigned char *frame[])
   if (!(fd = fopen(name,"rb")))
   {
     sprintf(errortext,"Couldn't open %s\n",name);
-    error(errortext);
+    {error(errortext);return false;}
   }
   for (i=0; i<chrom_vsize; i++)
     fread(frame[1]+i*chrom_width,1,chrom_hsize,fd);
@@ -116,15 +121,16 @@ static void read_y_u_v(char *fname,unsigned char *frame[])
   if (!(fd = fopen(name,"rb")))
   {
     sprintf(errortext,"Couldn't open %s\n",name);
-    error(errortext);
+    {error(errortext);return false;}
   }
   for (i=0; i<chrom_vsize; i++)
     fread(frame[2]+i*chrom_width,1,chrom_hsize,fd);
   fclose(fd);
   border_extend(frame[2],chrom_hsize,chrom_vsize,chrom_width,chrom_height);
+  return true;
 }
 
-static void read_yuv(char *fname,unsigned char *frame[],int framenum)
+static bool read_yuv(char *fname,unsigned char *frame[],int framenum)
 {
   int i;
   int chrom_hsize, chrom_vsize;
@@ -140,7 +146,7 @@ static void read_yuv(char *fname,unsigned char *frame[],int framenum)
   if (!(fd = fopen(name,"rb")))
   {
     sprintf(errortext,"Couldn't open %s\n",name);
-    error(errortext);
+    {error(errortext);return false;}
   }
   fseek(fd, framenum*horizontal_size*vertical_size * 3 / 2, SEEK_SET);
   
@@ -160,9 +166,10 @@ static void read_yuv(char *fname,unsigned char *frame[],int framenum)
   border_extend(frame[2],chrom_hsize,chrom_vsize,chrom_width,chrom_height);
 
   fclose(fd);
+  return true;
 }
 
-static void read_ppm(char *fname,unsigned char *frame[])
+static bool read_ppm(char *fname,unsigned char *frame[])
 {
   int i, j;
   int r, g, b;
@@ -201,15 +208,15 @@ static void read_ppm(char *fname,unsigned char *frame[])
     if (!u444)
     {
       if (!(u444 = (unsigned char *)malloc(width*height)))
-        error("malloc failed");
+        {error("malloc failed");return false;}
       if (!(v444 = (unsigned char *)malloc(width*height)))
-        error("malloc failed");
+        {error("malloc failed");return false;}
       if (chroma_format==CHROMA420)
       {
         if (!(u422 = (unsigned char *)malloc((width>>1)*height)))
-          error("malloc failed");
+          {error("malloc failed");return false;}
         if (!(v422 = (unsigned char *)malloc((width>>1)*height)))
-          error("malloc failed");
+          {error("malloc failed");return false;}
       }
     }
   }
@@ -219,7 +226,7 @@ static void read_ppm(char *fname,unsigned char *frame[])
   if (!(fd = fopen(name,"rb")))
   {
     sprintf(errortext,"Couldn't open %s\n",name);
-    error(errortext);
+    {error(errortext);return false;}
   }
 
   /* skip header */
@@ -263,6 +270,7 @@ static void read_ppm(char *fname,unsigned char *frame[])
     conv422to420(u422,frame[1]);
     conv422to420(v422,frame[2]);
   }
+  return true;
 }
 
 static void border_extend(unsigned char *frame,int w1,int h1,int w2,int h2)

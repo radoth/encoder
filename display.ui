@@ -1851,12 +1851,25 @@
        <x>15</x>
        <y>10</y>
        <width>1296</width>
-       <height>66</height>
+       <height>96</height>
       </rect>
      </property>
      <property name="title">
       <string>输出目录</string>
      </property>
+     <widget class="QPushButton" name="pushButton">
+      <property name="geometry">
+       <rect>
+        <x>15</x>
+        <y>60</y>
+        <width>201</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string> 运行</string>
+      </property>
+     </widget>
      <widget class="QWidget" name="">
       <property name="geometry">
        <rect>
@@ -1878,32 +1891,6 @@
         </widget>
        </item>
       </layout>
-     </widget>
-    </widget>
-    <widget class="QGroupBox" name="groupBox_13">
-     <property name="geometry">
-      <rect>
-       <x>15</x>
-       <y>80</y>
-       <width>1296</width>
-       <height>81</height>
-      </rect>
-     </property>
-     <property name="title">
-      <string>GroupBox</string>
-     </property>
-     <widget class="QPushButton" name="pushButton">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>35</y>
-        <width>201</width>
-        <height>23</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>检查参数</string>
-      </property>
      </widget>
     </widget>
    </widget>

@@ -7,7 +7,7 @@
 #include "config.h"
 #include "global.h"
 
-void writeframe(char *fname,unsigned char *frame[])
+bool writeframe(char *fname,unsigned char *frame[])
 
 {
   int chrom_hsize, chrom_vsize;
@@ -21,14 +21,14 @@ void writeframe(char *fname,unsigned char *frame[])
                                            : vertical_size>>1;
 
   if (fname[0]=='-')
-    return;
+    return true;
 
    /* Y */
    sprintf(name,"%s.Y",fname);
    if (!(fd = fopen(name,"wb")))
    {
      sprintf(errortext,"Couldn't create %s\n",name);
-     error(errortext);
+     {error(errortext);return false;}
    }
    fwrite(frame[0],1,horizontal_size*vertical_size,fd);
    fclose(fd);
@@ -38,7 +38,7 @@ void writeframe(char *fname,unsigned char *frame[])
    if (!(fd = fopen(name,"wb")))
    {
      sprintf(errortext,"Couldn't create %s\n",name);
-     error(errortext);
+     {error(errortext);return false;}
    }
    fwrite(frame[1],1,chrom_hsize*chrom_vsize,fd);
    fclose(fd);
@@ -48,8 +48,9 @@ void writeframe(char *fname,unsigned char *frame[])
    if (!(fd = fopen(name,"wb")))
    {
      sprintf(errortext,"Couldn't create %s\n",name);
-     error(errortext);
+     {error(errortext);return false;}
    }
    fwrite(frame[2],1,chrom_hsize*chrom_vsize,fd);
   fclose(fd);
+  return true;
 }

@@ -14,13 +14,13 @@
 /* prototypes of global functions */
 
 /* conform.c */
-void range_checks ();
-void profile_and_level_checks ();
+bool range_checks ();
+bool profile_and_level_checks ();
 
 /* mpeg2enc.c */
-void init ();
-void readparmfile (char *fname);
-void readquantmat ();
+bool init ();
+bool readparmfile (char *fname);
+bool readquantmat ();
 
 /* fdctref.c */
 void init_fdct (void);
@@ -60,21 +60,21 @@ void putpictcodext (void);
 void putseqend (void);
 
 /* putmpg.c */
-void putintrablk (short *blk, int cc);
-void putnonintrablk (short *blk);
+bool putintrablk (short *blk, int cc);
+bool putnonintrablk (short *blk);
 void putmv (int dmv, int f_code);
 
 /* putpic.c */
-void putpict (unsigned char *frame);
+bool putpict (unsigned char *frame);
 
 /* putseq.c */
-void putseq (void);
+bool putseq (void);
 
 /* putvlc.c */
-void putDClum (int val);
-void putDCchrom (int val);
-void putACfirst (int run, int val);
-void putAC (int run, int signed_level, int vlcformat);
+bool putDClum (int val);
+bool putDCchrom (int val);
+bool putACfirst (int run, int val);
+bool putAC (int run, int signed_level, int vlcformat);
 void putaddrinc (int addrinc);
 void putmbtype (int pict_type, int mb_type);
 void putmotioncode (int motion_code);
@@ -102,7 +102,7 @@ void vbv_end_of_picture (void);
 void calc_vbv_delay (void);
 
 /* readpic.c */
-void readframe (char *fname, unsigned char *frame[],int framenum);
+bool readframe (char *fname, unsigned char *frame[],int framenum);
 
 /* stats.c */
 void calcSNR (unsigned char *org[3], unsigned char *rec[3]);
@@ -117,7 +117,7 @@ void dct_type_estimation (unsigned char *pred, unsigned char *cur,
   struct mbinfo *mbi);
 
 /* writepic.c */
-  void writeframe (char *fname, unsigned char *frame[]);
+  bool writeframe (char *fname, unsigned char *frame[]);
 
 
 /* global variables */
@@ -312,3 +312,4 @@ EXTERN SignalShooter* signalshooter;
 
 /* custom */
 EXTERN int hasError;
+EXTERN QString errorTextGlobal;

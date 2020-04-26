@@ -5,6 +5,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include<QDateTime>
+#include <QMessageBox>
 
 Display::Display(QWidget *parent)
     : QWidget(parent)
@@ -23,7 +24,7 @@ Display::Display(QWidget *parent)
     ui->outputLine->setReadOnly(true);
 }
 
-void Display::parameterPrepare()
+bool Display::parameterPrepare()
 {
     int h,m,s,f;
     int i;
@@ -191,15 +192,15 @@ void Display::parameterPrepare()
 
 
     if (N<1)
-      error("N must be positive");
+      {error("N must be positive");return false;}
     if (M<1)
-      error("M must be positive");
+      {error("M must be positive");return false;}
     if (N%M != 0)
-      error("N must be an integer multiple of M");
+      {error("N must be an integer multiple of M");return false;}
 
     motion_data = (struct motion_data *)malloc(M*sizeof(struct motion_data));
     if (!motion_data)
-      error("malloc failed\n");
+      {error("malloc failed\n");return false;}
 
     motion_data[0].forw_hor_f_code=((((QComboBox *)(ui->searchTable->cellWidget(0,0)))->currentIndex()))+1;
     motion_data[0].forw_vert_f_code=((((QComboBox *)(ui->searchTable->cellWidget(0,1)))->currentIndex()))+1;
@@ -313,7 +314,8 @@ void Display::parameterPrepare()
     repeatfirst = !!repeatfirst;
     prog_frame = !!prog_frame;
 
-    range_checks();
+    if(range_checks()==false)
+        return false;
 
     static double ratetab[8]=
       {24000.0/1001.0,24.0,25.0,30000.0/1001.0,30.0,50.0,60000.0/1001.0,60.0};
@@ -327,7 +329,8 @@ void Display::parameterPrepare()
 
     if (!mpeg1)
     {
-      profile_and_level_checks();
+      if(profile_and_level_checks()==false)
+          return false;
     }
     else
     {
@@ -527,7 +530,7 @@ void Display::parameterPrepare()
       }
     }
 
-
+return true;
 }
 
 Display::~Display()
@@ -562,8 +565,6 @@ void Display::on_sourceBrowse_clicked()
 void Display::on_IPDistance_valueChanged(int arg1)
 {
     M=arg1;
-    if (M<1)
-      error("M must be positive");
 
     ui->searchTable->setRowCount(2*M-1);
     ui->searchTable->setColumnCount(4);
@@ -699,35 +700,55 @@ void Display::on_pushButton_clicked()
 {
     hasError=0;
 
-    parameterPrepare();
-    readquantmat();
+    if(parameterPrepare()==false)
+    {
+        QMessageBox::critical(this,"严重错误",errorTextGlobal);
+        return;
+    }
+
+    if(readquantmat()==false)
+    {
+        QMessageBox::critical(this,"严重错误",errorTextGlobal);
+        return;
+    }
+
     extern int r,Xi,Xb,Xp,d0i,d0p,d0b; /* rate control */
     extern double avg_act;
 
     if(fileOUTPUT.isEmpty()||fileNAME.isEmpty())
     {
         sprintf(errortext,"Invalid input or output folder");
-        error(errortext);
+        QMessageBox::critical(this,"严重错误","Invalid input or output folder");
+        return;
     }
 
     if (!(outfile=fopen(fileOUTPUT.toStdString().c_str(),"wb")))
     {
        sprintf(errortext,"Couldn't create output file");
-       error(errortext);
+       QMessageBox::critical(this,"严重错误","Couldn't create output file");
+       fclose(outfile);
+       fclose(statfile);
+       return;
     }
 
-    if(hasError==1)
+    if(init()==false)
     {
-        exit(1);
+        QMessageBox::critical(this,"严重错误",errorTextGlobal);
+        fclose(outfile);
+        fclose(statfile);
+        return;
     }
 
-
-    init();
-    putseq();
+    if(putseq()==false)
+    {
+        QMessageBox::critical(this,"严重错误",errorTextGlobal);
+        fclose(outfile);
+        fclose(statfile);
+        return;
+    }
 
     fclose(outfile);
     fclose(statfile);
-
 }
 
 void Display::on_outputBrowse_clicked()

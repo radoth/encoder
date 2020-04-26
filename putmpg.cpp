@@ -6,7 +6,7 @@
 #include "global.h"
 
 /* generate variable length codes for an intra-coded block (6.2.6, 6.3.17) */
-void putintrablk(short *blk,int cc)
+bool putintrablk(short *blk,int cc)
 {
   int n, dct_diff, run, signed_level;
 
@@ -15,9 +15,15 @@ void putintrablk(short *blk,int cc)
   dc_dct_pred[cc] = blk[0];
 
   if (cc==0)
-    putDClum(dct_diff);
+    {
+      if(putDClum(dct_diff)==false)
+        return false;
+  }
   else
-    putDCchrom(dct_diff);
+    {
+        if(putDCchrom(dct_diff)==false)
+        return false;
+    }
 
   /* AC coefficients (7.2.2) */
   run = 0;
@@ -27,7 +33,8 @@ void putintrablk(short *blk,int cc)
     signed_level = blk[(altscan ? alternate_scan : zig_zag_scan)[n]];
     if (signed_level!=0)
     {
-      putAC(run,signed_level,intravlc);
+      if(putAC(run,signed_level,intravlc)==false)
+          return false;
       run = 0;
     }
     else
@@ -39,10 +46,12 @@ void putintrablk(short *blk,int cc)
     putbits(6,4); /* 0110 (Table B-15) */
   else
     putbits(2,2); /* 10 (Table B-14) */
+
+  return true;
 }
 
 /* generate variable length codes for a non-intra-coded block (6.2.6, 6.3.17) */
-void putnonintrablk(short *blk)
+bool putnonintrablk(short *blk)
 {
   int n, run, signed_level, first;
 
@@ -59,11 +68,13 @@ void putnonintrablk(short *blk)
       if (first)
       {
         /* first coefficient in non-intra block */
-        putACfirst(run,signed_level);
+        if(putACfirst(run,signed_level)==false)
+            return false;
         first = 0;
       }
       else
-        putAC(run,signed_level,0);
+        if(putAC(run,signed_level,0)==false)
+            return false;
 
       run = 0;
     }
@@ -73,6 +84,8 @@ void putnonintrablk(short *blk)
 
   /* End of Block -- normative block punctuation  */
   putbits(2,2);
+
+  return true;
 }
 
 /* generate variable length code for a motion vector component (7.6.3.1) */

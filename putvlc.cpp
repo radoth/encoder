@@ -9,22 +9,22 @@
 #include "vlc.h"
 
 /* 函数声明 */
-static void putDC (sVLCtable *tab, int val);
+static bool putDC (sVLCtable *tab, int val);
 
 /* 为亮度DC系数产生可变长编码 */
-void putDClum(int val)
+bool putDClum(int val)
 {
-  putDC(DClumtab,val);
+  return putDC(DClumtab,val);
 }
 
 /* 为色度DC系数产生可变长编码 */
-void putDCchrom(int val)
+bool putDCchrom(int val)
 {
-  putDC(DCchromtab,val);
+  return putDC(DCchromtab,val);
 }
 
 //为DC系数产生可变长的编码
-static void putDC(sVLCtable *tab,int val)
+static bool putDC(sVLCtable *tab,int val)
 {
   int absval, size;
 
@@ -33,7 +33,7 @@ static void putDC(sVLCtable *tab,int val)
   if (absval>2047 || (mpeg1 && absval>255))
   {
     sprintf(errortext,"DC value out of range (%d)\n",val);
-    error(errortext);
+    {error(errortext);return false;}
   }
 
   /* 计算dct_dc_size */
@@ -57,19 +57,22 @@ static void putDC(sVLCtable *tab,int val)
       absval = val + (1<<size) - 1; /* val + (2 ^ size) - 1 */
     putbits(absval,size);
   }
+  return true;
 }
 
 /*为非帧内方式的块的第一个AC系数进行VLC编码*/
-void putACfirst(int run,int val)
+bool putACfirst(int run,int val)
 {
   if (run==0 && (val==1 || val==-1)) /* 对这两个条件下的值要区别对待*/
     putbits(2|(val<0),2); 
   else
-    putAC(run,val,0); 
+    if(putAC(run,val,0)==false)
+        return false;
+  return true;
 }
 
 /*对其他的DCT系数进行编码。*/
-void putAC(int run,int signed_level,int vlcformat)
+bool putAC(int run,int signed_level,int vlcformat)
 {
   int level, len;
   VLCtable *ptab = NULL;
@@ -81,7 +84,7 @@ void putAC(int run,int signed_level,int vlcformat)
   {
     sprintf(errortext,"AC value out of range (run=%d, signed_level=%d)\n",
       run,signed_level);
-    error(errortext);
+    {error(errortext);return false;}
   }
 
   len = 0;
@@ -132,6 +135,7 @@ void putAC(int run,int signed_level,int vlcformat)
 		putbits(signed_level,12);
     }
   }
+  return true;
 }
 
 /* 为macroblock_address_increment 进行VLC编码 */

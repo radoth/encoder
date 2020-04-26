@@ -6,7 +6,7 @@
 #include "config.h"
 #include "global.h"
 
-void putseq()
+bool putseq()
 {
   /* this routine assumes (N % M) == 0 */
   int i, j, k, f, f0, n, np, nb, sxf=0, syf=0, sxb=0, syb=0;
@@ -169,7 +169,8 @@ void putseq()
     }
 
     sprintf(name,tplorg,f+frame0);
-	readframe(name, neworg, f + frame0);
+    if(readframe(name, neworg, f + frame0)==false)
+        return false;
 
     if (fieldpic)
     {
@@ -190,7 +191,8 @@ void putseq()
       dct_type_estimation(predframe[0],neworg[0],mbinfo);
       transform(predframe,neworg,mbinfo,blocks);
 
-      putpict(neworg[0]);
+      if(putpict(neworg[0])==false)
+          return false;
 
       for (k=0; k<mb_height2*mb_width; k++)
       {
@@ -237,7 +239,8 @@ void putseq()
       dct_type_estimation(predframe[0],neworg[0],mbinfo);
       transform(predframe,neworg,mbinfo,blocks);
 
-      putpict(neworg[0]);
+      if(putpict(neworg[0])==false)
+          return false;
 
       for (k=0; k<mb_height2*mb_width; k++)
       {
@@ -274,7 +277,8 @@ void putseq()
       dct_type_estimation(predframe[0],neworg[0],mbinfo);
       transform(predframe,neworg,mbinfo,blocks);
 
-      putpict(neworg[0]);
+      if(putpict(neworg[0])==false)
+          return false;
 
       for (k=0; k<mb_height*mb_width; k++)
       {
@@ -300,11 +304,14 @@ void putseq()
 	printf("frame %d costs %f us\n", f + frame0, picture_time);
 
     sprintf(name,tplref,f+frame0);
-    writeframe(name,newref);
+    if(writeframe(name,newref)==false)
+        return false;
 
   }
 
   printf("mpeg2 encoded: eclapsed %f us, %d frames, %f fps\n",total_time,nframes,nframes*1000000/total_time);
 
   putseqend();
+
+  return true;
 }

@@ -47,7 +47,7 @@ int mainORI(int argc,char *argv[])
   return 0;
 }
 
-void init()
+bool init()
 {
   int i, size;
   static int block_count_tab[3] = {6,8,12};
@@ -74,7 +74,7 @@ void init()
 
   /* clip table */
   if (!(clp = (unsigned char *)malloc(1024)))
-    error("malloc failed\n");
+    {error("malloc failed\n");return false;}
   clp+= 384;
   for (i=-384; i<640; i++)
     clp[i] = (i<0) ? 0 : ((i>255) ? 255 : i);
@@ -84,31 +84,31 @@ void init()
     size = (i==0) ? width*height : chrom_width*chrom_height;
 
     if (!(newrefframe[i] = (unsigned char *)malloc(size)))
-      error("malloc failed\n");
+      {error("malloc failed\n");return false;}
     if (!(oldrefframe[i] = (unsigned char *)malloc(size)))
-      error("malloc failed\n");
+      {error("malloc failed\n");return false;}
     if (!(auxframe[i] = (unsigned char *)malloc(size)))
-      error("malloc failed\n");
+      {error("malloc failed\n");return false;}
     if (!(neworgframe[i] = (unsigned char *)malloc(size)))
-      error("malloc failed\n");
+      {error("malloc failed\n");return false;}
     if (!(oldorgframe[i] = (unsigned char *)malloc(size)))
-      error("malloc failed\n");
+      {error("malloc failed\n");return false;}
     if (!(auxorgframe[i] = (unsigned char *)malloc(size)))
-      error("malloc failed\n");
+      {error("malloc failed\n");return false;}
     if (!(predframe[i] = (unsigned char *)malloc(size)))
-      error("malloc failed\n");
+      {error("malloc failed\n");return false;}
   }
 
   mbinfo = (struct mbinfo *)malloc(mb_width*mb_height2*sizeof(struct mbinfo));
 
   if (!mbinfo)
-    error("malloc failed\n");
+    {error("malloc failed\n");return false;}
 
   blocks =
     (short (*)[64])malloc(mb_width*mb_height2*block_count*sizeof(short [64]));
 
   if (!blocks)
-    error("malloc failed\n");
+    {error("malloc failed\n");return false;}
 
   /* open statistics output file */
   if (statname[0]=='-')
@@ -116,19 +116,21 @@ void init()
   else if (!(statfile = fopen(statname,"w")))
   {
     sprintf(errortext,"Couldn't create statistics output file %s",statname);
-    error(errortext);
+    {error(errortext);return false;}
   }
+
+  return true;
 }
 
 void error(QString text)
 {
   fprintf(stderr,text.toStdString().c_str());
   putc('\n',stderr);
+  errorTextGlobal=text;
   hasError=1;
-  exit(1);
 }
 
-void readparmfile(char *fname)
+bool readparmfile(char *fname)
 {
   int i;
   int h,m,s,f;
@@ -142,7 +144,7 @@ void readparmfile(char *fname)
   if (!(fd = fopen(fname,"r")))
   {
     sprintf(errortext,"Couldn't open parameter file %s",fname);
-    error(errortext);
+    {error(errortext);return false;}
   }
 
   fgets(id_string,254,fd);
@@ -206,15 +208,15 @@ void readparmfile(char *fname)
   fgets(line,254,fd); sscanf(line,"%d",&d0b);
 
   if (N<1)
-    error("N must be positive");
+    {error("N must be positive");return false;}
   if (M<1)
-    error("M must be positive");
+    {error("M must be positive");return false;}
   if (N%M != 0)
-    error("N must be an integer multiple of M");
+    {error("N must be an integer multiple of M");return false;}
 
   motion_data = (struct motion_data *)malloc(M*sizeof(struct motion_data));
   if (!motion_data)
-    error("malloc failed\n");
+    {error("malloc failed\n");return false;}
 
   for (i=0; i<M; i++)
   {
@@ -254,7 +256,8 @@ void readparmfile(char *fname)
   prog_frame = !!prog_frame;
 
   /* make sure MPEG specific parameters are valid */
-  range_checks();
+  if(range_checks()==false)
+      return false;
 
   frame_rate = ratetab[frame_rate_code-1];
 
@@ -266,7 +269,9 @@ void readparmfile(char *fname)
 
   if (!mpeg1)
   {
-    profile_and_level_checks();
+
+    if(profile_and_level_checks()==false)
+        return false;
   }
   else
   {
@@ -465,10 +470,10 @@ void readparmfile(char *fname)
       }
     }
   }
-
+return true;
 }
 
-void readquantmat()
+bool readquantmat()
 {
   int i,v;
   FILE *fd;
@@ -487,14 +492,14 @@ void readquantmat()
     if (!(fd = fopen(iqname,"r")))
     {
       sprintf(errortext,"Couldn't open quant matrix file %s",iqname);
-      error(errortext);
+      {error(errortext);return false;}
     }
 
     for (i=0; i<64; i++)
     {
       fscanf(fd,"%d",&v);
       if (v<1 || v>255)
-        error("invalid value in quant matrix");
+        {error("invalid value in quant matrix");return false;}
       intra_q[i] = v;
     }
 
@@ -515,17 +520,18 @@ void readquantmat()
     if (!(fd = fopen(niqname,"r")))
     {
       sprintf(errortext,"Couldn't open quant matrix file %s",niqname);
-      error(errortext);
+      {error(errortext);return false;}
     }
 
     for (i=0; i<64; i++)
     {
       fscanf(fd,"%d",&v);
       if (v<1 || v>255)
-        error("invalid value in quant matrix");
+        {error("invalid value in quant matrix");return false;}
       inter_q[i] = v;
     }
 
     fclose(fd);
   }
+  return true;
 }

@@ -17,7 +17,7 @@ public:
     QString fileRECONS;
     QString fileOUTPUT;
     Display(QWidget *parent = nullptr);
-    void parameterPrepare();
+    bool parameterPrepare();
     ~Display();
 
 private slots:
