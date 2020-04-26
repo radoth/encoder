@@ -124,6 +124,7 @@ void error(QString text)
 {
   fprintf(stderr,text.toStdString().c_str());
   putc('\n',stderr);
+  hasError=1;
   exit(1);
 }
 

@@ -21,7 +21,6 @@ Display::Display(QWidget *parent)
     ((QSpinBox *)(ui->searchTable->cellWidget(0,2)))->setValue(11);
     ((QSpinBox *)(ui->searchTable->cellWidget(0,3)))->setValue(11);
     ui->outputLine->setReadOnly(true);
-
 }
 
 void Display::parameterPrepare()
@@ -698,14 +697,28 @@ void Display::on_useCustomOutMatrix_clicked()
 
 void Display::on_pushButton_clicked()
 {
+    hasError=0;
+
     parameterPrepare();
     readquantmat();
     extern int r,Xi,Xb,Xp,d0i,d0p,d0b; /* rate control */
     extern double avg_act;
-    if (!(outfile=fopen("guiTESTOUT","wb")))
+
+    if(fileOUTPUT.isEmpty()||fileNAME.isEmpty())
+    {
+        sprintf(errortext,"Invalid input or output folder");
+        error(errortext);
+    }
+
+    if (!(outfile=fopen(fileOUTPUT.toStdString().c_str(),"wb")))
     {
        sprintf(errortext,"Couldn't create output file");
        error(errortext);
+    }
+
+    if(hasError==1)
+    {
+        exit(1);
     }
 
 

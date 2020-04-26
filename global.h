@@ -309,3 +309,6 @@ EXTERN int altscan_tab[3], altscan; /* alternate scan (I,P,B,current) */
 EXTERN int repeatfirst; /* repeat first field after second field */
 EXTERN int prog_frame; /* progressive frame */
 EXTERN SignalShooter* signalshooter;
+
+/* custom */
+EXTERN int hasError;
