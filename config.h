@@ -1,4 +1,4 @@
-/* config.h, еДжцнд╪Ч                                        */
+/* config.h, И┘█Г╫╝Ф√┤Д╩╤                                        */
 
 #define HAVE_SYS_TIMEB_H
 #define HAVE_FTIME

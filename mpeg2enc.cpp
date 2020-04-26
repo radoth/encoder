@@ -1,4 +1,4 @@
-/* mpeg2enc.c, main() ºÍ¶ÁÈ¡²ÎÊıÎÄ¼şº¯Êı*/
+/* mpeg2enc.c, main() å’Œè¯»å–å‚æ•°æ–‡ä»¶å‡½æ•°*/
 
 
 
@@ -11,9 +11,6 @@
 #include <QString>
 
 /* private prototypes */
-static void init (void);
-static void readparmfile (char *fname);
-static void readquantmat (void);
 
 
 int mainORI(int argc,char *argv[])
@@ -50,7 +47,7 @@ int mainORI(int argc,char *argv[])
   return 0;
 }
 
-static void init()
+void init()
 {
   int i, size;
   static int block_count_tab[3] = {6,8,12};
@@ -130,7 +127,7 @@ void error(QString text)
   exit(1);
 }
 
-static void readparmfile(char *fname)
+void readparmfile(char *fname)
 {
   int i;
   int h,m,s,f;
@@ -470,7 +467,7 @@ static void readparmfile(char *fname)
 
 }
 
-static void readquantmat()
+void readquantmat()
 {
   int i,v;
   FILE *fd;

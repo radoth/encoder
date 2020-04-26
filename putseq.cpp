@@ -1,4 +1,4 @@
-/* putseq.c, 和序列有关的程序*/
+/* putseq.c, 鍜屽簭鍒楁湁鍏崇殑绋嬪簭*/
 
 
 #include <cstdio>

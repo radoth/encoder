@@ -1,4 +1,4 @@
-/* putmpg.c, 块和运动向量编码函数*/
+/* putmpg.c, 鍧楀拰杩愬姩鍚戦噺缂栫爜鍑芥暟*/
 
 
 #include <cstdio>

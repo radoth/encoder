@@ -1,4 +1,4 @@
-/* puthdr.c, ²úÉúÍ·ĞÅÏ¢                                         */
+/* puthdr.c, äº§ç”Ÿå¤´ä¿¡æ¯                                         */
 
 
 #include <cstdio>

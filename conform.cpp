@@ -1,4 +1,4 @@
-/* conform.c, Ò»ÖÂÐÔ¼ì²â*/
+/* conform.c, ä¸€è‡´æ€§æ£€æµ‹*/
 
 
 #include <cstdio>

@@ -1,4 +1,4 @@
-/* putbits.c, ±ÈÌØÊä³ö                                             */
+/* putbits.c, æ¯”ç‰¹è¾“å‡º                                             */
 
 
 #include <cstdio>

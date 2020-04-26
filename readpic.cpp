@@ -1,4 +1,4 @@
-/* readpic.c, ��ȡԴͼ��*/
+/* readpic.c, 读取源图像*/
 
 
 #include <cstdio>

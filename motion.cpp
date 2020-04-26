@@ -1,4 +1,4 @@
-/* motion.c, ÔË¶¯¹À¼Æº¯Êı*/
+/* motion.c, è¿åŠ¨ä¼°è®¡å‡½æ•°*/
 
 
 
@@ -61,21 +61,21 @@ static int bdist2 (unsigned char *pf, unsigned char *pb,
 static int variance (unsigned char *p, int lx);
 
 /*
- * Ç°ÏòºÍ½»Ö¯Ö¡µÄÔË¶¯¹À¼Æ
+ * å‰å‘å’Œäº¤ç»‡å¸§çš„è¿åŠ¨ä¼°è®¡
  *
- *oldorg£ºÇ°ÏòÔ¤²âµÄÔ­Ê¼²Î¿¼Í¼£¨¹©PÍ¼ÏñºÍBÍ¼ÏñÊ¹ÓÃ£©
- *neworg£ººóÏòÔ¤²âµÄÔ­Ê¼²Î¿¼Í¼£¨½ö¹©BÍ¼ÏñÊ¹ÓÃ£©
- *oldref£ºÇ°ÏòÔ¤²âµÄÖØ½¨Í¼Ïñ£¨PÍ¼ÏñºÍBÍ¼Ïñ£©
- *newref£ººóÏòÔ¤²âµÄÖØ½¨Í¼Ïñ£¨BÍ¼Ïñ£©
- *cur£ºµ±Ç°Ô­Ê¼Í¼ÏñÖ¡£¨ÓÉÔ¤²âÍ¼Ïñ²úÉúµÄ£©
- *curref£ºµ±Ç°µÄÖØ½¨Í¼ÏñÖ¡£¨ÓÃÀ´¸ù¾İµÚÒ»¸ö³¡Ô¤²âµÚ¶ş¸ö³¡£©
- *sxf£¬syf£ºÇ°ÏòËÑË÷´°¿Ú
- *sxb£¬syb£ººóÏòËÑË÷´°¿Ú
- *mbi£ºÖ¸Ïòºê¿éĞÅÏ¢½á¹¹ÌåµÄÖ¸Õë
- *Êä³ö½á¹ûmbi->
+ *oldorgï¼šå‰å‘é¢„æµ‹çš„åŸå§‹å‚è€ƒå›¾ï¼ˆä¾›På›¾åƒå’ŒBå›¾åƒä½¿ç”¨ï¼‰
+ *neworgï¼šåå‘é¢„æµ‹çš„åŸå§‹å‚è€ƒå›¾ï¼ˆä»…ä¾›Bå›¾åƒä½¿ç”¨ï¼‰
+ *oldrefï¼šå‰å‘é¢„æµ‹çš„é‡å»ºå›¾åƒï¼ˆPå›¾åƒå’ŒBå›¾åƒï¼‰
+ *newrefï¼šåå‘é¢„æµ‹çš„é‡å»ºå›¾åƒï¼ˆBå›¾åƒï¼‰
+ *curï¼šå½“å‰åŸå§‹å›¾åƒå¸§ï¼ˆç”±é¢„æµ‹å›¾åƒäº§ç”Ÿçš„ï¼‰
+ *currefï¼šå½“å‰çš„é‡å»ºå›¾åƒå¸§ï¼ˆç”¨æ¥æ ¹æ®ç¬¬ä¸€ä¸ªåœºé¢„æµ‹ç¬¬äºŒä¸ªåœºï¼‰
+ *sxfï¼Œsyfï¼šå‰å‘æœç´¢çª—å£
+ *sxbï¼Œsybï¼šåå‘æœç´¢çª—å£
+ *mbiï¼šæŒ‡å‘å®å—ä¿¡æ¯ç»“æ„ä½“çš„æŒ‡é’ˆ
+ *è¾“å‡ºç»“æœmbi->
  *mb_type: 0, MB_INTRA, MB_FORWARD, MB_BACKWARD, MB_FORWARD|MB_BACKWARD
- *MV[][][]: ÔË¶¯ÏòÁ¿ (³¡¸ñÊ½)
- *mv_field_sel: ¶¥²¿/µ×²¿³¡
+ *MV[][][]: è¿åŠ¨å‘é‡ (åœºæ ¼å¼)
+ *mv_field_sel: é¡¶éƒ¨/åº•éƒ¨åœº
  *motion_type: MC_FIELD, MC_16X8
  */
 void motion_estimation (unsigned char *oldorg, unsigned char *neworg,
@@ -85,12 +85,12 @@ void motion_estimation (unsigned char *oldorg, unsigned char *neworg,
 {
   int i, j;
 
-    /* ¶ÔËùÓĞµÄºê¿é½øĞĞÑ­»·²Ù×÷ */
+    /* å¯¹æ‰€æœ‰çš„å®å—è¿›è¡Œå¾ªç¯æ“ä½œ */
   for (j=0; j<height2; j+=16)
   {
     for (i=0; i<width; i+=16)
     {
-         /*¸ù¾İÍ¼Ïñ½á¹¹µÄÀàĞÍÀ´ÅĞ¶ÏÊÇ½øĞĞÖ¡Ô¤²â»¹ÊÇ³¡Ô¤²â*/
+         /*æ ¹æ®å›¾åƒç»“æ„çš„ç±»å‹æ¥åˆ¤æ–­æ˜¯è¿›è¡Œå¸§é¢„æµ‹è¿˜æ˜¯åœºé¢„æµ‹*/
       if (pict_struct==FRAME_PICTURE)
         frame_ME(oldorg,neworg,oldref,newref,cur,i,j,sxf,syf,sxb,syb,mbi);
       else
@@ -422,24 +422,24 @@ static void frame_ME(unsigned char *oldorg,unsigned char *neworg,unsigned char *
 }
 
 /*
- * ³¡Í¼ÏñµÄÔË¶¯¹À¼Æ
+ * åœºå›¾åƒçš„è¿åŠ¨ä¼°è®¡
  *
- *oldorg£ºÇ°ÏòÔ¤²âµÄÔ­Ê¼²Î¿¼Í¼£¨¹©PÍ¼ÏñºÍBÍ¼ÏñÊ¹ÓÃ£©
- *neworg£ººóÏòÔ¤²âµÄÔ­Ê¼²Î¿¼Í¼£¨½ö¹©BÍ¼ÏñÊ¹ÓÃ£©
- *oldref£ºÇ°ÏòÔ¤²âµÄÖØ½¨Í¼Ïñ£¨PÍ¼ÏñºÍBÍ¼Ïñ£©
- *newref£ººóÏòÔ¤²âµÄÖØ½¨Í¼Ïñ£¨BÍ¼Ïñ£©
- *cur£ºµ±Ç°Ô­Ê¼Í¼ÏñÖ¡£¨ÓÉÔ¤²âÍ¼Ïñ²úÉúµÄ£©
- *curref£ºµ±Ç°µÄÖØ½¨Í¼ÏñÖ¡£¨ÓÃÀ´¸ù¾İµÚÒ»¸ö³¡Ô¤²âµÚ¶ş¸ö³¡£©
- *sxf£¬syf£ºÇ°ÏòËÑË÷´°¿Ú
- *sxb£¬syb£ººóÏòËÑË÷´°¿Ú
- *mbi£ºÖ¸Ïòºê¿éĞÅÏ¢½á¹¹ÌåµÄÖ¸Õë
- *secondfield£ºÖ¸Ê¾Ò»Ö¡Í¼ÏñµÄµÚ¶ş¸ö³¡
- *ipflag£ºÖ¸Ê¾µ±Ç°PÍ¼ÏñÖ¡ÊÇÓÉIÍ¼ÏñÖ¡ËùÔ¤²â²úÉúµÄ
+ *oldorgï¼šå‰å‘é¢„æµ‹çš„åŸå§‹å‚è€ƒå›¾ï¼ˆä¾›På›¾åƒå’ŒBå›¾åƒä½¿ç”¨ï¼‰
+ *neworgï¼šåå‘é¢„æµ‹çš„åŸå§‹å‚è€ƒå›¾ï¼ˆä»…ä¾›Bå›¾åƒä½¿ç”¨ï¼‰
+ *oldrefï¼šå‰å‘é¢„æµ‹çš„é‡å»ºå›¾åƒï¼ˆPå›¾åƒå’ŒBå›¾åƒï¼‰
+ *newrefï¼šåå‘é¢„æµ‹çš„é‡å»ºå›¾åƒï¼ˆBå›¾åƒï¼‰
+ *curï¼šå½“å‰åŸå§‹å›¾åƒå¸§ï¼ˆç”±é¢„æµ‹å›¾åƒäº§ç”Ÿçš„ï¼‰
+ *currefï¼šå½“å‰çš„é‡å»ºå›¾åƒå¸§ï¼ˆç”¨æ¥æ ¹æ®ç¬¬ä¸€ä¸ªåœºé¢„æµ‹ç¬¬äºŒä¸ªåœºï¼‰
+ *sxfï¼Œsyfï¼šå‰å‘æœç´¢çª—å£
+ *sxbï¼Œsybï¼šåå‘æœç´¢çª—å£
+ *mbiï¼šæŒ‡å‘å®å—ä¿¡æ¯ç»“æ„ä½“çš„æŒ‡é’ˆ
+ *secondfieldï¼šæŒ‡ç¤ºä¸€å¸§å›¾åƒçš„ç¬¬äºŒä¸ªåœº
+ *ipflagï¼šæŒ‡ç¤ºå½“å‰På›¾åƒå¸§æ˜¯ç”±Iå›¾åƒå¸§æ‰€é¢„æµ‹äº§ç”Ÿçš„
 
- *Êä³ö½á¹ûmbi->
+ *è¾“å‡ºç»“æœmbi->
  *mb_type: 0, MB_INTRA, MB_FORWARD, MB_BACKWARD, MB_FORWARD|MB_BACKWARD
- *MV[][][]: ÔË¶¯ÏòÁ¿ (³¡¸ñÊ½)
- *mv_field_sel: ¶¥²¿/µ×²¿³¡
+ *MV[][][]: è¿åŠ¨å‘é‡ (åœºæ ¼å¼)
+ *mv_field_sel: é¡¶éƒ¨/åº•éƒ¨åœº
  *motion_type: MC_FIELD, MC_16X8
 
  */
@@ -721,7 +721,7 @@ static void field_ME(unsigned char *oldorg,unsigned char *neworg,unsigned char *
 }
 
 /*
- * Ö¡Í¼ÏñÔË¶¯¹À¼Æ
+ * å¸§å›¾åƒè¿åŠ¨ä¼°è®¡
  *
 
  */
@@ -786,19 +786,19 @@ static void frame_estimate(unsigned char *org,unsigned char *ref,unsigned char *
 }
 
 /*
- * ³¡Í¼Æ¬ÔË¶¯Ô¤²â³ÌĞò
+ * åœºå›¾ç‰‡è¿åŠ¨é¢„æµ‹ç¨‹åº
  *
- * toporg£ºÔ­Ê¼ÉÏ°ë²¿·Ö³¡µØÖ·
- *topref£ºÖØ½¨µÄÉÏ°ë²¿·Ö³¡µØÖ·
- *botorg£ºÔ­Ê¼ÏÂ°ë²¿·Ö²Î¿¼³¡µØÖ·
- *botref£ºÖØ½¨µÄÏÂ°ë²¿·Ö²Î¿¼³¡µÄµØÖ·
- *mb£º´ıÆ¥ÅäµÄºê¿é
- *i£¬j£ººê¿éµÄÎ»ÖÃ£¨¼´ËÑË÷´°¿ÚµÄÖĞĞÄ£©
- *iminp£¬jminp£¬selp£¬dfieldp£º×î¼ÑÔ¤²â³¡µÄÎ»ÖÃºÍ¾àÀë
- *imin8up£¬jmin8up£¬sel8up£ºÉÏ°ë²¿·Öºê¿éµÄ×î¼ÑÔ¤²âµÄÎ»ÖÃ
- *imin8lp£¬jmin8lp£¬sel8lp£ºÏÂ°ë²¿·Öºê¿éµÄ×î¼ÑÔ¤²âµÄÎ»ÖÃ
- *d8p£º×î¼Ñ16¡Á8µÄÔ¤²â¿éµÄ¾àÀë
- *iminsp£¬jminsp£¬dsp£º×î¼ÑÍ¬ÆæÅ¼ĞÔÔ¤²â³¡µÄÎ»ÖÃºÍ¾àÀë
+ * toporgï¼šåŸå§‹ä¸ŠåŠéƒ¨åˆ†åœºåœ°å€
+ *toprefï¼šé‡å»ºçš„ä¸ŠåŠéƒ¨åˆ†åœºåœ°å€
+ *botorgï¼šåŸå§‹ä¸‹åŠéƒ¨åˆ†å‚è€ƒåœºåœ°å€
+ *botrefï¼šé‡å»ºçš„ä¸‹åŠéƒ¨åˆ†å‚è€ƒåœºçš„åœ°å€
+ *mbï¼šå¾…åŒ¹é…çš„å®å—
+ *iï¼Œjï¼šå®å—çš„ä½ç½®ï¼ˆå³æœç´¢çª—å£çš„ä¸­å¿ƒï¼‰
+ *iminpï¼Œjminpï¼Œselpï¼Œdfieldpï¼šæœ€ä½³é¢„æµ‹åœºçš„ä½ç½®å’Œè·ç¦»
+ *imin8upï¼Œjmin8upï¼Œsel8upï¼šä¸ŠåŠéƒ¨åˆ†å®å—çš„æœ€ä½³é¢„æµ‹çš„ä½ç½®
+ *imin8lpï¼Œjmin8lpï¼Œsel8lpï¼šä¸‹åŠéƒ¨åˆ†å®å—çš„æœ€ä½³é¢„æµ‹çš„ä½ç½®
+ *d8pï¼šæœ€ä½³16Ã—8çš„é¢„æµ‹å—çš„è·ç¦»
+ *iminspï¼Œjminspï¼Œdspï¼šæœ€ä½³åŒå¥‡å¶æ€§é¢„æµ‹åœºçš„ä½ç½®å’Œè·ç¦»
  */
 
 static void field_estimate(unsigned char *toporg,unsigned char *topref,unsigned char *botorg,unsigned char *botref,unsigned char *mb,int i,int j,int sx,int sy,int ipflag,
@@ -925,7 +925,7 @@ static void dpframe_estimate(unsigned char *ref,unsigned char *mb,int i,int j,in
   {
     for (ppred=0; ppred<2; ppred++)
     {
-      /* ½«µÑ¿¨¶ù¾ø¶Ô×ø±êÏµ×ª»¯³ÉÏà¶ÔÔË¶¯ÏòÁ¿µÄÖµ
+      /* å°†ç¬›å¡å„¿ç»å¯¹åæ ‡ç³»è½¬åŒ–æˆç›¸å¯¹è¿åŠ¨å‘é‡çš„å€¼
        */
       is = iminf[pref][ppred] - (i<<1);
       js = jminf[pref][ppred] - (j<<1);
@@ -1148,17 +1148,17 @@ static void dpfield_estimate(unsigned char *topref,unsigned char *botref,unsigne
 }
 
 /*
- È«ËÑË÷¿éÆ¥Åä
+ å…¨æœç´¢å—åŒ¹é…
 
- blk£º¿éµÄ×óÉÏ½ÇÏñËØ×ø±ê
-h£º¿éµÄ¸ß¶È
-lx£ºÔÚ²Î¿¼¿éÖĞ£¬´¹Ö±ÏàÁÚµÄÏñËØÖ®¼äµÄ¾àÀë£¨ÒÔ×Ö½ÚÎªµ¥Î»£©
-org£ºÔ´²Î¿¼Í¼ÏñµÄ×óÉÏ½ÇÏñËØµÄ×ø±ê
-ref£ºÖØ½¨²Î¿¼Í¼ÏñµÄ×óÉÏ½ÇÏñËØµÄ×ø±ê
-i0£¬j0£ºËÑË÷´°¿ÚµÄÖĞĞÄµã
-sx£¬sy£ºËÑË÷´°¿ÚµÄ°ë³¤ºÍ°ë¿í
-xmax£¬ymax£ºËÑË÷ÇøÓòµÄÓÒ±ß½çºÍÏÂ±ß½ç
-iminp£¬jminp£ºÖ¸Ïò´æ´¢½á¹ûµÄÖ¸Õë
+ blkï¼šå—çš„å·¦ä¸Šè§’åƒç´ åæ ‡
+hï¼šå—çš„é«˜åº¦
+lxï¼šåœ¨å‚è€ƒå—ä¸­ï¼Œå‚ç›´ç›¸é‚»çš„åƒç´ ä¹‹é—´çš„è·ç¦»ï¼ˆä»¥å­—èŠ‚ä¸ºå•ä½ï¼‰
+orgï¼šæºå‚è€ƒå›¾åƒçš„å·¦ä¸Šè§’åƒç´ çš„åæ ‡
+refï¼šé‡å»ºå‚è€ƒå›¾åƒçš„å·¦ä¸Šè§’åƒç´ çš„åæ ‡
+i0ï¼Œj0ï¼šæœç´¢çª—å£çš„ä¸­å¿ƒç‚¹
+sxï¼Œsyï¼šæœç´¢çª—å£çš„åŠé•¿å’ŒåŠå®½
+xmaxï¼Œymaxï¼šæœç´¢åŒºåŸŸçš„å³è¾¹ç•Œå’Œä¸‹è¾¹ç•Œ
+iminpï¼Œjminpï¼šæŒ‡å‘å­˜å‚¨ç»“æœçš„æŒ‡é’ˆ
 */
 
 static int fullsearch(unsigned char *org,unsigned char *ref,unsigned char *blk,int lx,int i0,int j0,int sx,int sy,int h,int xmax,int ymax,int *iminp,int *jminp)
@@ -1247,12 +1247,12 @@ static int fullsearch(unsigned char *org,unsigned char *ref,unsigned char *blk,i
 }
 
 /*
- * ÇóÁ½¸ö¿éÖ®¼ä¾ø¶Ô²îÖµ
- * blk1,blk2£ºÎªÁ½¸ö¿é×óÉÏ½ÇÏñËØ×ø±ê
- *lx£º´¹Ö±ÏàÁÚµÄÏñËØÖ®¼äµÄ¾àÀë£¨ÒÔ×Ö½ÚÎªµ¥Î»£©
- *hx£¬hy£ºË®Æ½ºÍ´¹Ö±²åÖµµÄ±êÖ¾
- *h£º¿éµÄ¸ß¶È£¨Í¨³£Îª8»ò16£©
- *distlim£º¼«Öµ£¬Èç¹û½á¹û³¬¹ı¸ÃÖµÔò·ÅÆúÖ®¡£
+ * æ±‚ä¸¤ä¸ªå—ä¹‹é—´ç»å¯¹å·®å€¼
+ * blk1,blk2ï¼šä¸ºä¸¤ä¸ªå—å·¦ä¸Šè§’åƒç´ åæ ‡
+ *lxï¼šå‚ç›´ç›¸é‚»çš„åƒç´ ä¹‹é—´çš„è·ç¦»ï¼ˆä»¥å­—èŠ‚ä¸ºå•ä½ï¼‰
+ *hxï¼Œhyï¼šæ°´å¹³å’Œå‚ç›´æ’å€¼çš„æ ‡å¿—
+ *hï¼šå—çš„é«˜åº¦ï¼ˆé€šå¸¸ä¸º8æˆ–16ï¼‰
+ *distlimï¼šæå€¼ï¼Œå¦‚æœç»“æœè¶…è¿‡è¯¥å€¼åˆ™æ”¾å¼ƒä¹‹ã€‚
  */
 static int dist1(unsigned char *blk1,unsigned char *blk2,int lx,int hx,int hy,int h,int distlim)
 {
@@ -1345,7 +1345,7 @@ static int dist1(unsigned char *blk1,unsigned char *blk2,int lx,int hx,int hy,in
 }
 
 /*
- * Á½¸ö¿éÖ®¼ä¾ù·½Îó²î
+ * ä¸¤ä¸ªå—ä¹‹é—´å‡æ–¹è¯¯å·®
 
  */
 static int dist2(unsigned char *blk1,unsigned char *blk2,int lx,int hx,int hy,int h)
@@ -1414,7 +1414,7 @@ static int dist2(unsigned char *blk1,unsigned char *blk2,int lx,int hx,int hy,in
 }
 
 /*
- *(16*h) ¿éºÍË«ÏòÔ¤²âÖ®¼äµÄ¾ø¶ÔÎó²î
+ *(16*h) å—å’ŒåŒå‘é¢„æµ‹ä¹‹é—´çš„ç»å¯¹è¯¯å·®
  *
 
  */
@@ -1461,7 +1461,7 @@ static int bdist1(unsigned char *pf,unsigned char *pb,unsigned char *p2,int lx,i
 }
 
 /*
- * (16*h) ¿éºÍË«ÏòÔ¤²âÖ®¼äµÄ¾ù·½Îó²î
+ * (16*h) å—å’ŒåŒå‘é¢„æµ‹ä¹‹é—´çš„å‡æ–¹è¯¯å·®
  */
 static int bdist2(unsigned char *pf,unsigned char *pb,unsigned char *p2,int lx,int hxf,int hyf,int hxb,int hyb,int h)
 {
@@ -1503,9 +1503,9 @@ static int bdist2(unsigned char *pf,unsigned char *pb,unsigned char *p2,int lx,i
 }
 
 /*
- * ¼ÆËãÒ»¸ö(16*16) ¿éµÄ·½²î£¬²¢³ËÒÔ256
- * p:  ¿é×óÉÏ½ÇÏñËØµÄµØÖ·
- * lx: ÏàÁÚÏñËØµÄ´¹Ö±¾àÀë£¨ÒÔ×Ö½ÚÎªµ¥Î»£©
+ * è®¡ç®—ä¸€ä¸ª(16*16) å—çš„æ–¹å·®ï¼Œå¹¶ä¹˜ä»¥256
+ * p:  å—å·¦ä¸Šè§’åƒç´ çš„åœ°å€
+ * lx: ç›¸é‚»åƒç´ çš„å‚ç›´è·ç¦»ï¼ˆä»¥å­—èŠ‚ä¸ºå•ä½ï¼‰
  */
 static int variance(unsigned char *p,int lx)
 {

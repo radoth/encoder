@@ -1,4 +1,4 @@
-/* putvlc.c, ±ä³¤±àÂë³ÌĞò*/
+/* putvlc.c, å˜é•¿ç¼–ç ç¨‹åº*/
 
 
 
@@ -8,22 +8,22 @@
 #include "global.h"
 #include "vlc.h"
 
-/* º¯ÊıÉùÃ÷ */
+/* å‡½æ•°å£°æ˜ */
 static void putDC (sVLCtable *tab, int val);
 
-/* ÎªÁÁ¶ÈDCÏµÊı²úÉú¿É±ä³¤±àÂë */
+/* ä¸ºäº®åº¦DCç³»æ•°äº§ç”Ÿå¯å˜é•¿ç¼–ç  */
 void putDClum(int val)
 {
   putDC(DClumtab,val);
 }
 
-/* ÎªÉ«¶ÈDCÏµÊı²úÉú¿É±ä³¤±àÂë */
+/* ä¸ºè‰²åº¦DCç³»æ•°äº§ç”Ÿå¯å˜é•¿ç¼–ç  */
 void putDCchrom(int val)
 {
   putDC(DCchromtab,val);
 }
 
-//ÎªDCÏµÊı²úÉú¿É±ä³¤µÄ±àÂë
+//ä¸ºDCç³»æ•°äº§ç”Ÿå¯å˜é•¿çš„ç¼–ç 
 static void putDC(sVLCtable *tab,int val)
 {
   int absval, size;
@@ -36,7 +36,7 @@ static void putDC(sVLCtable *tab,int val)
     error(errortext);
   }
 
-  /* ¼ÆËãdct_dc_size */
+  /* è®¡ç®—dct_dc_size */
   size = 0;
 
   while (absval)
@@ -45,10 +45,10 @@ static void putDC(sVLCtable *tab,int val)
     size++;
   }
 
-  /*¸ù¾İ±íB-12 »òB-13Îªdct_dc_size ²úÉúVLC */
+  /*æ ¹æ®è¡¨B-12 æˆ–B-13ä¸ºdct_dc_size äº§ç”ŸVLC */
   putbits(tab[size].code,tab[size].len);
 
-  /* ¸½¼Ó¹Ì¶¨³¤¶ÈµÄ´úÂë (dc_dct_differential) */
+  /* é™„åŠ å›ºå®šé•¿åº¦çš„ä»£ç  (dc_dct_differential) */
   if (size!=0)
   {
     if (val>=0)
@@ -59,16 +59,16 @@ static void putDC(sVLCtable *tab,int val)
   }
 }
 
-/*Îª·ÇÖ¡ÄÚ·½Ê½µÄ¿éµÄµÚÒ»¸öACÏµÊı½øĞĞVLC±àÂë*/
+/*ä¸ºéå¸§å†…æ–¹å¼çš„å—çš„ç¬¬ä¸€ä¸ªACç³»æ•°è¿›è¡ŒVLCç¼–ç */
 void putACfirst(int run,int val)
 {
-  if (run==0 && (val==1 || val==-1)) /* ¶ÔÕâÁ½¸öÌõ¼şÏÂµÄÖµÒªÇø±ğ¶Ô´ı*/
+  if (run==0 && (val==1 || val==-1)) /* å¯¹è¿™ä¸¤ä¸ªæ¡ä»¶ä¸‹çš„å€¼è¦åŒºåˆ«å¯¹å¾…*/
     putbits(2|(val<0),2); 
   else
     putAC(run,val,0); 
 }
 
-/*¶ÔÆäËûµÄDCTÏµÊı½øĞĞ±àÂë¡£*/
+/*å¯¹å…¶ä»–çš„DCTç³»æ•°è¿›è¡Œç¼–ç ã€‚*/
 void putAC(int run,int signed_level,int vlcformat)
 {
   int level, len;
@@ -76,7 +76,7 @@ void putAC(int run,int signed_level,int vlcformat)
 
   level = (signed_level<0) ? -signed_level : signed_level; /* abs(signed_level) */
 
-  /* Òª±£Ö¤ÓÎ³ÌºÍ¼¶±ğ£¨level£©ÓĞĞ§ */
+  /* è¦ä¿è¯æ¸¸ç¨‹å’Œçº§åˆ«ï¼ˆlevelï¼‰æœ‰æ•ˆ */
   if (run<0 || run>63 || level==0 || level>2047 || (mpeg1 && level>255))
   {
     sprintf(errortext,"AC value out of range (run=%d, signed_level=%d)\n",
@@ -88,7 +88,7 @@ void putAC(int run,int signed_level,int vlcformat)
 
   if (run<2 && level<41)
   {
-    /* ¸ù¾İvlcformat Ñ¡Ôñ²ÉÓÃ±íB-14 »¹ÊÇ B-15 */
+    /* æ ¹æ®vlcformat é€‰æ‹©é‡‡ç”¨è¡¨B-14 è¿˜æ˜¯ B-15 */
 	  if (vlcformat)
       ptab = &dct_code_tab1a[run][level-1];
     else
@@ -98,7 +98,7 @@ void putAC(int run,int signed_level,int vlcformat)
   }
   else if (run<32 && level<6)
   {
-    /* ¸ù¾İvlcformat Ñ¡Ôñ²ÉÓÃ±íB-14 »¹ÊÇ B-15 */
+    /* æ ¹æ®vlcformat é€‰æ‹©é‡‡ç”¨è¡¨B-14 è¿˜æ˜¯ B-15 */
 	  if (vlcformat)
       ptab = &dct_code_tab2a[run-2][level-1];
     else
@@ -107,19 +107,19 @@ void putAC(int run,int signed_level,int vlcformat)
     len = ptab->len;
   }
 
-  if (len!=0) /* ËµÃ÷´æÔÚÒ»¸öVLC ±àÂë */
+  if (len!=0) /* è¯´æ˜å­˜åœ¨ä¸€ä¸ªVLC ç¼–ç  */
   {
     putbits(ptab->code,len);
-    putbits(signed_level<0,1); /* Éè±êÊ¶ */
+    putbits(signed_level<0,1); /* è®¾æ ‡è¯† */
   }
   else
   {
-        /* ËµÃ÷¶ÔÕâ¸öÖĞ¼ä¸ñÊ½ (run, level) Ã»ÓĞVLC±àÂë:£ºÊ¹ÓÃescape±àÂë */
+        /* è¯´æ˜å¯¹è¿™ä¸ªä¸­é—´æ ¼å¼ (run, level) æ²¡æœ‰VLCç¼–ç :ï¼šä½¿ç”¨escapeç¼–ç  */
     putbits(1l,6); /* Escape */
-    putbits(run,6); /* ÓÃ6 bit ±íÊ¾ÓÎ³Ì£¨run £©*/
+    putbits(run,6); /* ç”¨6 bit è¡¨ç¤ºæ¸¸ç¨‹ï¼ˆrun ï¼‰*/
     if (mpeg1)
     {
-      /* ISO/IEC 11172-2 ¹æ¶¨Ê¹ÓÃ 8 »ò 16 bit µÄ´úÂë */
+      /* ISO/IEC 11172-2 è§„å®šä½¿ç”¨ 8 æˆ– 16 bit çš„ä»£ç  */
 		if (signed_level>127)
         putbits(0,8);
       if (signed_level<-127)
@@ -128,13 +128,13 @@ void putAC(int run,int signed_level,int vlcformat)
     }
     else
     {
-      /* ISO/IEC 13818-2 ¹æ¶¨Ê¹ÓÃ12 bit ´úÂë¸ù¾İ±íB-16 */
+      /* ISO/IEC 13818-2 è§„å®šä½¿ç”¨12 bit ä»£ç æ ¹æ®è¡¨B-16 */
 		putbits(signed_level,12);
     }
   }
 }
 
-/* Îªmacroblock_address_increment ½øĞĞVLC±àÂë */
+/* ä¸ºmacroblock_address_increment è¿›è¡ŒVLCç¼–ç  */
 void putaddrinc(int addrinc)
 {
   while (addrinc>33)
@@ -146,14 +146,14 @@ void putaddrinc(int addrinc)
   putbits(addrinctab[addrinc-1].code,addrinctab[addrinc-1].len);
 }
 
-/* Îªmacroblock_type ½øĞĞVLC */
+/* ä¸ºmacroblock_type è¿›è¡ŒVLC */
 void putmbtype(int pict_type,int mb_type)
 {
   putbits(mbtypetab[pict_type-1][mb_type].code,
           mbtypetab[pict_type-1][mb_type].len);
 }
 
-/* Îªmotion_code ½øĞĞVLC */
+/* ä¸ºmotion_code è¿›è¡ŒVLC */
 void putmotioncode(int motion_code)
 {
   int abscode;
@@ -161,10 +161,10 @@ void putmotioncode(int motion_code)
   abscode = (motion_code>=0) ? motion_code : -motion_code; /* abs(motion_code) */
   putbits(motionvectab[abscode].code,motionvectab[abscode].len);
   if (motion_code!=0)
-    putbits(motion_code<0,1);  /* ±êÊ¶, 0ÎªÕı, 1Îª¸º */
+    putbits(motion_code<0,1);  /* æ ‡è¯†, 0ä¸ºæ­£, 1ä¸ºè´Ÿ */
 }
 
-/* Îªdmvector[t]½øĞĞVLC¸ù¾İ±í B-11 */
+/* ä¸ºdmvector[t]è¿›è¡ŒVLCæ ¹æ®è¡¨ B-11 */
 void putdmv(int dmv)
 {
   if (dmv==0)
@@ -175,8 +175,8 @@ void putdmv(int dmv)
     putbits(3,2);
 }
 
-/* Îª±àÂë¿éµÄÄ£Ê½coded_block_pattern ½øĞĞVLC£¬
-¶ÔÓÚ 4:2:2, 4:4:4 Í¼Ïñ¸ñÊ½µÄ¿é²»½øĞĞ */
+/* ä¸ºç¼–ç å—çš„æ¨¡å¼coded_block_pattern è¿›è¡ŒVLCï¼Œ
+å¯¹äº 4:2:2, 4:4:4 å›¾åƒæ ¼å¼çš„å—ä¸è¿›è¡Œ */
 void putcbp(int cbp)
 {
   putbits(cbptable[cbp].code,cbptable[cbp].len);

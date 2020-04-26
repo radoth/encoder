@@ -1,4 +1,4 @@
-/* predict.c, ÔË¶¯²¹³¥Ô¤²â*/
+/* predict.c, è¿åŠ¨è¡¥å¿é¢„æµ‹*/
 
 
 
@@ -26,13 +26,13 @@ static void calc_DMV (int DMV[][2], int *dmvector, int mvx,
 static void clearblock (unsigned char *cur[], int i0, int j0);
 
 
-/* ÎªÍêÕûµÄÍ¼ÏñĞÎ³ÉÔ¤²â
+/* ä¸ºå®Œæ•´çš„å›¾åƒå½¢æˆé¢„æµ‹
  *
-    reff: Ç°Ïò²Î¿¼Í¼ÏñÖ¡
-    refb: ºóÏò²Î¿¼Í¼ÏñÖ¡
-	cur: Ä¿±êÖ¡£¨¼´µ±Ç°ÒªÔ¤²âµÄÖ¡£©
-	secondfield: Ô¤²âÖ¡µÄµÚ¶ş¸ö³¡Í¼Ïñ
-	mbi: Ö¸Ïòºê¿éĞÅÏ¢½á¹¹ÌåµÄÖ¸Õë
+    reff: å‰å‘å‚è€ƒå›¾åƒå¸§
+    refb: åå‘å‚è€ƒå›¾åƒå¸§
+	cur: ç›®æ ‡å¸§ï¼ˆå³å½“å‰è¦é¢„æµ‹çš„å¸§ï¼‰
+	secondfield: é¢„æµ‹å¸§çš„ç¬¬äºŒä¸ªåœºå›¾åƒ
+	mbi: æŒ‡å‘å®å—ä¿¡æ¯ç»“æ„ä½“çš„æŒ‡é’ˆ
 
  */
 
@@ -42,7 +42,7 @@ void predict(unsigned char *reff[],unsigned char *refb[],unsigned char *cur[3],i
 
   k = 0;
 
-  /* ¶ÔËùÓĞµÄºê¿é½øĞĞÑ­»· */
+  /* å¯¹æ‰€æœ‰çš„å®å—è¿›è¡Œå¾ªç¯ */
   for (j=0; j<height2; j+=16)
     for (i=0; i<width; i+=16)
     {
@@ -54,25 +54,25 @@ void predict(unsigned char *reff[],unsigned char *refb[],unsigned char *cur[3],i
     }
 }
 
-/* ÎªÒ»¸öºê¿éĞÎ³ÉÔ¤²â
+/* ä¸ºä¸€ä¸ªå®å—å½¢æˆé¢„æµ‹
  *
- 	oldref: ÓÃÀ´½øĞĞÇ°ÏòÔ¤²âµÄ²Î¿¼Ö¡
-	newref: ÓÃÀ´½øĞĞºóÏòÔ¤²âµÄ²Î¿¼Ö¡
-	cur: Ä¿±êÖ¡£¨¼´µ±Ç°ÒªÔ¤²âµÄÖ¡£©
-	lx: Ö¡µÄ¿í¶È£¨ÓëÈ«¾Ö±äÁ¿"width"Ò»ÖÂ£©
-	bx¡¢by: Òª±»Ô¤²âµÄºê¿éµÄÍ¼Ïñ×ø±ê£¨¿ÉÒÔÊÇ³¡£¬Ò²¿ÉÒÔÊÇÖ¡£©
-	pict_type: Í¼ÏñÀàĞÍ£¬¾ÍÊÇI¡¢P»òB
-	pict_struct: Í¼ÏñµÄ½á¹¹£¬¾ÍÊÇÖ¡Í¼Ïñ£¨FRAME_PICTURE£©£¬ÉÏ²¿·ÖµÄ³¡Í¼Ïñ
-	£¨TOP_FIELD£©ºÍÏÂ²¿·ÖµÄ³¡Í¼Ïñ£¨BOTTOM_FIELD£©
+ 	oldref: ç”¨æ¥è¿›è¡Œå‰å‘é¢„æµ‹çš„å‚è€ƒå¸§
+	newref: ç”¨æ¥è¿›è¡Œåå‘é¢„æµ‹çš„å‚è€ƒå¸§
+	cur: ç›®æ ‡å¸§ï¼ˆå³å½“å‰è¦é¢„æµ‹çš„å¸§ï¼‰
+	lx: å¸§çš„å®½åº¦ï¼ˆä¸å…¨å±€å˜é‡"width"ä¸€è‡´ï¼‰
+	bxã€by: è¦è¢«é¢„æµ‹çš„å®å—çš„å›¾åƒåæ ‡ï¼ˆå¯ä»¥æ˜¯åœºï¼Œä¹Ÿå¯ä»¥æ˜¯å¸§ï¼‰
+	pict_type: å›¾åƒç±»å‹ï¼Œå°±æ˜¯Iã€Pæˆ–B
+	pict_struct: å›¾åƒçš„ç»“æ„ï¼Œå°±æ˜¯å¸§å›¾åƒï¼ˆFRAME_PICTUREï¼‰ï¼Œä¸Šéƒ¨åˆ†çš„åœºå›¾åƒ
+	ï¼ˆTOP_FIELDï¼‰å’Œä¸‹éƒ¨åˆ†çš„åœºå›¾åƒï¼ˆBOTTOM_FIELDï¼‰
 	
-	mb_type: ºê¿éÀàĞÍ£¬¿ÉÒÔÊÇÇ°Ïò£¨MB_FORWARD£©,Ò²¿ÉÒÔÊÇºóÏò£¨MB_BACKWARD£©
-	»òÊÇÖ¡ÄÚ£¨MB_INTRA£©ºê¿é
+	mb_type: å®å—ç±»å‹ï¼Œå¯ä»¥æ˜¯å‰å‘ï¼ˆMB_FORWARDï¼‰,ä¹Ÿå¯ä»¥æ˜¯åå‘ï¼ˆMB_BACKWARDï¼‰
+	æˆ–æ˜¯å¸§å†…ï¼ˆMB_INTRAï¼‰å®å—
 	
-	  motion_type: ÔË¶¯ÀàĞÍ£¬Ö÷ÒªÓÃÖµMC_FRAME, MC_FIELD¡¢MC_16X8¡¢MC_DMV±íÊ¾
-	secondfield: Ô¤²âÖ¡µÄµÚ¶ş¸ö³¡Í¼Ïñ
-	PMV[2][2][2]: ÔË¶¯ÏòÁ¿£¨ÒÔ°ëÏñËØÍ¼Ïñ×ø±êÎªµ¥Î»£©
-	mv_field_sel[2][2]: ´¹Ö±ÔË¶¯³¡Ñ¡Ôñ£¨Õë¶Ô³¡Ô¤²â£©
-	dmvector: ²î·ÖÔË¶¯ÏòÁ¿
+	  motion_type: è¿åŠ¨ç±»å‹ï¼Œä¸»è¦ç”¨å€¼MC_FRAME, MC_FIELDã€MC_16X8ã€MC_DMVè¡¨ç¤º
+	secondfield: é¢„æµ‹å¸§çš„ç¬¬äºŒä¸ªåœºå›¾åƒ
+	PMV[2][2][2]: è¿åŠ¨å‘é‡ï¼ˆä»¥åŠåƒç´ å›¾åƒåæ ‡ä¸ºå•ä½ï¼‰
+	mv_field_sel[2][2]: å‚ç›´è¿åŠ¨åœºé€‰æ‹©ï¼ˆé’ˆå¯¹åœºé¢„æµ‹ï¼‰
+	dmvector: å·®åˆ†è¿åŠ¨å‘é‡
 
  */
 
@@ -89,89 +89,89 @@ static void predict_mb(unsigned char *oldref[],unsigned char *newref[],unsigned 
     return;
   }
 
-  addflag = 0;  /* µÚÒ»¸öÔ¤²âÖµÒª´æ´¢ÆğÀ´£¬È»ºó¼ÓÉÏµÚ¶ş¸ö²¢È¡Æ½¾ù */
+  addflag = 0;  /* ç¬¬ä¸€ä¸ªé¢„æµ‹å€¼è¦å­˜å‚¨èµ·æ¥ï¼Œç„¶ååŠ ä¸Šç¬¬äºŒä¸ªå¹¶å–å¹³å‡ */
 
   if ((mb_type & MB_FORWARD) || (pict_type==P_TYPE))
   {
-    /* Ç°ÏòÔ¤²â£¬°üÀ¨PÍ¼ÏñÀïÃæµÄ0ÔË¶¯ÏòÁ¿ */
+    /* å‰å‘é¢„æµ‹ï¼ŒåŒ…æ‹¬På›¾åƒé‡Œé¢çš„0è¿åŠ¨å‘é‡ */
     if (pict_struct==FRAME_PICTURE)
     {
-      /* Ö¡Í¼Ïñ */
+      /* å¸§å›¾åƒ */
 
 
       if ((motion_type==MC_FRAME) || !(mb_type & MB_FORWARD))
       {
-  /* Ö¡Í¼ÏñÖĞ£¬»ùÓÚÖ¡µÄÔ¤²â */
+  /* å¸§å›¾åƒä¸­ï¼ŒåŸºäºå¸§çš„é¢„æµ‹ */
 		  pred(oldref,0,cur,0,
           lx,16,16,bx,by,PMV[0][0][0],PMV[0][0][1],0);
       }
       else if (motion_type==MC_FIELD)
       {
-         /* Ö¡Í¼ÏñÖĞ£¬»ùÓÚ³¡µÄÔ¤²â-based prediction in frame picture
-         *²¢·Ç°´ÕÕ´¹Ö±×ø±êµÄ±ÈÀı
+         /* å¸§å›¾åƒä¸­ï¼ŒåŸºäºåœºçš„é¢„æµ‹-based prediction in frame picture
+         *å¹¶éæŒ‰ç…§å‚ç›´åæ ‡çš„æ¯”ä¾‹
          */
 
 
-        /* ÉÏ²¿·Ö³¡Í¼ÏñµÄÔ¤²â */
+        /* ä¸Šéƒ¨åˆ†åœºå›¾åƒçš„é¢„æµ‹ */
 		  pred(oldref,mv_field_sel[0][0],cur,0,
           lx<<1,16,8,bx,by>>1,PMV[0][0][0],PMV[0][0][1]>>1,0);
 
-        /* ÏÂ²¿·Ö³¡Í¼ÏñµÄÔ¤²â */
+        /* ä¸‹éƒ¨åˆ†åœºå›¾åƒçš„é¢„æµ‹ */
 		  pred(oldref,mv_field_sel[1][0],cur,1,
           lx<<1,16,8,bx,by>>1,PMV[1][0][0],PMV[1][0][1]>>1,0);
       }
       else if (motion_type==MC_DMV)
       {
-               /* DMVÔ¤²â */
-        /* ¼ÆËãÑÜÉúµÄÔË¶¯ÏòÁ¿ */
+               /* DMVé¢„æµ‹ */
+        /* è®¡ç®—è¡ç”Ÿçš„è¿åŠ¨å‘é‡ */
 
         calc_DMV(DMV,dmvector,PMV[0][0][0],PMV[0][0][1]>>1);
 
-         /* ÓÃÉÏ²¿·Ö³¡Í¼ÏñÔ¤²âÉÏ²¿·Ö³¡Í¼Ïñ */
+         /* ç”¨ä¸Šéƒ¨åˆ†åœºå›¾åƒé¢„æµ‹ä¸Šéƒ¨åˆ†åœºå›¾åƒ */
         pred(oldref,0,cur,0,lx<<1,16,8,bx,by>>1,PMV[0][0][0],PMV[0][0][1]>>1,0);
-        /* ÓÃÏÂ²¿·Ö³¡Í¼ÏñÔ¤²âÏÂ²¿·Ö³¡Í¼Ïñ */
+        /* ç”¨ä¸‹éƒ¨åˆ†åœºå›¾åƒé¢„æµ‹ä¸‹éƒ¨åˆ†åœºå›¾åƒ */
         pred(oldref,1,cur,1,lx<<1,16,8,bx,by>>1,PMV[0][0][0],PMV[0][0][1]>>1,0);
-        /*ÓÃÏÂ²¿·Ö³¡Í¼ÏñÔ¤²âÏÂ²¿·Ö³¡Í¼Ïñ£¬²¢¼Óµ½Ô­À´µÄ³¡Í¼ÏñÉÏ*/
+        /*ç”¨ä¸‹éƒ¨åˆ†åœºå›¾åƒé¢„æµ‹ä¸‹éƒ¨åˆ†åœºå›¾åƒï¼Œå¹¶åŠ åˆ°åŸæ¥çš„åœºå›¾åƒä¸Š*/
         pred(oldref,1,cur,0,lx<<1,16,8,bx,by>>1,DMV[0][0],DMV[0][1],1);
-        /*ÓÃÉÏ²¿·Ö³¡Í¼ÏñÔ¤²âÏÂ²¿·Ö³¡Í¼Ïñ£¬²¢¼Óµ½Ô­À´µÄ³¡Í¼ÏñÉÏ*/
+        /*ç”¨ä¸Šéƒ¨åˆ†åœºå›¾åƒé¢„æµ‹ä¸‹éƒ¨åˆ†åœºå›¾åƒï¼Œå¹¶åŠ åˆ°åŸæ¥çš„åœºå›¾åƒä¸Š*/
         pred(oldref,0,cur,1,lx<<1,16,8,bx,by>>1,DMV[1][0],DMV[1][1],1);
 
       }
       else
       {
-         /* ÎŞĞ§µÄÔË¶¯ÀàĞÍ */
+         /* æ— æ•ˆçš„è¿åŠ¨ç±»å‹ */
         if (!quiet)
           fprintf(stderr,"invalid motion_type\n");
       }
     }
     else /* TOP_FIELD or BOTTOM_FIELD */
     {
-       /* ³¡Í¼Ïñ */
+       /* åœºå›¾åƒ */
 
       currentfield = (pict_struct==BOTTOM_FIELD);
 
-   /* ÅĞ¶ÏÓÃÄÄÒ»Ö¡À´½øĞĞÔ¤²â*/
+   /* åˆ¤æ–­ç”¨å“ªä¸€å¸§æ¥è¿›è¡Œé¢„æµ‹*/
       if ((pict_type==P_TYPE) && secondfield
           && (currentfield!=mv_field_sel[0][0]))
-        predframe = newref; /* Í¬Ò»Ö¡ */
+        predframe = newref; /* åŒä¸€å¸§ */
       else
-        predframe = oldref;  /* Ç°Ò»Ö¡ */
+        predframe = oldref;  /* å‰ä¸€å¸§ */
 
       if ((motion_type==MC_FIELD) || !(mb_type & MB_FORWARD))
       {
-        /* ³¡Í¼ÏñÖĞ»ùÓÚ³¡µÄÔ¤²â*/
+        /* åœºå›¾åƒä¸­åŸºäºåœºçš„é¢„æµ‹*/
 		  pred(predframe,mv_field_sel[0][0],cur,currentfield,
           lx<<1,16,16,bx,by,PMV[0][0][0],PMV[0][0][1],0);
       }
       else if (motion_type==MC_16X8)
       {
-           /* ÔÚ³¡Í¼ÏñÖĞµÄ16¡Á8 ÔË¶¯²¹³¥Ô¤²â*/
-        /* ÉÏ°ë²¿·Ö */
+           /* åœ¨åœºå›¾åƒä¸­çš„16Ã—8 è¿åŠ¨è¡¥å¿é¢„æµ‹*/
+        /* ä¸ŠåŠéƒ¨åˆ† */
         
         pred(predframe,mv_field_sel[0][0],cur,currentfield,
           lx<<1,16,8,bx,by,PMV[0][0][0],PMV[0][0][1],0);
 
-        /* ÅĞ¶ÏÓÃÄÄÒ»Ö¡Í¼ÏñÀ´Ô¤²âÏÂ°ë²¿·Ö */
+        /* åˆ¤æ–­ç”¨å“ªä¸€å¸§å›¾åƒæ¥é¢„æµ‹ä¸‹åŠéƒ¨åˆ† */
         if ((pict_type==P_TYPE) && secondfield
             && (currentfield!=mv_field_sel[1][0]))
           predframe = newref; /* same frame */
@@ -184,7 +184,7 @@ static void predict_mb(unsigned char *oldref[],unsigned char *newref[],unsigned 
       }
       else if (motion_type==MC_DMV)
       {
-         /* DMVÔ¤²â */
+         /* DMVé¢„æµ‹ */
 
         if (secondfield)
           predframe = newref; /* same frame */
@@ -205,12 +205,12 @@ static void predict_mb(unsigned char *oldref[],unsigned char *newref[],unsigned 
           fprintf(stderr,"invalid motion_type\n");
       }
     }
-    addflag = 1; /* ÏÂÒ»¸öÔ¤²âÖµ½«Óë¸ÃÖµÈ¡Æ½¾ù */
+    addflag = 1; /* ä¸‹ä¸€ä¸ªé¢„æµ‹å€¼å°†ä¸è¯¥å€¼å–å¹³å‡ */
   }
 
   if (mb_type & MB_BACKWARD)
   {
-        /* ºóÏòÔ¤²â */
+        /* åå‘é¢„æµ‹ */
 
     if (pict_struct==FRAME_PICTURE)
     {
@@ -263,19 +263,19 @@ static void predict_mb(unsigned char *oldref[],unsigned char *newref[],unsigned 
   }
 }
 
-/* Ô¤²â¾ØĞÎ¿é
+/* é¢„æµ‹çŸ©å½¢å—
  *
- * src:     Ô´Ö¡(Y,U,V)
- * sfield:  Ô´³¡Ñ¡Ôñ(0: Ö¡»òÉÏ°ë³¡, 1: ÏÂ°ë³¡)
- * dst:     Ä¿±êÖ¡(Y,U,V)
- * dfield:  Ä¿±ê³¡Ñ¡Ôñ
+ * src:     æºå¸§(Y,U,V)
+ * sfield:  æºåœºé€‰æ‹©(0: å¸§æˆ–ä¸ŠåŠåœº, 1: ä¸‹åŠåœº)
+ * dst:     ç›®æ ‡å¸§(Y,U,V)
+ * dfield:  ç›®æ ‡åœºé€‰æ‹©
  *
- * ÏÂÃæµÄÊıÖµÊÇÁÁ¶ÈÍ¼ÏñµÄ²ÎÊı
- * lx:      ÏàÁÚÏñËØµÄ´¹Ö±¾àÀë
- * w,h:     ¿éµÄ¿í¶ÈºÍ¸ß¶È
- * x,y:     Ä¿±ê¿éµÄ×ø±ê
- * dx,dy:   °ëÏñËØÔË¶¯ÏòÁ¿
- * addflag: ´æ´¢»ò¼ÓÔ¤²â
+ * ä¸‹é¢çš„æ•°å€¼æ˜¯äº®åº¦å›¾åƒçš„å‚æ•°
+ * lx:      ç›¸é‚»åƒç´ çš„å‚ç›´è·ç¦»
+ * w,h:     å—çš„å®½åº¦å’Œé«˜åº¦
+ * x,y:     ç›®æ ‡å—çš„åæ ‡
+ * dx,dy:   åŠåƒç´ è¿åŠ¨å‘é‡
+ * addflag: å­˜å‚¨æˆ–åŠ é¢„æµ‹
  */
 static void pred(unsigned char *src[],int sfield,unsigned char *dst[],int dfield,int lx,int w,int h,int x,int y,int dx,int dy,int addflag)
 {
@@ -303,16 +303,16 @@ static void pred(unsigned char *src[],int sfield,unsigned char *dst[],int dfield
   }
 }
 
-/* µÍµÈ¼¶Ô¤²â
+/* ä½ç­‰çº§é¢„æµ‹
  *
- * src:     Ô´Ö¡(Y,U,V)
- * dst:     Ä¿±êÖ¡(Y,U,V)
+ * src:     æºå¸§(Y,U,V)
+ * dst:     ç›®æ ‡å¸§(Y,U,V)
  *
- * lx:      ÏàÁÚÏñËØµÄ´¹Ö±¾àÀë
- * w,h:     ¿éµÄ¿í¶ÈºÍ¸ß¶È
- * x,y:     Ä¿±ê¿éµÄ×ø±ê
- * dx,dy:   °ëÏñËØÔË¶¯ÏòÁ¿
- * addflag: ´æ´¢»ò¼ÓÔ¤²â
+ * lx:      ç›¸é‚»åƒç´ çš„å‚ç›´è·ç¦»
+ * w,h:     å—çš„å®½åº¦å’Œé«˜åº¦
+ * x,y:     ç›®æ ‡å—çš„åæ ‡
+ * dx,dy:   åŠåƒç´ è¿åŠ¨å‘é‡
+ * addflag: å­˜å‚¨æˆ–åŠ é¢„æµ‹
  */
 
 

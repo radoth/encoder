@@ -1,4 +1,4 @@
-/* quantize.c, Á¿»¯ºÍÄæÁ¿»¯º¯Êý*/
+/* quantize.c, é‡åŒ–å’Œé€†é‡åŒ–å‡½æ•°*/
 
 
 #include <cstdio>
@@ -10,8 +10,8 @@ static void iquant1_intra (short *src, short *dst,
 static void iquant1_non_intra (short *src, short *dst,
   unsigned char *quant_mat, int mquant);
 
-/* ÔÚÇ÷½üÓÚ0Ê±¸ÃÁ¿»¯Æ÷µÄ²¹³¥Îª1/8stepsize
-£¨µ«DCÏµÊýÀýÍâ£©
+/* åœ¨è¶‹è¿‘äºŽ0æ—¶è¯¥é‡åŒ–å™¨çš„è¡¥å¿ä¸º1/8stepsize
+ï¼ˆä½†DCç³»æ•°ä¾‹å¤–ï¼‰
  */
 
 int quant_intra(short *src,short *dst,int dc_prec,unsigned char *quant_mat,int mquant)
@@ -31,7 +31,7 @@ int quant_intra(short *src,short *dst,int dc_prec,unsigned char *quant_mat,int m
     d = (3*mquant+2)>>2;
     y = (y+d)/(2*mquant); /* (y+0.75*mquant) / (2*mquant) */
 
-/*Èô³¬¹ýÉÏÏÞÔò½øÐÐÏ÷²¨´¦Àí*/
+/*è‹¥è¶…è¿‡ä¸Šé™åˆ™è¿›è¡Œå‰Šæ³¢å¤„ç†*/
     if (y > 255)
     {
       if (mpeg1)
@@ -54,7 +54,7 @@ int quant_intra(short *src,short *dst,int dc_prec,unsigned char *quant_mat,int m
   return 1;
 }
 
-/*½ÓÏÂÀ´µÄquant_non_intraÊÇ¶Ô·ÇÖ¡ÄÚ·½Ê½µÄÁ¿»¯*/
+/*æŽ¥ä¸‹æ¥çš„quant_non_intraæ˜¯å¯¹éžå¸§å†…æ–¹å¼çš„é‡åŒ–*/
 
 int quant_non_intra(short *src,short *dst,unsigned char *quant_mat,int mquant)
 {
@@ -87,12 +87,12 @@ int quant_non_intra(short *src,short *dst,unsigned char *quant_mat,int mquant)
   return nzflag;
 }
 
-/* Ö¡ÄÚÍ¼ÏñµÄÄæÁ¿»¯ */
+/* å¸§å†…å›¾åƒçš„é€†é‡åŒ– */
 void iquant_intra(short *src,short *dst,int dc_prec,unsigned char *quant_mat,int mquant)
 {
   int i, val, sum;
 
-/*ÓÉÓÚÒªÇóMPEG-2ÏòÏÂ¼æÈÝ£¬Òò´Ë¶ÔÓÚMPEG-1Á¿»¯·½Ê½£¬²ÉÈ¡ÏàÓ¦µÄËã·¨*/
+/*ç”±äºŽè¦æ±‚MPEG-2å‘ä¸‹å…¼å®¹ï¼Œå› æ­¤å¯¹äºŽMPEG-1é‡åŒ–æ–¹å¼ï¼Œé‡‡å–ç›¸åº”çš„ç®—æ³•*/
   if (mpeg1)
     iquant1_intra(src,dst,dc_prec,quant_mat,mquant);
   else
@@ -104,13 +104,13 @@ void iquant_intra(short *src,short *dst,int dc_prec,unsigned char *quant_mat,int
       sum+= dst[i] = (val>2047) ? 2047 : ((val<-2048) ? -2048 : val);
     }
 
-     /*²»Æ¥Åä¿ØÖÆ */
+     /*ä¸åŒ¹é…æŽ§åˆ¶ */
     if ((sum&1)==0)
       dst[63]^= 1;
   }
 }
 
-/* ·ÇÖ¡ÄÚÍ¼ÏñµÄÄæÁ¿»¯ */
+/* éžå¸§å†…å›¾åƒçš„é€†é‡åŒ– */
 void iquant_non_intra(short *src,short *dst,unsigned char *quant_mat,int mquant)
 {
   int i, val, sum;
@@ -134,7 +134,7 @@ void iquant_non_intra(short *src,short *dst,unsigned char *quant_mat,int mquant)
   }
 }
 
-/* ¶ÔMPEG-1Í¼ÏñÁ¿»¯µÄ×Óº¯Êý */
+/* å¯¹MPEG-1å›¾åƒé‡åŒ–çš„å­å‡½æ•° */
 static void iquant1_intra(short *src,short *dst,int dc_prec,unsigned char *quant_mat,int mquant)
 {
   int i, val;
@@ -152,7 +152,7 @@ static void iquant1_intra(short *src,short *dst,int dc_prec,unsigned char *quant
   }
 }
 
-/* ·ÇÖ¡ÄÚÍ¼ÏñµÄÄæÁ¿»¯ */
+/* éžå¸§å†…å›¾åƒçš„é€†é‡åŒ– */
 static void iquant1_non_intra(short *src,short *dst,unsigned char *quant_mat,int mquant)
 {
   int i, val;

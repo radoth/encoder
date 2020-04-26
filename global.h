@@ -1,4 +1,4 @@
-/* global.h, È«¾Ö±äÁ¿¼°º¯ÊıÉùÃ÷*/
+/* global.h, å…¨å±€å˜é‡åŠå‡½æ•°å£°æ˜*/
 
 #include "mpeg2enc.h"
 #include "gettimeofday.h"
@@ -16,6 +16,11 @@
 /* conform.c */
 void range_checks ();
 void profile_and_level_checks ();
+
+/* mpeg2enc.c */
+void init ();
+void readparmfile (char *fname);
+void readquantmat ();
 
 /* fdctref.c */
 void init_fdct (void);
