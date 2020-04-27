@@ -24,6 +24,10 @@ void calcSNR(unsigned char *org[3],unsigned char *rec[3])
   calcSNR1(org[0]+offs,rec[0]+offs,width2,w,h,&v,&e);
   fprintf(statfile,"Y: variance=%4.4g, MSE=%3.3g (%3.3g dB), SNR=%3.3g dB\n",
     v, e, 10.0*log10(255.0*255.0/e), 10.0*log10(v/e));
+  tmpPicture.YV=v;
+  tmpPicture.YMSE=e;
+  tmpPicture.YMSEdb=10.0*log10(255.0*255.0/e);
+  tmpPicture.YSNR=10.0*log10(v/e);
 
   if (chroma_format!=CHROMA444)
   {
@@ -37,10 +41,18 @@ void calcSNR(unsigned char *org[3],unsigned char *rec[3])
   calcSNR1(org[1]+offs,rec[1]+offs,chrom_width2,w,h,&v,&e);
   fprintf(statfile,"U: variance=%4.4g, MSE=%3.3g (%3.3g dB), SNR=%3.3g dB\n",
     v, e, 10.0*log10(255.0*255.0/e), 10.0*log10(v/e));
+   tmpPicture.UV=v;
+   tmpPicture.UMSE=e;
+   tmpPicture.UMSEdb=10.0*log10(255.0*255.0/e);
+   tmpPicture.USNR=10.0*log10(v/e);
 
   calcSNR1(org[2]+offs,rec[2]+offs,chrom_width2,w,h,&v,&e);
   fprintf(statfile,"V: variance=%4.4g, MSE=%3.3g (%3.3g dB), SNR=%3.3g dB\n",
     v, e, 10.0*log10(255.0*255.0/e), 10.0*log10(v/e));
+  tmpPicture.VV=v;
+  tmpPicture.VMSE=e;
+  tmpPicture.VMSEdb=10.0*log10(255.0*255.0/e);
+  tmpPicture.VSNR=10.0*log10(v/e);
 }
 
 static void calcSNR1(unsigned char *org,unsigned char *rec,int lx,int w,int h,double *pv,double *pe)
@@ -126,10 +138,36 @@ void stats()
     n_backward,100.0*(double)n_backward/nmb);
   fprintf(statfile," # of interpolated macroblocks: %4d (%.1f%%)\n",
     n_interp,100.0*(double)n_interp/nmb);
+  tmpPicture.hash1=n_intra;
+  tmpPicture.hash2=n_blocks;
+  tmpPicture.hash3=n_ncoded;
+  tmpPicture.hash4=n_skipped;
+  tmpPicture.hash5=n_forward;
+  tmpPicture.hash6=n_backward;
+  tmpPicture.hash7=n_interp;
+  tmpPicture.hashp1=100.0*(double)n_intra/nmb;
+  tmpPicture.hashp2=100.0*(double)n_blocks/(block_count*nmb);
+  tmpPicture.hashp3=100.0*(double)n_ncoded/nmb;
+  tmpPicture.hashp4=100.0*(double)n_skipped/nmb;
+  tmpPicture.hashp5=100.0*(double)n_forward/nmb;
+  tmpPicture.hashp6=100.0*(double)n_backward/nmb;
+  tmpPicture.hashp7=100.0*(double)n_interp/nmb;
 
   fprintf(statfile,"\nmacroblock_type map:\n");
 
   k = 0;
+
+  tmpPicture.rountineOut=mb_height2;
+  tmpPicture.rountineIn=mb_width;
+  tmpPicture.mmap1.resize(tmpPicture.rountineOut);
+  tmpPicture.mmap2.resize(tmpPicture.rountineOut);
+  tmpPicture.quantmap.resize(tmpPicture.rountineOut);
+  for(int i=0;i<tmpPicture.rountineOut;i++)
+  {
+      (tmpPicture.mmap1)[i].resize(tmpPicture.rountineIn);
+      (tmpPicture.mmap2)[i].resize(tmpPicture.rountineIn);
+      (tmpPicture.quantmap)[i].resize(tmpPicture.rountineIn);
+  }
 
   for (j=0; j<mb_height2; j++)
   {
@@ -138,31 +176,58 @@ void stats()
       mbi = mbinfo + k;
       mb_type = mbi->mb_type;
       if (mbi->skipped)
-        putc('S',statfile);
+        {
+          putc('S',statfile);
+          (tmpPicture.mmap1)[j][i]='S';
+      }
       else if (mb_type & MB_INTRA)
-        putc('I',statfile);
+        {
+          putc('I',statfile);
+          (tmpPicture.mmap1)[j][i]='I';
+      }
       else switch (mb_type & (MB_FORWARD|MB_BACKWARD))
       {
       case MB_FORWARD:
         putc(mbi->motion_type==MC_FIELD ? 'f' :
              mbi->motion_type==MC_DMV   ? 'p' :
-                                          'F',statfile); break;
+                                          'F',statfile);
+       (tmpPicture.mmap1)[j][i]= mbi->motion_type==MC_FIELD ? 'f' :
+                                                              mbi->motion_type==MC_DMV   ? 'p' :
+                                                                                           'F';
+          break;
       case MB_BACKWARD:
         putc(mbi->motion_type==MC_FIELD ? 'b' :
-                                          'B',statfile); break;
+                                          'B',statfile);
+          (tmpPicture.mmap1)[j][i]=mbi->motion_type==MC_FIELD ? 'b' :
+                                                                'B';
+          break;
       case MB_FORWARD|MB_BACKWARD:
         putc(mbi->motion_type==MC_FIELD ? 'd' :
-                                          'D',statfile); break;
+                                          'D',statfile);
+          (tmpPicture.mmap1)[j][i]=mbi->motion_type==MC_FIELD ? 'd' :
+                                                                'D';
+          break;
       default:
-        putc('0',statfile); break;
+        putc('0',statfile);
+        (tmpPicture.mmap1)[j][i]='0';
+          break;
       }
 
       if (mb_type & MB_QUANT)
-        putc('Q',statfile);
+        {
+          putc('Q',statfile);
+          (tmpPicture.mmap2)[j][i]='Q';
+      }
       else if (mb_type & (MB_PATTERN|MB_INTRA))
-        putc(' ',statfile);
+        {
+          putc(' ',statfile);
+          (tmpPicture.mmap2)[j][i]=' ';
+      }
       else
-        putc('N',statfile);
+        {
+          putc('N',statfile);
+          (tmpPicture.mmap2)[j][i]='N';
+      }
 
       putc(' ',statfile);
 
@@ -182,12 +247,12 @@ void stats()
         fprintf(statfile,"%3d",mbinfo[k].mquant);
       else
         fprintf(statfile,"   ");
-
+      (tmpPicture.quantmap)[j][i]=mbinfo[k].mquant;
       k++;
     }
     putc('\n',statfile);
   }
-
+    pictureDATA.push_back(tmpPicture);
 #if 0
   fprintf(statfile,"\ncbp map:\n");
 

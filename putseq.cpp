@@ -151,6 +151,18 @@ bool putseq()
     fprintf(statfile," intra_vlc_format=%d\n",intravlc);
     fprintf(statfile," alternate_scan=%d\n",altscan);
 
+    tmpPicture.mmap1.clear();
+    tmpPicture.mmap2.clear();
+    tmpPicture.quantmap.clear();
+    tmpPicture.no=i;
+    tmpPicture.dispNo=f;
+    tmpPicture.picType=ipb[pict_type];
+    tmpPicture.tempRef=temp_ref;
+    tmpPicture.framePredDct=frame_pred_dct;
+    tmpPicture.qScaleType=q_scale_type;
+    tmpPicture.intravlc=intravlc;
+    tmpPicture.altscan=altscan;
+
     if (pict_type!=I_TYPE)
     {
       fprintf(statfile," forward search window: %d...%d / %d...%d\n",
@@ -158,6 +170,10 @@ bool putseq()
       fprintf(statfile," forward vector range: %d...%d.5 / %d...%d.5\n",
         -(4<<forw_hor_f_code),(4<<forw_hor_f_code)-1,
         -(4<<forw_vert_f_code),(4<<forw_vert_f_code)-1);
+      tmpPicture.sxf=sxf;
+      tmpPicture.syf=syf;
+      tmpPicture.forw_hor_f_code=forw_hor_f_code;
+      tmpPicture.forw_vert_f_code=forw_vert_f_code;
     }
 
     if (pict_type==B_TYPE)
@@ -167,6 +183,10 @@ bool putseq()
       fprintf(statfile," backward vector range: %d...%d.5 / %d...%d.5\n",
         -(4<<back_hor_f_code),(4<<back_hor_f_code)-1,
         -(4<<back_vert_f_code),(4<<back_vert_f_code)-1);
+      tmpPicture.sxb=sxb;
+      tmpPicture.syb=syb;
+      tmpPicture.back_hor_f_code=back_hor_f_code;
+      tmpPicture.back_vert_f_code=back_vert_f_code;
     }
 
     sprintf(name,tplorg,f+frame0);
@@ -305,6 +325,8 @@ bool putseq()
 	picture_time = (tv_end.tv_sec - tv_start.tv_sec) * 1000000 + (tv_end.tv_usec - tv_start.tv_usec);
 	total_time += picture_time;
 	printf("frame %d costs %f us\n", f + frame0, picture_time);
+    tmpPicture.codeNo=f + frame0;
+    tmpPicture.pictureTime=picture_time;
 
     sprintf(name,tplref,f+frame0);
     if(writeframe(name,newref)==false)
@@ -313,6 +335,9 @@ bool putseq()
   }
 
   printf("mpeg2 encoded: eclapsed %f us, %d frames, %f fps\n",total_time,nframes,nframes*1000000/total_time);
+    globalDATA.totalTime=total_time;
+    globalDATA.nframes=nframes;
+    globalDATA.fps=nframes*1000000/total_time;
 
   putseqend();
 

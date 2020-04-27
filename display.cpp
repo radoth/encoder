@@ -839,6 +839,9 @@ void Display::on_pushButton_clicked()
 
     refreshErrorList();
 
+    groupDATA.clear();
+    pictureDATA.clear();
+
     ifRunning=true;
     checkDataThread *seqThr=new checkDataThread();
     connect(seqThr,SIGNAL(ProcessEnded(bool)),this,SLOT(onProcessEnded(bool)));

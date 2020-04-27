@@ -317,3 +317,54 @@ EXTERN QString errorTextGlobal;
 EXTERN QVector<QString> warningTextGlobal;
 EXTERN bool putSeqStatus,ifRunning;
 EXTERN int currentFrame,frameAll,currentGroup,currentField;
+
+/* statictics */
+struct globalStatistics
+{
+    long int xi,xp,xb;
+    long int r;
+    long int d0i,d0p,d0b;
+    double avgAct;
+    double totalTime,fps;
+    int nframes;
+};
+EXTERN globalStatistics globalDATA;
+
+struct groupStatictics
+{
+    long int R,Np,Nb;
+};
+
+EXTERN QVector<groupStatictics> groupDATA;
+EXTERN groupStatictics tmpGrp;
+
+struct pictureStatictics
+{
+    int no,dispNo,codeNo;
+    char picType;
+    int tempRef,framePredDct,qScaleType,intravlc,altscan;
+    int sxf,syf,sxb,syb;
+    int forw_hor_f_code,forw_vert_f_code,back_hor_f_code,back_vert_f_code;
+    double pictureTime;
+    int targetNumberOfBits;
+    int vbvDelay,bitcount,bitcnt_EOP;
+    double vbvDcdTime;
+    int actualBits;
+    double avgQuanPara;
+    int reaminNumberGOP;
+    int Xi,Xp,Xb;
+    int d0i,d0p,d0b;
+    int Np,Nb;
+    double avg_act;
+    double YV,YMSE,YMSEdb,YSNR;
+    double UV,UMSE,UMSEdb,USNR;
+    double VV,VMSE,VMSEdb,VSNR;
+    int hash1,hash2,hash3,hash4,hash5,hash6,hash7;
+    double hashp1,hashp2,hashp3,hashp4,hashp5,hashp6,hashp7;
+    QVector<QVector<char>> mmap1,mmap2;
+    QVector<QVector<int>> quantmap;
+    int rountineOut,rountineIn;
+};
+
+EXTERN QVector<pictureStatictics> pictureDATA;
+EXTERN pictureStatictics tmpPicture;

@@ -50,11 +50,19 @@ void rc_init_seq()
   fprintf(statfile,
     " initial global complexity measures (I,P,B): Xi=%d, Xp=%d, Xb=%d\n",
     Xi, Xp, Xb);
+  globalDATA.xi=Xi;
+  globalDATA.xp=Xp;
+  globalDATA.xb=Xb;
   fprintf(statfile," reaction parameter: r=%d\n", r);
+  globalDATA.r=r;
   fprintf(statfile,
     " initial virtual buffer fullness (I,P,B): d0i=%d, d0p=%d, d0b=%d\n",
     d0i, d0p, d0b);
+  globalDATA.d0i=d0i;
+  globalDATA.d0p=d0p;
+  globalDATA.d0b=d0b;
   fprintf(statfile," initial average activity: avg_act=%.1f\n", avg_act);
+  globalDATA.avgAct=avg_act;
 }
 
 void rc_init_GOP(int np,int nb)
@@ -67,6 +75,10 @@ void rc_init_GOP(int np,int nb)
   fprintf(statfile," target number of bits for GOP: R=%d\n",R);
   fprintf(statfile," number of P pictures in GOP: Np=%d\n",Np);
   fprintf(statfile," number of B pictures in GOP: Nb=%d\n",Nb);
+  tmpGrp.R=R;
+  tmpGrp.Np=Np;
+  tmpGrp.Nb=Nb;
+  groupDATA.push_back(tmpGrp);
 }
 
 /* Note: we need to substitute K for the 1.4 and 1.0 constants -- this can
@@ -106,6 +118,7 @@ void rc_init_pict(unsigned char *frame)
 
   fprintf(statfile,"\nrate control: start of picture\n");
   fprintf(statfile," target number of bits: T=%d\n",T);
+  tmpPicture.targetNumberOfBits=T;
 }
 
 static void calc_actj(unsigned char *frame)
@@ -192,6 +205,18 @@ void rc_update_pict()
   fprintf(statfile," remaining number of P pictures in GOP: Np=%d\n",Np);
   fprintf(statfile," remaining number of B pictures in GOP: Nb=%d\n",Nb);
   fprintf(statfile," average activity: avg_act=%.1f\n", avg_act);
+  tmpPicture.actualBits=S;
+  tmpPicture.avgQuanPara=(double)Q/(mb_width*mb_height2);
+  tmpPicture.reaminNumberGOP=R;
+  tmpPicture.Xi=Xi;
+  tmpPicture.Xp=Xp;
+  tmpPicture.Xb=Xb;
+  tmpPicture.d0i=d0i;
+  tmpPicture.d0p=d0p;
+  tmpPicture.d0b=d0b;
+  tmpPicture.Np=Np;
+  tmpPicture.Nb=Nb;
+  tmpPicture.avg_act=avg_act;
 }
 
 /* compute initial quantization stepsize (at the beginning of picture) */
@@ -477,6 +502,10 @@ void calc_vbv_delay()
   fprintf(statfile,
     "\nvbv_delay=%d (bitcount=%d, decoding_time=%.2f, bitcnt_EOP=%d)\n",
     vbv_delay,bitcount(),decoding_time,bitcnt_EOP);
+  tmpPicture.vbvDelay=vbv_delay;
+  tmpPicture.bitcount=bitcount();
+  tmpPicture.vbvDcdTime=decoding_time;
+  tmpPicture.bitcnt_EOP=bitcnt_EOP;
 
   if (vbv_delay<0)
   {
