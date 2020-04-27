@@ -4,6 +4,7 @@
 #include "gettimeofday.h"
 #include "signalshooter.h"
 #include <QString>
+#include <QVector>
 
 #ifndef GLOBAL
 #define EXTERN extern
@@ -313,3 +314,4 @@ EXTERN SignalShooter* signalshooter;
 /* custom */
 EXTERN int hasError;
 EXTERN QString errorTextGlobal;
+EXTERN QVector<QString> warningTextGlobal;

@@ -1893,6 +1893,41 @@
       </layout>
      </widget>
     </widget>
+    <widget class="QGroupBox" name="groupBox_13">
+     <property name="geometry">
+      <rect>
+       <x>15</x>
+       <y>115</y>
+       <width>1296</width>
+       <height>536</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>运行结果</string>
+     </property>
+     <widget class="QWidget" name="">
+      <property name="geometry">
+       <rect>
+        <x>15</x>
+        <y>25</y>
+        <width>1271</width>
+        <height>217</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_17">
+       <item>
+        <widget class="QLabel" name="label_45">
+         <property name="text">
+          <string>程序提示：</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QTextEdit" name="textEdit"/>
+       </item>
+      </layout>
+     </widget>
+    </widget>
    </widget>
   </widget>
   <widget class="QWidget" name="layoutWidget">

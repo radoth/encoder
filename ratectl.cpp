@@ -450,8 +450,11 @@ void calc_vbv_delay()
   {
     /* picture not completely in buffer at intended decoding time */
     if (!quiet)
-      fprintf(stderr,"vbv_delay underflow! (decoding_time=%.1f, t_EOP=%.1f\n)",
+      {
+        fprintf(stderr,"vbv_delay underflow! (decoding_time=%.1f, t_EOP=%.1f\n)",
         decoding_time, bitcnt_EOP*90000.0/bit_rate);
+        errorTextGlobal.append(QString("vbv_delay underflow! (decoding_time= %1 , t_EOP= %2 )").arg(decoding_time).arg(bitcnt_EOP*90000.0/bit_rate));
+    }
   }
 
   /* when to decode current frame */
@@ -465,7 +468,10 @@ void calc_vbv_delay()
       > (vbv_buffer_size*16384)*90000.0/bit_rate)
   {
     if (!quiet)
-      fprintf(stderr,"vbv_delay overflow!\n");
+      {
+        fprintf(stderr,"vbv_delay overflow!\n");
+        errorTextGlobal.append("vbv_delay overflow!");
+    }
   }
 
   fprintf(statfile,
@@ -475,14 +481,20 @@ void calc_vbv_delay()
   if (vbv_delay<0)
   {
     if (!quiet)
-      fprintf(stderr,"vbv_delay underflow: %d\n",vbv_delay);
+      {
+        fprintf(stderr,"vbv_delay underflow: %d\n",vbv_delay);
+        errorTextGlobal.append(QString("vbv_delay underflow: %1").arg(vbv_delay));
+    }
     vbv_delay = 0;
   }
 
   if (vbv_delay>65535)
   {
     if (!quiet)
-      fprintf(stderr,"vbv_delay overflow: %d\n",vbv_delay);
+      {
+        fprintf(stderr,"vbv_delay overflow: %d\n",vbv_delay);
+        errorTextGlobal.append(QString("vbv_delay overflow: %1").arg(vbv_delay));
+    }
     vbv_delay = 65535;
   }
 }

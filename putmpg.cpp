@@ -108,7 +108,10 @@ void putmv(int dmv,int f_code)
   /* check value */
   if (dmv<vmin || dmv>vmax)
     if (!quiet)
-      fprintf(stderr,"invalid motion vector\n");
+      {
+        fprintf(stderr,"invalid motion vector\n");
+        errorTextGlobal.append("invalid motion vector");
+    }
 
   /* split dmv into motion_code and motion_residual */
   temp = ((dmv<0) ? -dmv : dmv) + f - 1;

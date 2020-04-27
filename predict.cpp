@@ -141,7 +141,10 @@ static void predict_mb(unsigned char *oldref[],unsigned char *newref[],unsigned 
       {
          /* 无效的运动类型 */
         if (!quiet)
-          fprintf(stderr,"invalid motion_type\n");
+          {
+            fprintf(stderr,"invalid motion_type\n");
+            errorTextGlobal.append("invalid motion_type");
+        }
       }
     }
     else /* TOP_FIELD or BOTTOM_FIELD */
@@ -202,7 +205,10 @@ static void predict_mb(unsigned char *oldref[],unsigned char *newref[],unsigned 
       else
       {
         if (!quiet)
-          fprintf(stderr,"invalid motion_type\n");
+          {
+            fprintf(stderr,"invalid motion_type\n");
+            errorTextGlobal.append("invalid motion_type");
+        }
       }
     }
     addflag = 1; /* 下一个预测值将与该值取平均 */
@@ -257,7 +263,10 @@ static void predict_mb(unsigned char *oldref[],unsigned char *newref[],unsigned 
       {
         /* invalid motion_type in field picture */
         if (!quiet)
-          fprintf(stderr,"invalid motion_type\n");
+          {
+            fprintf(stderr,"invalid motion_type\n");
+            errorTextGlobal.append("invalid motion_type");
+        }
       }
     }
   }
