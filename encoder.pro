@@ -35,6 +35,7 @@ SOURCES += \
     quantize.cpp \
     ratectl.cpp \
     readpic.cpp \
+    refreshui.cpp \
     signalshooter.cpp \
     stats.cpp \
     transfrm.cpp \
@@ -47,6 +48,7 @@ HEADERS += \
     gettimeofday.h \
     global.h \
     mpeg2enc.h \
+    refreshui.h \
     signalshooter.h \
     vlc.h
 

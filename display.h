@@ -18,6 +18,7 @@ public:
     QString fileOUTPUT;
     Display(QWidget *parent = nullptr);
     bool parameterPrepare();
+    void refreshErrorList();
     ~Display();
 
 private slots:

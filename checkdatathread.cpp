@@ -8,4 +8,5 @@ checkDataThread::checkDataThread()
 
 void checkDataThread::run()
 {
+    putSeqStatus=putseq();
 }

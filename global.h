@@ -315,3 +315,4 @@ EXTERN SignalShooter* signalshooter;
 EXTERN int hasError;
 EXTERN QString errorTextGlobal;
 EXTERN QVector<QString> warningTextGlobal;
+EXTERN bool putSeqStatus;

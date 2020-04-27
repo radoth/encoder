@@ -308,7 +308,7 @@
             <rect>
              <x>10</x>
              <y>20</y>
-             <width>416</width>
+             <width>430</width>
              <height>89</height>
             </rect>
            </property>
@@ -653,7 +653,7 @@
               <rect>
                <x>9</x>
                <y>20</y>
-               <width>407</width>
+               <width>419</width>
                <height>521</height>
               </rect>
              </property>
@@ -1622,7 +1622,7 @@
           <property name="title">
            <string>速率控制</string>
           </property>
-          <widget class="QWidget" name="">
+          <widget class="QWidget" name="layoutWidget">
            <property name="geometry">
             <rect>
              <x>6</x>
@@ -1870,7 +1870,7 @@
        <string> 运行</string>
       </property>
      </widget>
-     <widget class="QWidget" name="">
+     <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
        <rect>
         <x>15</x>
@@ -1905,7 +1905,7 @@
      <property name="title">
       <string>运行结果</string>
      </property>
-     <widget class="QWidget" name="">
+     <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
        <rect>
         <x>15</x>
@@ -1923,7 +1923,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QTextEdit" name="textEdit"/>
+        <widget class="QListWidget" name="errorList"/>
        </item>
       </layout>
      </widget>
@@ -1959,7 +1959,6 @@
   <buttongroup name="buttonGroup_2"/>
   <buttongroup name="buttonGroup_4"/>
   <buttongroup name="buttonGroup"/>
-  <buttongroup name="buttonGroup_3"/>
   <buttongroup name="buttonGroup_5"/>
  </buttongroups>
 </ui>

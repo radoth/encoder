@@ -453,7 +453,7 @@ void calc_vbv_delay()
       {
         fprintf(stderr,"vbv_delay underflow! (decoding_time=%.1f, t_EOP=%.1f\n)",
         decoding_time, bitcnt_EOP*90000.0/bit_rate);
-        errorTextGlobal.append(QString("vbv_delay underflow! (decoding_time= %1 , t_EOP= %2 )").arg(decoding_time).arg(bitcnt_EOP*90000.0/bit_rate));
+        warningTextGlobal.append(QString("vbv_delay underflow! (decoding_time= %1 , t_EOP= %2 )").arg(decoding_time).arg(bitcnt_EOP*90000.0/bit_rate));
     }
   }
 
@@ -470,7 +470,7 @@ void calc_vbv_delay()
     if (!quiet)
       {
         fprintf(stderr,"vbv_delay overflow!\n");
-        errorTextGlobal.append("vbv_delay overflow!");
+        warningTextGlobal.append("vbv_delay overflow!");
     }
   }
 
@@ -483,7 +483,7 @@ void calc_vbv_delay()
     if (!quiet)
       {
         fprintf(stderr,"vbv_delay underflow: %d\n",vbv_delay);
-        errorTextGlobal.append(QString("vbv_delay underflow: %1").arg(vbv_delay));
+        warningTextGlobal.append(QString("vbv_delay underflow: %1").arg(vbv_delay));
     }
     vbv_delay = 0;
   }
@@ -493,7 +493,7 @@ void calc_vbv_delay()
     if (!quiet)
       {
         fprintf(stderr,"vbv_delay overflow: %d\n",vbv_delay);
-        errorTextGlobal.append(QString("vbv_delay overflow: %1").arg(vbv_delay));
+        warningTextGlobal.append(QString("vbv_delay overflow: %1").arg(vbv_delay));
     }
     vbv_delay = 65535;
   }

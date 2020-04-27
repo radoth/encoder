@@ -6,6 +6,7 @@
 #include <cstdlib>
 #include<QDateTime>
 #include <QMessageBox>
+#include "checkdatathread.h"
 
 Display::Display(QWidget *parent)
     : QWidget(parent)
@@ -346,7 +347,7 @@ bool Display::parameterPrepare()
           if (!quiet)
             {
               fprintf(stderr,"Warning: setting constrained_parameters_flag = 0\n");
-              errorTextGlobal.append("Warning: setting constrained_parameters_flag = 0");
+              warningTextGlobal.append("Warning: setting constrained_parameters_flag = 0");
           }
           constrparms = 0;
         }
@@ -361,7 +362,7 @@ bool Display::parameterPrepare()
             if (!quiet)
               {
                 fprintf(stderr,"Warning: setting constrained_parameters_flag = 0\n");
-                errorTextGlobal.append("Warning: setting constrained_parameters_flag = 0");
+                warningTextGlobal.append("Warning: setting constrained_parameters_flag = 0");
             }
             constrparms = 0;
             break;
@@ -372,7 +373,7 @@ bool Display::parameterPrepare()
             if (!quiet)
               {
                 fprintf(stderr,"Warning: setting constrained_parameters_flag = 0\n");
-                errorTextGlobal.append("Warning: setting constrained_parameters_flag = 0");
+                warningTextGlobal.append("Warning: setting constrained_parameters_flag = 0");
             }
             constrparms = 0;
             break;
@@ -385,7 +386,7 @@ bool Display::parameterPrepare()
               if (!quiet)
                 {
                   fprintf(stderr,"Warning: setting constrained_parameters_flag = 0\n");
-                  errorTextGlobal.append("Warning: setting constrained_parameters_flag = 0");
+                  warningTextGlobal.append("Warning: setting constrained_parameters_flag = 0");
               }
               constrparms = 0;
               break;
@@ -396,7 +397,7 @@ bool Display::parameterPrepare()
               if (!quiet)
                 {
                   fprintf(stderr,"Warning: setting constrained_parameters_flag = 0\n");
-                  errorTextGlobal.append("Warning: setting constrained_parameters_flag = 0");
+                  warningTextGlobal.append("Warning: setting constrained_parameters_flag = 0");
               }
               constrparms = 0;
               break;
@@ -415,7 +416,7 @@ bool Display::parameterPrepare()
         if (!quiet)
           {
             fprintf(stderr,"Warning: setting progressive_sequence = 1\n");
-            errorTextGlobal.append("Warning: setting progressive_sequence = 1");
+            warningTextGlobal.append("Warning: setting progressive_sequence = 1");
         }
         prog_seq = 1;
       }
@@ -425,7 +426,7 @@ bool Display::parameterPrepare()
         if (!quiet)
           {
             fprintf(stderr,"Warning: setting chroma_format = 1 (4:2:0)\n");
-            errorTextGlobal.append("Warning: setting chroma_format = 1 (4:2:0)");
+            warningTextGlobal.append("Warning: setting chroma_format = 1 (4:2:0)");
         }
         chroma_format = CHROMA420;
       }
@@ -435,7 +436,7 @@ bool Display::parameterPrepare()
         if (!quiet)
           {
             fprintf(stderr,"Warning: setting intra_dc_precision = 0\n");
-            errorTextGlobal.append("Warning: setting intra_dc_precision = 0");
+            warningTextGlobal.append("Warning: setting intra_dc_precision = 0");
         }
         dc_prec = 0;
       }
@@ -446,7 +447,7 @@ bool Display::parameterPrepare()
           if (!quiet)
             {
               fprintf(stderr,"Warning: setting qscale_tab[%d] = 0\n",i);
-              errorTextGlobal.append(QString("Warning: setting qscale_tab[%1] = 0").arg(i));
+              warningTextGlobal.append(QString("Warning: setting qscale_tab[%1] = 0").arg(i));
           }
           qscale_tab[i] = 0;
         }
@@ -457,7 +458,7 @@ bool Display::parameterPrepare()
           if (!quiet)
             {
               fprintf(stderr,"Warning: setting intravlc_tab[%d] = 0\n",i);
-              errorTextGlobal.append(QString("Warning: setting intravlc_tab[%1] = 0").arg(i));
+              warningTextGlobal.append(QString("Warning: setting intravlc_tab[%1] = 0").arg(i));
           }
           intravlc_tab[i] = 0;
         }
@@ -468,7 +469,7 @@ bool Display::parameterPrepare()
           if (!quiet)
             {
               fprintf(stderr,"Warning: setting altscan_tab[%d] = 0\n",i);
-              errorTextGlobal.append(QString("Warning: setting altscan_tab[%1] = 0").arg(i));
+              warningTextGlobal.append(QString("Warning: setting altscan_tab[%1] = 0").arg(i));
           }
           altscan_tab[i] = 0;
         }
@@ -479,7 +480,7 @@ bool Display::parameterPrepare()
       if (!quiet)
         {
           fprintf(stderr,"Warning: setting constrained_parameters_flag = 0\n");
-          errorTextGlobal.append("Warning: setting constrained_parameters_flag = 0");
+          warningTextGlobal.append("Warning: setting constrained_parameters_flag = 0");
       }
       constrparms = 0;
     }
@@ -489,7 +490,7 @@ bool Display::parameterPrepare()
       if (!quiet)
         {
           fprintf(stderr,"Warning: setting progressive_frame = 1\n");
-          errorTextGlobal.append("Warning: setting progressive_frame = 1");
+          warningTextGlobal.append("Warning: setting progressive_frame = 1");
       }
       prog_frame = 1;
     }
@@ -499,7 +500,7 @@ bool Display::parameterPrepare()
       if (!quiet)
         {
           fprintf(stderr,"Warning: setting field_pictures = 0\n");
-          errorTextGlobal.append("Warning: setting field_pictures = 0");
+          warningTextGlobal.append("Warning: setting field_pictures = 0");
       }
       fieldpic = 0;
     }
@@ -509,7 +510,7 @@ bool Display::parameterPrepare()
       if (!quiet)
         {
           fprintf(stderr,"Warning: setting repeat_first_field = 0\n");
-          errorTextGlobal.append("Warning: setting repeat_first_field = 0");
+          warningTextGlobal.append("Warning: setting repeat_first_field = 0");
       }
       repeatfirst = 0;
     }
@@ -522,7 +523,7 @@ bool Display::parameterPrepare()
           if (!quiet)
             {
               fprintf(stderr,"Warning: setting frame_pred_frame_dct[%d] = 1\n",i);
-              errorTextGlobal.append(QString("Warning: setting frame_pred_frame_dct[%1] = 1\n").arg(i));
+              warningTextGlobal.append(QString("Warning: setting frame_pred_frame_dct[%1] = 1").arg(i));
           }
           frame_pred_dct_tab[i] = 1;
         }
@@ -533,7 +534,7 @@ bool Display::parameterPrepare()
       if (!quiet)
         {
           fprintf(stderr,"Warning: setting top_field_first = 0\n");
-          errorTextGlobal.append("Warning: setting top_field_first = 0");
+          warningTextGlobal.append("Warning: setting top_field_first = 0");
       }
       topfirst = 0;
     }
@@ -548,7 +549,7 @@ bool Display::parameterPrepare()
             fprintf(stderr,
             "Warning: reducing forward horizontal search width to %d\n",
             (4<<motion_data[i].forw_hor_f_code)-1);
-            errorTextGlobal.append(QString("Warning: reducing forward horizontal search width to %1").arg((4<<motion_data[i].forw_hor_f_code)-1));
+            warningTextGlobal.append(QString("Warning: reducing forward horizontal search width to %1").arg((4<<motion_data[i].forw_hor_f_code)-1));
         }
         motion_data[i].sxf = (4<<motion_data[i].forw_hor_f_code)-1;
       }
@@ -560,7 +561,7 @@ bool Display::parameterPrepare()
             fprintf(stderr,
             "Warning: reducing forward vertical search width to %d\n",
             (4<<motion_data[i].forw_vert_f_code)-1);
-            errorTextGlobal.append(QString("Warning: reducing forward vertical search width to %1").arg((4<<motion_data[i].forw_vert_f_code)-1));
+            warningTextGlobal.append(QString("Warning: reducing forward vertical search width to %1").arg((4<<motion_data[i].forw_vert_f_code)-1));
         }
         motion_data[i].syf = (4<<motion_data[i].forw_vert_f_code)-1;
       }
@@ -574,7 +575,7 @@ bool Display::parameterPrepare()
               fprintf(stderr,
               "Warning: reducing backward horizontal search width to %d\n",
               (4<<motion_data[i].back_hor_f_code)-1);
-              errorTextGlobal.append(QString("Warning: reducing backward horizontal search width to %1").arg((4<<motion_data[i].back_hor_f_code)-1));
+              warningTextGlobal.append(QString("Warning: reducing backward horizontal search width to %1").arg((4<<motion_data[i].back_hor_f_code)-1));
           }
           motion_data[i].sxb = (4<<motion_data[i].back_hor_f_code)-1;
         }
@@ -586,14 +587,23 @@ bool Display::parameterPrepare()
               fprintf(stderr,
               "Warning: reducing backward vertical search width to %d\n",
               (4<<motion_data[i].back_vert_f_code)-1);
-              errorTextGlobal.append(QString("Warning: reducing backward vertical search width to %1").arg((4<<motion_data[i].back_vert_f_code)-1));
+              warningTextGlobal.append(QString("Warning: reducing backward vertical search width to %1").arg((4<<motion_data[i].back_vert_f_code)-1));
           }
           motion_data[i].syb = (4<<motion_data[i].back_vert_f_code)-1;
         }
       }
     }
 
-return true;
+    return true;
+}
+
+void Display::refreshErrorList()
+{
+    ui->errorList->clear();
+    for(auto i:warningTextGlobal)
+    {
+        ui->errorList->addItem(i);
+    }
 }
 
 Display::~Display()
@@ -802,6 +812,17 @@ void Display::on_pushButton_clicked()
         return;
     }
 
+    refreshErrorList();
+
+    checkDataThread *seqThr=new checkDataThread();
+    seqThr->start();
+
+    while(seqThr->isRunning())
+    {
+        refreshErrorList();
+    }
+
+/*
     if(putseq()==false)
     {
         QMessageBox::critical(this,"严重错误",errorTextGlobal);
@@ -809,7 +830,7 @@ void Display::on_pushButton_clicked()
         fclose(statfile);
         return;
     }
-
+*/
     fclose(outfile);
     fclose(statfile);
 }

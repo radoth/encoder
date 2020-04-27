@@ -4,6 +4,7 @@
 
 class checkDataThread: public QThread
 {
+    Q_OBJECT
 public:
     checkDataThread();
 
