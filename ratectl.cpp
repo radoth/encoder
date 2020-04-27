@@ -483,7 +483,7 @@ void calc_vbv_delay()
     if (!quiet)
       {
         fprintf(stderr,"vbv_delay underflow: %d\n",vbv_delay);
-        warningTextGlobal.append(QString("vbv_delay underflow: %1").arg(vbv_delay));
+        warningTextGlobal.append(QString("vbv_delay underflow: vbv delay: %1").arg(vbv_delay));
     }
     vbv_delay = 0;
   }
@@ -493,7 +493,7 @@ void calc_vbv_delay()
     if (!quiet)
       {
         fprintf(stderr,"vbv_delay overflow: %d\n",vbv_delay);
-        warningTextGlobal.append(QString("vbv_delay overflow: %1").arg(vbv_delay));
+        warningTextGlobal.append(QString("vbv_delay overflow: vbv delay: %1").arg(vbv_delay));
     }
     vbv_delay = 65535;
   }

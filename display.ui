@@ -28,7 +28,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>2</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="welcome">
     <attribute name="title">
@@ -185,7 +185,7 @@
            </size>
           </property>
           <property name="title">
-           <string>重建帧输出</string>
+           <string>重建帧输出（YCbCr）</string>
           </property>
           <widget class="QWidget" name="layoutWidget">
            <property name="geometry">
@@ -1620,7 +1620,7 @@
            </size>
           </property>
           <property name="title">
-           <string>速率控制</string>
+           <string>码率均衡</string>
           </property>
           <widget class="QWidget" name="layoutWidget">
            <property name="geometry">
@@ -2025,6 +2025,11 @@
       </layout>
      </widget>
     </widget>
+   </widget>
+   <widget class="QWidget" name="tab_2">
+    <attribute name="title">
+     <string>统计数据</string>
+    </attribute>
    </widget>
   </widget>
   <widget class="QWidget" name="layoutWidget">
