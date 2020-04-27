@@ -7,6 +7,8 @@
 #include<QDateTime>
 #include <QMessageBox>
 #include "checkdatathread.h"
+#include "refreshui.h"
+#include "refreshbar.h"
 
 Display::Display(QWidget *parent)
     : QWidget(parent)
@@ -600,15 +602,38 @@ bool Display::parameterPrepare()
 void Display::refreshErrorList()
 {
     ui->errorList->clear();
-    for(auto i:warningTextGlobal)
+    auto tmpCopy=warningTextGlobal;
+    for(auto i=tmpCopy.rbegin();i!=tmpCopy.rend();i++)
     {
-        ui->errorList->addItem(i);
+        ui->errorList->addItem(*i);
     }
 }
 
 Display::~Display()
 {
     delete ui;
+}
+
+void Display::onRefreshSignal()
+{
+    refreshErrorList();
+}
+
+void Display::onRefreshBar()
+{
+    ui->currentFrame->setText(QString::number(currentFrame));
+    ui->frameAll->setText(QString::number(frameAll));
+    ui->currentGroup->setText(QString::number(currentGroup));
+    ui->currentField->setText(QString::number(currentField));
+    ui->progressBar->setValue(fmin(ceil(((double)(currentFrame+1))/frameAll*100),100));
+    //qDebug()<<((double)(currentFrame))/frameAll;
+}
+
+void Display::onProcessEnded(bool status)
+{
+    if(status)
+        QMessageBox::information(this,"编码成功","编码成功结束。");
+    else QMessageBox::critical(this,"编码失败","编码失败。\n"+errorTextGlobal);
 }
 
 
@@ -814,13 +839,16 @@ void Display::on_pushButton_clicked()
 
     refreshErrorList();
 
+    ifRunning=true;
     checkDataThread *seqThr=new checkDataThread();
+    connect(seqThr,SIGNAL(ProcessEnded(bool)),this,SLOT(onProcessEnded(bool)));
     seqThr->start();
-
-    while(seqThr->isRunning())
-    {
-        refreshErrorList();
-    }
+    RefreshUI *refUI=new RefreshUI();
+    connect(refUI,SIGNAL(refreshSignal()),this,SLOT(onRefreshSignal()));
+    refUI->start();
+    RefreshBar *refBar=new RefreshBar();
+    connect(refBar,SIGNAL(refreshBar()),this,SLOT(onRefreshBar()));
+    refBar->start();
 
 /*
     if(putseq()==false)
@@ -831,8 +859,7 @@ void Display::on_pushButton_clicked()
         return;
     }
 */
-    fclose(outfile);
-    fclose(statfile);
+
 }
 
 void Display::on_outputBrowse_clicked()

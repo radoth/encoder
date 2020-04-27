@@ -41,6 +41,7 @@ bool putseq()
     {
       fprintf(stderr,"Encoding frame %d ",i);
       fflush(stderr);
+      currentFrame=i;
     }
 
     /* f0: lowest frame number in current GOP
@@ -178,6 +179,7 @@ bool putseq()
       {
         fprintf(stderr,"\nfirst field  (%s) ",topfirst ? "top" : "bot");
         fflush(stderr);
+        currentField=1;
       }
 
       pict_struct = topfirst ? TOP_FIELD : BOTTOM_FIELD;
@@ -214,6 +216,7 @@ bool putseq()
       {
         fprintf(stderr,"second field (%s) ",topfirst ? "bot" : "top");
         fflush(stderr);
+        currentField=2;
       }
 
       pict_struct = topfirst ? BOTTOM_FIELD : TOP_FIELD;

@@ -8,6 +8,9 @@ class checkDataThread: public QThread
 public:
     checkDataThread();
 
+signals:
+    void ProcessEnded(bool status);
+
 private:
     virtual void run();
 };

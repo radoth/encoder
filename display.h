@@ -21,6 +21,11 @@ public:
     void refreshErrorList();
     ~Display();
 
+public slots:
+    void onRefreshSignal();
+    void onRefreshBar();
+    void onProcessEnded(bool status);
+
 private slots:
     void on_sourceBrowse_clicked();
 

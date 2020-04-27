@@ -315,4 +315,5 @@ EXTERN SignalShooter* signalshooter;
 EXTERN int hasError;
 EXTERN QString errorTextGlobal;
 EXTERN QVector<QString> warningTextGlobal;
-EXTERN bool putSeqStatus;
+EXTERN bool putSeqStatus,ifRunning;
+EXTERN int currentFrame,frameAll,currentGroup,currentField;

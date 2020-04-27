@@ -8,6 +8,9 @@ class RefreshUI: public QThread
 public:
     RefreshUI();
 
+signals:
+    void refreshSignal();
+
 private:
     virtual void run();
 };

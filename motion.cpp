@@ -101,12 +101,16 @@ void motion_estimation (unsigned char *oldorg, unsigned char *neworg,
 
     if (!quiet)
     {
+        currentGroup++;
       putc('.',stderr);
       fflush(stderr);
     }
   }
   if (!quiet)
-    putc('\n',stderr);
+    {
+      putc('\n',stderr);
+      currentGroup=0;
+  }
 }
 
 static void frame_ME(unsigned char *oldorg,unsigned char *neworg,unsigned char *oldref,unsigned char *newref,unsigned char *cur,int i,int j,int sxf,int syf,int sxb,int syb,struct mbinfo *mbi)

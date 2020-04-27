@@ -23,7 +23,7 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>1321</width>
+     <width>1326</width>
      <height>686</height>
     </rect>
    </property>
@@ -306,9 +306,9 @@
           <widget class="QWidget" name="layoutWidget">
            <property name="geometry">
             <rect>
-             <x>10</x>
+             <x>0</x>
              <y>20</y>
-             <width>430</width>
+             <width>426</width>
              <height>89</height>
             </rect>
            </property>
@@ -1899,11 +1899,11 @@
        <x>15</x>
        <y>115</y>
        <width>1296</width>
-       <height>536</height>
+       <height>256</height>
       </rect>
      </property>
      <property name="title">
-      <string>运行结果</string>
+      <string>程序提示</string>
      </property>
      <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
@@ -1916,14 +1916,111 @@
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_17">
        <item>
-        <widget class="QLabel" name="label_45">
-         <property name="text">
-          <string>程序提示：</string>
-         </property>
-        </widget>
+        <widget class="QListWidget" name="errorList"/>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+    <widget class="QGroupBox" name="groupBox_14">
+     <property name="geometry">
+      <rect>
+       <x>15</x>
+       <y>385</y>
+       <width>1296</width>
+       <height>206</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>编码进度</string>
+     </property>
+     <widget class="QWidget" name="">
+      <property name="geometry">
+       <rect>
+        <x>15</x>
+        <y>30</y>
+        <width>1276</width>
+        <height>151</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_18">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_37">
+         <item>
+          <widget class="QLabel" name="label_47">
+           <property name="text">
+            <string>当前帧数：</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="currentFrame">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
        <item>
-        <widget class="QListWidget" name="errorList"/>
+        <layout class="QHBoxLayout" name="horizontalLayout_38">
+         <item>
+          <widget class="QLabel" name="label_49">
+           <property name="text">
+            <string>总帧数：</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="frameAll">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_39">
+         <item>
+          <widget class="QLabel" name="label_51">
+           <property name="text">
+            <string>当前组数：</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="currentGroup">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_40">
+         <item>
+          <widget class="QLabel" name="label_53">
+           <property name="text">
+            <string>当前场：</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="currentField">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QProgressBar" name="progressBar">
+         <property name="value">
+          <number>0</number>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
