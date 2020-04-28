@@ -109,7 +109,7 @@ void putmv(int dmv,int f_code)
   if (dmv<vmin || dmv>vmax)
     if (!quiet)
       {
-        fprintf(stderr,"invalid motion vector\n");
+        //fprintf(stderr,"invalid motion vector\n");
         warningTextGlobal.append("invalid motion vector");
     }
 

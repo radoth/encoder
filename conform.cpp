@@ -175,7 +175,7 @@ bool profile_and_level_checks()
   {
     if (!quiet)
       {
-        fprintf(stderr,"Warning: profile uses a reserved value, conformance checks skipped\n");
+        //fprintf(stderr,"Warning: profile uses a reserved value, conformance checks skipped\n");
         warningTextGlobal.append("Warning: profile uses a reserved value, conformance checks skipped.");
       }
     return true;

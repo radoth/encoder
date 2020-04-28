@@ -13,7 +13,6 @@ void checkDataThread::run()
      currentField=1;
     putSeqStatus=putseq();
     fclose(outfile);
-    fclose(statfile);
     ifRunning=false;
      emit ProcessEnded(putSeqStatus);
 }

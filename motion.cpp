@@ -102,13 +102,13 @@ void motion_estimation (unsigned char *oldorg, unsigned char *neworg,
     if (!quiet)
     {
         currentGroup++;
-      putc('.',stderr);
-      fflush(stderr);
+      //putc('.',stderr);
+      //fflush(stderr);
     }
   }
   if (!quiet)
     {
-      putc('\n',stderr);
+      //putc('\n',stderr);
       currentGroup=0;
   }
 }

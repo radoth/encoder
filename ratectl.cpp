@@ -46,22 +46,22 @@ void rc_init_seq()
   if (d0b==0) d0b = (int)floor(1.4*10.0*r/(qscale_tab[2] ? 56.0 : 31.0) + 0.5);
 */
 
-  fprintf(statfile,"\nrate control: sequence initialization\n");
-  fprintf(statfile,
-    " initial global complexity measures (I,P,B): Xi=%d, Xp=%d, Xb=%d\n",
-    Xi, Xp, Xb);
+  //fprintf(statfile,"\nrate control: sequence initialization\n");
+  //fprintf(statfile,
+   // " initial global complexity measures (I,P,B): Xi=%d, Xp=%d, Xb=%d\n",
+   // Xi, Xp, Xb);
   globalDATA.xi=Xi;
   globalDATA.xp=Xp;
   globalDATA.xb=Xb;
-  fprintf(statfile," reaction parameter: r=%d\n", r);
+  //fprintf(statfile," reaction parameter: r=%d\n", r);
   globalDATA.r=r;
-  fprintf(statfile,
-    " initial virtual buffer fullness (I,P,B): d0i=%d, d0p=%d, d0b=%d\n",
-    d0i, d0p, d0b);
+  //fprintf(statfile,
+    //" initial virtual buffer fullness (I,P,B): d0i=%d, d0p=%d, d0b=%d\n",
+   // d0i, d0p, d0b);
   globalDATA.d0i=d0i;
   globalDATA.d0p=d0p;
   globalDATA.d0b=d0b;
-  fprintf(statfile," initial average activity: avg_act=%.1f\n", avg_act);
+  //fprintf(statfile," initial average activity: avg_act=%.1f\n", avg_act);
   globalDATA.avgAct=avg_act;
 }
 
@@ -71,10 +71,10 @@ void rc_init_GOP(int np,int nb)
   Np = fieldpic ? 2*np+1 : np;
   Nb = fieldpic ? 2*nb : nb;
 
-  fprintf(statfile,"\nrate control: new group of pictures (GOP)\n");
-  fprintf(statfile," target number of bits for GOP: R=%d\n",R);
-  fprintf(statfile," number of P pictures in GOP: Np=%d\n",Np);
-  fprintf(statfile," number of B pictures in GOP: Nb=%d\n",Nb);
+  //fprintf(statfile,"\nrate control: new group of pictures (GOP)\n");
+  //fprintf(statfile," target number of bits for GOP: R=%d\n",R);
+  //fprintf(statfile," number of P pictures in GOP: Np=%d\n",Np);
+  //fprintf(statfile," number of B pictures in GOP: Nb=%d\n",Nb);
   tmpGrp.R=R;
   tmpGrp.Np=Np;
   tmpGrp.Nb=Nb;
@@ -116,8 +116,8 @@ void rc_init_pict(unsigned char *frame)
   calc_actj(frame);
   actsum = 0.0;
 
-  fprintf(statfile,"\nrate control: start of picture\n");
-  fprintf(statfile," target number of bits: T=%d\n",T);
+  //fprintf(statfile,"\nrate control: start of picture\n");
+  //fprintf(statfile," target number of bits: T=%d\n",T);
   tmpPicture.targetNumberOfBits=T;
 }
 
@@ -191,20 +191,20 @@ void rc_update_pict()
     break;
   }
 
-  fprintf(statfile,"\nrate control: end of picture\n");
-  fprintf(statfile," actual number of bits: S=%d\n",S);
-  fprintf(statfile," average quantization parameter Q=%.1f\n",
-    (double)Q/(mb_width*mb_height2));
-  fprintf(statfile," remaining number of bits in GOP: R=%d\n",R);
-  fprintf(statfile,
-    " global complexity measures (I,P,B): Xi=%d, Xp=%d, Xb=%d\n",
-    Xi, Xp, Xb);
-  fprintf(statfile,
-    " virtual buffer fullness (I,P,B): d0i=%d, d0p=%d, d0b=%d\n",
-    d0i, d0p, d0b);
-  fprintf(statfile," remaining number of P pictures in GOP: Np=%d\n",Np);
-  fprintf(statfile," remaining number of B pictures in GOP: Nb=%d\n",Nb);
-  fprintf(statfile," average activity: avg_act=%.1f\n", avg_act);
+  //fprintf(statfile,"\nrate control: end of picture\n");
+  //fprintf(statfile," actual number of bits: S=%d\n",S);
+  //fprintf(statfile," average quantization parameter Q=%.1f\n",
+  //  (double)Q/(mb_width*mb_height2));
+  //fprintf(statfile," remaining number of bits in GOP: R=%d\n",R);
+  //fprintf(statfile,
+  //  " global complexity measures (I,P,B): Xi=%d, Xp=%d, Xb=%d\n",
+  //  Xi, Xp, Xb);
+  //fprintf(statfile,
+   // " virtual buffer fullness (I,P,B): d0i=%d, d0p=%d, d0b=%d\n",
+   // d0i, d0p, d0b);
+  //fprintf(statfile," remaining number of P pictures in GOP: Np=%d\n",Np);
+  //fprintf(statfile," remaining number of B pictures in GOP: Nb=%d\n",Nb);
+  //fprintf(statfile," average activity: avg_act=%.1f\n", avg_act);
   tmpPicture.actualBits=S;
   tmpPicture.avgQuanPara=(double)Q/(mb_width*mb_height2);
   tmpPicture.reaminNumberGOP=R;
@@ -476,8 +476,8 @@ void calc_vbv_delay()
     /* picture not completely in buffer at intended decoding time */
     if (!quiet)
       {
-        fprintf(stderr,"vbv_delay underflow! (decoding_time=%.1f, t_EOP=%.1f\n)",
-        decoding_time, bitcnt_EOP*90000.0/bit_rate);
+        //fprintf(stderr,"vbv_delay underflow! (decoding_time=%.1f, t_EOP=%.1f\n)",
+        //decoding_time, bitcnt_EOP*90000.0/bit_rate);
         warningTextGlobal.append(QString("vbv_delay underflow! (decoding_time= %1 , t_EOP= %2 )").arg(decoding_time).arg(bitcnt_EOP*90000.0/bit_rate));
     }
   }
@@ -494,14 +494,14 @@ void calc_vbv_delay()
   {
     if (!quiet)
       {
-        fprintf(stderr,"vbv_delay overflow!\n");
+        //fprintf(stderr,"vbv_delay overflow!\n");
         warningTextGlobal.append("vbv_delay overflow!");
     }
   }
 
-  fprintf(statfile,
-    "\nvbv_delay=%d (bitcount=%d, decoding_time=%.2f, bitcnt_EOP=%d)\n",
-    vbv_delay,bitcount(),decoding_time,bitcnt_EOP);
+  //fprintf(statfile,
+    //"\nvbv_delay=%d (bitcount=%d, decoding_time=%.2f, bitcnt_EOP=%d)\n",
+    //vbv_delay,bitcount(),decoding_time,bitcnt_EOP);
   tmpPicture.vbvDelay=vbv_delay;
   tmpPicture.bitcount=bitcount();
   tmpPicture.vbvDcdTime=decoding_time;
@@ -511,7 +511,7 @@ void calc_vbv_delay()
   {
     if (!quiet)
       {
-        fprintf(stderr,"vbv_delay underflow: %d\n",vbv_delay);
+        //fprintf(stderr,"vbv_delay underflow: %d\n",vbv_delay);
         warningTextGlobal.append(QString("vbv_delay underflow: vbv delay: %1").arg(vbv_delay));
     }
     vbv_delay = 0;
@@ -521,7 +521,7 @@ void calc_vbv_delay()
   {
     if (!quiet)
       {
-        fprintf(stderr,"vbv_delay overflow: %d\n",vbv_delay);
+        //fprintf(stderr,"vbv_delay overflow: %d\n",vbv_delay);
         warningTextGlobal.append(QString("vbv_delay overflow: vbv delay: %1").arg(vbv_delay));
     }
     vbv_delay = 65535;

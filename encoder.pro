@@ -66,7 +66,6 @@ FORMS += \
 TRANSLATIONS += \
     encoder_zh_CN.ts
 
-CONFIG+= console
 
 msvc {
     QMAKE_CFLAGS += /utf-8
