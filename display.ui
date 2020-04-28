@@ -28,7 +28,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>4</number>
+    <number>3</number>
    </property>
    <widget class="QWidget" name="welcome">
     <attribute name="title">
@@ -37,7 +37,7 @@
    </widget>
    <widget class="QWidget" name="settings">
     <attribute name="title">
-     <string>设置参数</string>
+     <string>参数</string>
     </attribute>
     <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
@@ -308,7 +308,7 @@
             <rect>
              <x>0</x>
              <y>20</y>
-             <width>426</width>
+             <width>430</width>
              <height>89</height>
             </rect>
            </property>
@@ -1933,7 +1933,7 @@
      <property name="title">
       <string>编码进度</string>
      </property>
-     <widget class="QWidget" name="">
+     <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
        <rect>
         <x>15</x>
@@ -2028,7 +2028,7 @@
    </widget>
    <widget class="QWidget" name="tab_2">
     <attribute name="title">
-     <string>统计数据</string>
+     <string>数据</string>
     </attribute>
     <widget class="QGroupBox" name="groupBox_15">
      <property name="geometry">
@@ -2036,13 +2036,13 @@
        <x>10</x>
        <y>5</y>
        <width>431</width>
-       <height>241</height>
+       <height>251</height>
       </rect>
      </property>
      <property name="title">
       <string>全局码率均衡</string>
      </property>
-     <widget class="QWidget" name="">
+     <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
        <rect>
         <x>12</x>
@@ -2063,6 +2063,12 @@
         <layout class="QHBoxLayout" name="horizontalLayout_41">
          <item>
           <widget class="QLabel" name="label_46">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="text">
             <string>I 帧 Xi：</string>
            </property>
@@ -2070,6 +2076,12 @@
          </item>
          <item>
           <widget class="QLabel" name="Xi">
+           <property name="font">
+            <font>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
            <property name="text">
             <string/>
            </property>
@@ -2077,6 +2089,12 @@
          </item>
          <item>
           <widget class="QLabel" name="label_50">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="text">
             <string>P 帧 Xp：</string>
            </property>
@@ -2084,6 +2102,12 @@
          </item>
          <item>
           <widget class="QLabel" name="Xp">
+           <property name="font">
+            <font>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
            <property name="text">
             <string/>
            </property>
@@ -2091,6 +2115,12 @@
          </item>
          <item>
           <widget class="QLabel" name="label_54">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="text">
             <string>B 帧 Xb：</string>
            </property>
@@ -2098,6 +2128,12 @@
          </item>
          <item>
           <widget class="QLabel" name="Xb">
+           <property name="font">
+            <font>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
            <property name="text">
             <string/>
            </property>
@@ -2109,6 +2145,12 @@
         <layout class="QHBoxLayout" name="horizontalLayout_42">
          <item>
           <widget class="QLabel" name="label_56">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="text">
             <string>实际反应参数 r：</string>
            </property>
@@ -2116,6 +2158,12 @@
          </item>
          <item>
           <widget class="QLabel" name="rrrrr">
+           <property name="font">
+            <font>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
            <property name="text">
             <string/>
            </property>
@@ -2134,6 +2182,12 @@
         <layout class="QHBoxLayout" name="horizontalLayout_43">
          <item>
           <widget class="QLabel" name="label_64">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="text">
             <string>I 帧 d0i：</string>
            </property>
@@ -2141,6 +2195,12 @@
          </item>
          <item>
           <widget class="QLabel" name="d0i">
+           <property name="font">
+            <font>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
            <property name="text">
             <string/>
            </property>
@@ -2148,6 +2208,12 @@
          </item>
          <item>
           <widget class="QLabel" name="label_63">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="text">
             <string>P 帧 d0p：</string>
            </property>
@@ -2155,6 +2221,12 @@
          </item>
          <item>
           <widget class="QLabel" name="d0p">
+           <property name="font">
+            <font>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
            <property name="text">
             <string/>
            </property>
@@ -2162,6 +2234,12 @@
          </item>
          <item>
           <widget class="QLabel" name="label_60">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="text">
             <string>B 帧 d0b：</string>
            </property>
@@ -2169,6 +2247,12 @@
          </item>
          <item>
           <widget class="QLabel" name="d0b">
+           <property name="font">
+            <font>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
            <property name="text">
             <string/>
            </property>
@@ -2180,6 +2264,12 @@
         <layout class="QHBoxLayout" name="horizontalLayout_80">
          <item>
           <widget class="QLabel" name="label_66">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="text">
             <string>实际初始平均活动 avg_act：</string>
            </property>
@@ -2187,6 +2277,12 @@
          </item>
          <item>
           <widget class="QLabel" name="avg_act_2">
+           <property name="font">
+            <font>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
            <property name="text">
             <string/>
            </property>
@@ -2198,6 +2294,12 @@
         <layout class="QHBoxLayout" name="horizontalLayout_84">
          <item>
           <widget class="QLabel" name="label_196">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="text">
             <string>编码总耗时：（微秒）</string>
            </property>
@@ -2205,6 +2307,12 @@
          </item>
          <item>
           <widget class="QLabel" name="totalTime">
+           <property name="font">
+            <font>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
            <property name="text">
             <string/>
            </property>
@@ -2216,6 +2324,12 @@
         <layout class="QHBoxLayout" name="horizontalLayout_88">
          <item>
           <widget class="QLabel" name="label_197">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="text">
             <string>编码平均帧率：(fps)</string>
            </property>
@@ -2223,6 +2337,12 @@
          </item>
          <item>
           <widget class="QLabel" name="fps">
+           <property name="font">
+            <font>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
            <property name="text">
             <string/>
            </property>
@@ -2234,6 +2354,12 @@
         <layout class="QHBoxLayout" name="horizontalLayout_44">
          <item>
           <widget class="QLabel" name="label_65">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="text">
             <string>总帧数：</string>
            </property>
@@ -2241,6 +2367,12 @@
          </item>
          <item>
           <widget class="QLabel" name="nframes">
+           <property name="font">
+            <font>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
            <property name="text">
             <string/>
            </property>
@@ -2263,7 +2395,7 @@
      <property name="title">
       <string>图片组（GOP）</string>
      </property>
-     <widget class="QWidget" name="">
+     <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -2284,13 +2416,32 @@
         <layout class="QHBoxLayout" name="horizontalLayout_48">
          <item>
           <widget class="QSlider" name="gopSlider">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QSpinBox" name="gopSpin"/>
+          <widget class="QSpinBox" name="gopSpin">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>100</width>
+             <height>0</height>
+            </size>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
@@ -2298,6 +2449,12 @@
         <layout class="QHBoxLayout" name="horizontalLayout_45">
          <item>
           <widget class="QLabel" name="label_68">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="text">
             <string>GOP 目标编码位数：</string>
            </property>
@@ -2305,6 +2462,18 @@
          </item>
          <item>
           <widget class="QLabel" name="RRRRRRRR">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="font">
+            <font>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
            <property name="text">
             <string/>
            </property>
@@ -2316,6 +2485,12 @@
         <layout class="QHBoxLayout" name="horizontalLayout_46">
          <item>
           <widget class="QLabel" name="label_69">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="text">
             <string>GOP中P帧数量：</string>
            </property>
@@ -2323,6 +2498,12 @@
          </item>
          <item>
           <widget class="QLabel" name="Np">
+           <property name="font">
+            <font>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
            <property name="text">
             <string/>
            </property>
@@ -2334,6 +2515,12 @@
         <layout class="QHBoxLayout" name="horizontalLayout_47">
          <item>
           <widget class="QLabel" name="label_70">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="text">
             <string>GOP中B帧数量：</string>
            </property>
@@ -2341,6 +2528,12 @@
          </item>
          <item>
           <widget class="QLabel" name="Nb">
+           <property name="font">
+            <font>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
            <property name="text">
             <string/>
            </property>
@@ -2351,17 +2544,12 @@
       </layout>
      </widget>
     </widget>
-   </widget>
-   <widget class="QWidget" name="tab_3">
-    <attribute name="title">
-     <string>页</string>
-    </attribute>
     <widget class="QGroupBox" name="groupBox_17">
      <property name="geometry">
       <rect>
-       <x>10</x>
+       <x>450</x>
        <y>5</y>
-       <width>696</width>
+       <width>861</width>
        <height>651</height>
       </rect>
      </property>
@@ -2371,9 +2559,9 @@
      <widget class="QSlider" name="frameSlider">
       <property name="geometry">
        <rect>
-        <x>25</x>
+        <x>5</x>
         <y>35</y>
-        <width>611</width>
+        <width>696</width>
         <height>22</height>
        </rect>
       </property>
@@ -2384,7 +2572,7 @@
      <widget class="QLabel" name="label_77">
       <property name="geometry">
        <rect>
-        <x>25</x>
+        <x>35</x>
         <y>15</y>
         <width>409</width>
         <height>17</height>
@@ -2397,910 +2585,1493 @@
      <widget class="QSpinBox" name="frameSpin">
       <property name="geometry">
        <rect>
-        <x>645</x>
+        <x>710</x>
         <y>35</y>
-        <width>36</width>
+        <width>136</width>
         <height>23</height>
        </rect>
       </property>
      </widget>
-     <widget class="QWidget" name="layoutWidget_3">
+     <widget class="QWidget" name="">
       <property name="geometry">
        <rect>
-        <x>20</x>
+        <x>15</x>
         <y>60</y>
-        <width>271</width>
-        <height>588</height>
+        <width>831</width>
+        <height>590</height>
        </rect>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout_21">
-       <property name="spacing">
-        <number>0</number>
-       </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_101">
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_97">
+        <layout class="QVBoxLayout" name="verticalLayout_21">
+         <property name="spacing">
+          <number>3</number>
+         </property>
          <item>
-          <widget class="QLabel" name="label_198">
-           <property name="text">
-            <string>帧顺序号：</string>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout" name="horizontalLayout_97">
+           <item>
+            <widget class="QLabel" name="label_198">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>帧顺序号：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="no">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item>
-          <widget class="QLabel" name="no">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_98">
-         <item>
-          <widget class="QLabel" name="label_200">
-           <property name="text">
-            <string>帧显示序号：</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="dispNo">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_99">
-         <item>
-          <widget class="QLabel" name="label_202">
-           <property name="text">
-            <string>帧编码序号：</string>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout" name="horizontalLayout_98">
+           <item>
+            <widget class="QLabel" name="label_200">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>帧显示序号：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="dispNo">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item>
-          <widget class="QLabel" name="codeNo">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_100">
-         <item>
-          <widget class="QLabel" name="label_204">
-           <property name="text">
-            <string>编码耗时：（微秒）</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="pictureTime">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_49">
-         <item>
-          <widget class="QLabel" name="label_78">
-           <property name="text">
-            <string>帧类型：</string>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout" name="horizontalLayout_99">
+           <item>
+            <widget class="QLabel" name="label_202">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>帧编码序号：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="codeNo">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item>
-          <widget class="QLabel" name="picType">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_50">
-         <item>
-          <widget class="QLabel" name="label_79">
-           <property name="text">
-            <string>时间参考类型：</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="tempRef">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_51">
-         <item>
-          <widget class="QLabel" name="label_80">
-           <property name="text">
-            <string>运动补偿仅限于帧预测：</string>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout" name="horizontalLayout_100">
+           <item>
+            <widget class="QLabel" name="label_204">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>编码耗时：（微秒）</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="pictureTime">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item>
-          <widget class="QLabel" name="framePredDCT">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout" name="horizontalLayout_49">
+           <item>
+            <widget class="QLabel" name="label_78">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>帧类型：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="picType">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_52">
          <item>
-          <widget class="QLabel" name="label_81">
-           <property name="text">
-            <string>非线性量化：</string>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout" name="horizontalLayout_50">
+           <item>
+            <widget class="QLabel" name="label_79">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>时间参考系坐标：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="tempRef">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item>
-          <widget class="QLabel" name="qScaleType">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout" name="horizontalLayout_51">
+           <item>
+            <widget class="QLabel" name="label_80">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>运动补偿仅限于帧预测：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="framePredDCT">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_53">
          <item>
-          <widget class="QLabel" name="label_82">
-           <property name="text">
-            <string>MPEG-2优化的
+          <layout class="QHBoxLayout" name="horizontalLayout_52">
+           <item>
+            <widget class="QLabel" name="label_81">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>非线性量化：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="qScaleType">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_53">
+           <item>
+            <widget class="QLabel" name="label_82">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>MPEG-2优化的
 帧内块可变长编码表：</string>
-           </property>
-          </widget>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="intravlc">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item>
-          <widget class="QLabel" name="intravlc">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_54">
-         <item>
-          <widget class="QLabel" name="label_83">
-           <property name="text">
-            <string>交替扫描：</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="altscan">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_55">
-         <item>
-          <widget class="QLabel" name="label_84">
-           <property name="text">
-            <string>前向搜索窗口：</string>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout" name="horizontalLayout_54">
+           <item>
+            <widget class="QLabel" name="label_83">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>交替扫描：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="altscan">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item>
-          <widget class="QLabel" name="forSeaWind">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_56">
-         <item>
-          <widget class="QLabel" name="label_85">
-           <property name="text">
-            <string>前向搜索范围：</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="forSeaRange">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_57">
-         <item>
-          <widget class="QLabel" name="label_94">
-           <property name="text">
-            <string>后向搜索窗口：</string>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout" name="horizontalLayout_55">
+           <item>
+            <widget class="QLabel" name="label_84">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>前向搜索窗口：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="forSeaWind">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item>
-          <widget class="QLabel" name="backSeaWind">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_58">
-         <item>
-          <widget class="QLabel" name="label_95">
-           <property name="text">
-            <string>后向搜索范围：</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="backSeaScope">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_59">
-         <item>
-          <widget class="QLabel" name="label_96">
-           <property name="text">
-            <string>VBV延迟：</string>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout" name="horizontalLayout_56">
+           <item>
+            <widget class="QLabel" name="label_85">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>前向搜索范围：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="forSeaRange">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item>
-          <widget class="QLabel" name="vbvDelay">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_74">
-         <item>
-          <widget class="QLabel" name="label_128">
-           <property name="text">
-            <string>VBV初始位数：</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="vbvBitCount">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_66">
-         <item>
-          <widget class="QLabel" name="label_112">
-           <property name="text">
-            <string>VBV解码时间：</string>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout" name="horizontalLayout_57">
+           <item>
+            <widget class="QLabel" name="label_94">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>后向搜索窗口：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="backSeaWind">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item>
-          <widget class="QLabel" name="vbvdcdtime">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_68">
-         <item>
-          <widget class="QLabel" name="label_116">
-           <property name="text">
-            <string>VBV最终位数：</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="bitcntEOP">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_67">
-         <item>
-          <widget class="QLabel" name="label_114">
-           <property name="text">
-            <string>目标编码位数：</string>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout" name="horizontalLayout_58">
+           <item>
+            <widget class="QLabel" name="label_95">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>后向搜索范围：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="backSeaScope">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item>
-          <widget class="QLabel" name="targetNumberofBits">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_65">
-         <item>
-          <widget class="QLabel" name="label_110">
-           <property name="text">
-            <string>实际编码位数：</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="actualBits">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_64">
-         <item>
-          <widget class="QLabel" name="label_108">
-           <property name="text">
-            <string>平均量化参数 Q：</string>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout" name="horizontalLayout_59">
+           <item>
+            <widget class="QLabel" name="label_96">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>VBV延迟：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="vbvDelay">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item>
-          <widget class="QLabel" name="avgQuanPara">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_61">
-         <item>
-          <widget class="QLabel" name="label_102">
-           <property name="text">
-            <string>当前GOP中剩余位数：</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="reaminNumberGOP">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_62">
-         <item>
-          <widget class="QLabel" name="label_104">
-           <property name="text">
-            <string>全局复杂度度量：</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_63">
-         <item>
-          <widget class="QLabel" name="label_106">
-           <property name="text">
-            <string>I 帧 Xi：</string>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout" name="horizontalLayout_74">
+           <item>
+            <widget class="QLabel" name="label_128">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>VBV初始位数：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="vbvBitCount">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item>
-          <widget class="QLabel" name="Xiii">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_73">
-         <item>
-          <widget class="QLabel" name="label_126">
-           <property name="text">
-            <string>P 帧 Xp：</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="Xppp">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_60">
-         <item>
-          <widget class="QLabel" name="label_97">
-           <property name="text">
-            <string>B 帧 Xb：</string>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout" name="horizontalLayout_66">
+           <item>
+            <widget class="QLabel" name="label_112">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>VBV解码时间：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="vbvdcdtime">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item>
-          <widget class="QLabel" name="Xbbb">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="layoutWidget_12">
-      <property name="geometry">
-       <rect>
-        <x>310</x>
-        <y>60</y>
-        <width>381</width>
-        <height>586</height>
-       </rect>
-      </property>
-      <layout class="QVBoxLayout" name="verticalLayout_22">
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_69">
-         <item>
-          <widget class="QLabel" name="label_105">
-           <property name="text">
-            <string>虚拟缓冲区充满度：</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_70">
-         <item>
-          <widget class="QLabel" name="label_119">
-           <property name="text">
-            <string>I 帧 d0i：</string>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout" name="horizontalLayout_68">
+           <item>
+            <widget class="QLabel" name="label_116">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>VBV最终位数：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="bitcntEOP">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item>
-          <widget class="QLabel" name="d0iiiiii">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_71">
-         <item>
-          <widget class="QLabel" name="label_121">
-           <property name="text">
-            <string>P 帧 d0p：</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="d0ppppppp">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_72">
-         <item>
-          <widget class="QLabel" name="label_123">
-           <property name="text">
-            <string>B 帧 d0b：</string>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout" name="horizontalLayout_67">
+           <item>
+            <widget class="QLabel" name="label_114">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>目标编码位数：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="targetNumberofBits">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item>
-          <widget class="QLabel" name="d0bbbbbbb">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_75">
-         <item>
-          <widget class="QLabel" name="label_125">
-           <property name="text">
-            <string>当前GOP中剩余P帧数量：</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="npppppppp">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_76">
-         <item>
-          <widget class="QLabel" name="label_131">
-           <property name="text">
-            <string>当前GOP中剩余B帧数量：</string>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout" name="horizontalLayout_65">
+           <item>
+            <widget class="QLabel" name="label_110">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>实际编码位数：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="actualBits">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item>
-          <widget class="QLabel" name="nbbbbbbbbb">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_77">
-         <item>
-          <widget class="QLabel" name="label_133">
-           <property name="text">
-            <string>平均活动 avg_act：</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="avg_acttttttt">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_78">
-         <item>
-          <widget class="QLabel" name="label_135">
-           <property name="text">
-            <string>Y分量幅度：</string>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout" name="horizontalLayout_64">
+           <item>
+            <widget class="QLabel" name="label_108">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>平均量化参数 Q：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="avgQuanPara">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item>
-          <widget class="QLabel" name="YV">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_79">
-         <item>
-          <widget class="QLabel" name="label_137">
-           <property name="text">
-            <string>Y分量均方误差数值：</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="YMSEDB">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_81">
-         <item>
-          <widget class="QLabel" name="label_141">
-           <property name="text">
-            <string>Y分量信噪比：(SNR)</string>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout" name="horizontalLayout_61">
+           <item>
+            <widget class="QLabel" name="label_102">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>当前GOP中剩余位数：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="reaminNumberGOP">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item>
-          <widget class="QLabel" name="YSNR">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_82">
-         <item>
-          <widget class="QLabel" name="label_143">
-           <property name="text">
-            <string>U分量幅度：</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="UV">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_83">
-         <item>
-          <widget class="QLabel" name="label_145">
-           <property name="text">
-            <string>U分量均方误差数值：</string>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout" name="horizontalLayout_62">
+           <item>
+            <widget class="QLabel" name="label_104">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="font">
+              <font>
+               <weight>50</weight>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>全局复杂度度量：</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item>
-          <widget class="QLabel" name="UMSEDB">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout" name="horizontalLayout_63">
+           <item>
+            <widget class="QLabel" name="label_106">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>I 帧 Xi：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="Xiii">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_73">
+           <item>
+            <widget class="QLabel" name="label_126">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>P 帧 Xp：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="Xppp">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_60">
+           <item>
+            <widget class="QLabel" name="label_97">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>B 帧 Xb：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="Xbbb">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
         </layout>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_85">
+        <layout class="QVBoxLayout" name="verticalLayout_22">
          <item>
-          <widget class="QLabel" name="label_149">
-           <property name="text">
-            <string>U分量信噪比：(SNR)</string>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout" name="horizontalLayout_69">
+           <item>
+            <widget class="QLabel" name="label_105">
+             <property name="font">
+              <font>
+               <weight>50</weight>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>虚拟缓冲区充满度：</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item>
-          <widget class="QLabel" name="USNR">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_86">
-         <item>
-          <widget class="QLabel" name="label_151">
-           <property name="text">
-            <string>V分量幅度：</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="VV">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_87">
-         <item>
-          <widget class="QLabel" name="label_153">
-           <property name="text">
-            <string>V分量均方误差数值：</string>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout" name="horizontalLayout_70">
+           <item>
+            <widget class="QLabel" name="label_119">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>I 帧 d0i：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="d0iiiiii">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item>
-          <widget class="QLabel" name="VMSEDB">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_89">
-         <item>
-          <widget class="QLabel" name="label_157">
-           <property name="text">
-            <string>V分量信噪比：(SNR)</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="VSNR">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_90">
-         <item>
-          <widget class="QLabel" name="label_158">
-           <property name="text">
-            <string>帧内编码宏块：</string>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout" name="horizontalLayout_71">
+           <item>
+            <widget class="QLabel" name="label_121">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>P 帧 d0p：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="d0ppppppp">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item>
-          <widget class="QLabel" name="hash1">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_91">
-         <item>
-          <widget class="QLabel" name="label_160">
-           <property name="text">
-            <string>已编码宏块：</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="hash2">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_95">
-         <item>
-          <widget class="QLabel" name="label_171">
-           <property name="text">
-            <string>未编码宏块：</string>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout" name="horizontalLayout_72">
+           <item>
+            <widget class="QLabel" name="label_123">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>B 帧 d0b：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="d0bbbbbbb">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item>
-          <widget class="QLabel" name="hash3">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_96">
-         <item>
-          <widget class="QLabel" name="label_173">
-           <property name="text">
-            <string>已跳过宏块：</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="hash4">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_93">
-         <item>
-          <widget class="QLabel" name="label_167">
-           <property name="text">
-            <string>前向预测宏块：</string>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout" name="horizontalLayout_75">
+           <item>
+            <widget class="QLabel" name="label_125">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>当前GOP中剩余P帧数量：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="npppppppp">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item>
-          <widget class="QLabel" name="hash5">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_94">
-         <item>
-          <widget class="QLabel" name="label_169">
-           <property name="text">
-            <string>后向预测宏块：</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="hash6">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_92">
-         <item>
-          <widget class="QLabel" name="label_162">
-           <property name="text">
-            <string>双向内插预测宏块：</string>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout" name="horizontalLayout_76">
+           <item>
+            <widget class="QLabel" name="label_131">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>当前GOP中剩余B帧数量：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="nbbbbbbbbb">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item>
-          <widget class="QLabel" name="hash7">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout" name="horizontalLayout_77">
+           <item>
+            <widget class="QLabel" name="label_133">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>平均活动 avg_act：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="avg_acttttttt">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_78">
+           <item>
+            <widget class="QLabel" name="label_135">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Y分量幅度：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="YV">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_79">
+           <item>
+            <widget class="QLabel" name="label_137">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Y分量均方误差数值：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="YMSEDB">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_81">
+           <item>
+            <widget class="QLabel" name="label_141">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Y分量信噪比：(SNR)</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="YSNR">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_82">
+           <item>
+            <widget class="QLabel" name="label_143">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>U分量幅度：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="UV">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_83">
+           <item>
+            <widget class="QLabel" name="label_145">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>U分量均方误差数值：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="UMSEDB">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_85">
+           <item>
+            <widget class="QLabel" name="label_149">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>U分量信噪比：(SNR)</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="USNR">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_86">
+           <item>
+            <widget class="QLabel" name="label_151">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>V分量幅度：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="VV">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_87">
+           <item>
+            <widget class="QLabel" name="label_153">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>V分量均方误差数值：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="VMSEDB">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_89">
+           <item>
+            <widget class="QLabel" name="label_157">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>V分量信噪比：(SNR)</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="VSNR">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_90">
+           <item>
+            <widget class="QLabel" name="label_158">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>帧内编码宏块：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="hash1">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_91">
+           <item>
+            <widget class="QLabel" name="label_160">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>已编码宏块：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="hash2">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_95">
+           <item>
+            <widget class="QLabel" name="label_171">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>未编码宏块：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="hash3">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_96">
+           <item>
+            <widget class="QLabel" name="label_173">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>已跳过宏块：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="hash4">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_93">
+           <item>
+            <widget class="QLabel" name="label_167">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>前向预测宏块：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="hash5">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_94">
+           <item>
+            <widget class="QLabel" name="label_169">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>后向预测宏块：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="hash6">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_92">
+           <item>
+            <widget class="QLabel" name="label_162">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>双向内插预测宏块：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="hash7">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
         </layout>
        </item>
       </layout>
      </widget>
     </widget>
+   </widget>
+   <widget class="QWidget" name="tab_3">
+    <attribute name="title">
+     <string>页</string>
+    </attribute>
    </widget>
   </widget>
   <widget class="QWidget" name="layoutWidget">
@@ -3329,9 +4100,9 @@
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="buttonGroup_2"/>
-  <buttongroup name="buttonGroup_4"/>
-  <buttongroup name="buttonGroup"/>
   <buttongroup name="buttonGroup_5"/>
+  <buttongroup name="buttonGroup_2"/>
+  <buttongroup name="buttonGroup"/>
+  <buttongroup name="buttonGroup_4"/>
  </buttongroups>
 </ui>

@@ -609,6 +609,104 @@ void Display::refreshErrorList()
     }
 }
 
+void Display::setFrameData(int num)
+{
+    if(num>=pictureDATA.size())
+        return;
+
+    ui->no->setText(QString::number(pictureDATA[num].no));
+    ui->dispNo->setText(QString::number(pictureDATA[num].dispNo));
+    ui->codeNo->setText(QString::number(pictureDATA[num].codeNo));
+    ui->picType->setText(QString(pictureDATA[num].picType)+"帧");
+    ui->tempRef->setText(QString::number(pictureDATA[num].tempRef));
+    ui->framePredDCT->setText(pictureDATA[num].framePredDct==1?"是":"否");
+    ui->qScaleType->setText(pictureDATA[num].qScaleType==1?"是":"否");
+    ui->intravlc->setText(pictureDATA[num].intravlc==1?"是":"否");
+    ui->altscan->setText(pictureDATA[num].altscan==1?"是":"否");
+    ui->pictureTime->setText(QString::number(pictureDATA[num].pictureTime));
+    ui->targetNumberofBits->setText(QString::number(pictureDATA[num].targetNumberOfBits));
+    ui->vbvDelay->setText(QString::number(pictureDATA[num].vbvDelay));
+    ui->vbvBitCount->setText(QString::number(pictureDATA[num].bitcount));
+    ui->bitcntEOP->setText(QString::number(pictureDATA[num].bitcnt_EOP));
+    ui->vbvdcdtime->setText(QString::number(pictureDATA[num].vbvDcdTime));
+    ui->actualBits->setText(QString::number(pictureDATA[num].actualBits));
+    ui->avgQuanPara->setText(QString::number(pictureDATA[num].avgQuanPara));
+    ui->reaminNumberGOP->setText(QString::number(pictureDATA[num].reaminNumberGOP));
+    ui->Xiii->setText(QString::number(pictureDATA[num].Xi));
+    ui->Xppp->setText(QString::number(pictureDATA[num].Xp));
+    ui->Xbbb->setText(QString::number(pictureDATA[num].Xb));
+    ui->d0iiiiii->setText(QString::number(pictureDATA[num].d0i));
+    ui->d0ppppppp->setText(QString::number(pictureDATA[num].d0p));
+    ui->d0bbbbbbb->setText(QString::number(pictureDATA[num].d0b));
+    ui->npppppppp->setText(QString::number(pictureDATA[num].Np));
+    ui->nbbbbbbbbb->setText(QString::number(pictureDATA[num].Nb));
+    ui->avg_acttttttt->setText(QString::number(pictureDATA[num].avg_act));
+    ui->YV->setText(QString::number(pictureDATA[num].YV));
+    ui->YMSEDB->setText(QString::number(pictureDATA[num].YMSE)+" ( "+QString::number(pictureDATA[num].YMSEdb)+" dB )");
+    ui->YSNR->setText(QString::number(pictureDATA[num].YSNR));
+    ui->UV->setText(QString::number(pictureDATA[num].UV));
+    ui->UMSEDB->setText(QString::number(pictureDATA[num].UMSE)+" ( "+QString::number(pictureDATA[num].UMSEdb)+" dB )");
+    ui->USNR->setText(QString::number(pictureDATA[num].USNR));
+    ui->VV->setText(QString::number(pictureDATA[num].VV));
+    ui->VMSEDB->setText(QString::number(pictureDATA[num].VMSE)+" ( "+QString::number(pictureDATA[num].VMSEdb)+" dB )");
+    ui->VSNR->setText(QString::number(pictureDATA[num].VSNR));
+    ui->hash1->setText(QString::number(pictureDATA[num].hash1)+" ( "+QString::number(pictureDATA[num].hashp1)+"% )");
+    ui->hash2->setText(QString::number(pictureDATA[num].hash2)+" ( "+QString::number(pictureDATA[num].hashp2)+"% )");
+    ui->hash3->setText(QString::number(pictureDATA[num].hash3)+" ( "+QString::number(pictureDATA[num].hashp3)+"% )");
+    ui->hash4->setText(QString::number(pictureDATA[num].hash4)+" ( "+QString::number(pictureDATA[num].hashp4)+"% )");
+    ui->hash5->setText(QString::number(pictureDATA[num].hash5)+" ( "+QString::number(pictureDATA[num].hashp5)+"% )");
+    ui->hash6->setText(QString::number(pictureDATA[num].hash6)+" ( "+QString::number(pictureDATA[num].hashp6)+"% )");
+    ui->hash7->setText(QString::number(pictureDATA[num].hash7)+" ( "+QString::number(pictureDATA[num].hashp7)+"% )");
+    if(pictureDATA[num].picType=='P'||pictureDATA[num].picType=='B')
+    {
+    ui->forSeaWind->setText("宽度范围[-"+QString::number(pictureDATA[num].sxf)+","+QString::number(pictureDATA[num].sxf)+"] 高度范围[-"+QString::number(pictureDATA[num].syf)+","+QString::number(pictureDATA[num].syf)+"]");
+    ui->forSeaRange->setText("水平范围[-"+QString::number(4<<(pictureDATA[num].forw_hor_f_code))+","+QString::number((4<<(pictureDATA[num].forw_hor_f_code))-1)+"] 垂直范围[-"+QString::number(4<<(pictureDATA[num].forw_vert_f_code))+","+QString::number((4<<(pictureDATA[num].forw_vert_f_code))-1)+"]");
+    }
+    else
+    {
+        ui->forSeaWind->setText("当前帧是I帧");
+        ui->forSeaRange->setText("当前帧是I帧");
+    }
+
+    if(pictureDATA[num].picType=='B')
+    {
+    ui->backSeaWind->setText("宽度范围[-"+QString::number(pictureDATA[num].sxb)+","+QString::number(pictureDATA[num].sxb)+"] 高度范围[-"+QString::number(pictureDATA[num].syb)+","+QString::number(pictureDATA[num].syb)+"]");
+    ui->backSeaScope->setText("水平范围[-"+QString::number(4<<(pictureDATA[num].back_hor_f_code))+","+QString::number((4<<(pictureDATA[num].back_hor_f_code))-1)+"] 垂直范围[-"+QString::number(4<<(pictureDATA[num].back_vert_f_code))+","+QString::number((4<<(pictureDATA[num].back_vert_f_code))-1)+"]");
+    }
+    else
+    {
+        ui->backSeaWind->setText("当前帧是"+QString(pictureDATA[num].picType)+"帧");
+        ui->backSeaScope->setText("当前帧是"+QString(pictureDATA[num].picType)+"帧");
+    }
+
+
+}
+
+void Display::setGroupData(int num)
+{
+    if(num>=groupDATA.size())
+        return;
+    ui->RRRRRRRR->setText(QString::number(groupDATA[num].R));
+    ui->Np->setText(QString::number(groupDATA[num].Np));
+    ui->Nb->setText(QString::number(groupDATA[num].Nb));
+}
+
+void Display::setGlobalData()
+{
+    ui->Xi->setText(QString::number(globalDATA.xi));
+    ui->Xp->setText(QString::number(globalDATA.xp));
+    ui->Xb->setText(QString::number(globalDATA.xb));
+    ui->rrrrr->setText(QString::number(globalDATA.r));
+    ui->d0i->setText(QString::number(globalDATA.d0i));
+    ui->d0p->setText(QString::number(globalDATA.d0p));
+    ui->d0b->setText(QString::number(globalDATA.d0b));
+    ui->avg_act_2->setText(QString::number(globalDATA.avgAct));
+    ui->totalTime->setText(QString::number(globalDATA.totalTime,'f'));
+    ui->fps->setText(QString::number(globalDATA.fps));
+    ui->nframes->setText(QString::number(globalDATA.nframes));
+
+}
+
 Display::~Display()
 {
     delete ui;
@@ -632,8 +730,26 @@ void Display::onRefreshBar()
 void Display::onProcessEnded(bool status)
 {
     if(status)
+    {
         QMessageBox::information(this,"编码成功","编码成功结束。");
+        setGlobalData();
+        setFrameData(0);
+        setGroupData(0);
+        ui->gopSpin->setMinimum(0);
+        ui->gopSpin->setMaximum(groupDATA.size()-1);
+        ui->gopSpin->setSingleStep(1);
+        ui->gopSlider->setMinimum(0);
+        ui->gopSlider->setMaximum(groupDATA.size()-1);
+        ui->gopSlider->setSingleStep(1);
+        ui->frameSpin->setMinimum(0);
+        ui->frameSpin->setMaximum(pictureDATA.size()-1);
+        ui->frameSpin->setSingleStep(1);
+        ui->frameSlider->setMinimum(0);
+        ui->frameSlider->setMaximum(pictureDATA.size()-1);
+        ui->frameSlider->setSingleStep(1);
+    }
     else QMessageBox::critical(this,"编码失败","编码失败。\n"+errorTextGlobal);
+    ui->pushButton->setEnabled(true);
 }
 
 
@@ -667,7 +783,7 @@ void Display::on_IPDistance_valueChanged(int arg1)
     ui->searchTable->setRowCount(2*M-1);
     ui->searchTable->setColumnCount(4);
     QStringList header;
-    header<<"水平搜索限长"<<"垂直搜索限长"<<"搜索宽度"<<"搜索高度";
+    header<<"水平向量长度"<<"垂直向量长度"<<"搜索宽度"<<"搜索高度";
     ui->searchTable->setHorizontalHeaderLabels(header);
     QStringList vheader;
     vheader<<"P帧";
@@ -845,6 +961,8 @@ void Display::on_pushButton_clicked()
     ifRunning=true;
     checkDataThread *seqThr=new checkDataThread();
     connect(seqThr,SIGNAL(ProcessEnded(bool)),this,SLOT(onProcessEnded(bool)));
+    ui->pushButton->setEnabled(false);
+
     seqThr->start();
     RefreshUI *refUI=new RefreshUI();
     connect(refUI,SIGNAL(refreshSignal()),this,SLOT(onRefreshSignal()));
@@ -874,4 +992,26 @@ void Display::on_outputBrowse_clicked()
         ui->outputLine->setText(fileOUTPUT);
         ui->outputLine->setReadOnly(true);
     }
+}
+
+void Display::on_gopSlider_valueChanged(int value)
+{
+    ui->gopSpin->setValue(value);
+    setGroupData(value);
+}
+
+void Display::on_gopSpin_valueChanged(int arg1)
+{
+    ui->gopSlider->setValue(arg1);
+}
+
+void Display::on_frameSlider_valueChanged(int value)
+{
+    ui->frameSpin->setValue(value);
+    setFrameData(value);
+}
+
+void Display::on_frameSpin_valueChanged(int arg1)
+{
+    ui->frameSlider->setValue(arg1);
 }

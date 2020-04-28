@@ -19,6 +19,9 @@ public:
     Display(QWidget *parent = nullptr);
     bool parameterPrepare();
     void refreshErrorList();
+    void setFrameData(int num);
+    void setGroupData(int num);
+    void setGlobalData();
     ~Display();
 
 public slots:
@@ -48,6 +51,14 @@ private slots:
     void on_pushButton_clicked();
 
     void on_outputBrowse_clicked();
+
+    void on_gopSlider_valueChanged(int value);
+
+    void on_gopSpin_valueChanged(int arg1);
+
+    void on_frameSlider_valueChanged(int value);
+
+    void on_frameSpin_valueChanged(int arg1);
 
 private:
     Ui::Display *ui;
