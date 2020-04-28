@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1340</width>
-    <height>690</height>
+    <height>692</height>
    </rect>
   </property>
   <property name="font">
@@ -24,7 +24,7 @@
      <x>5</x>
      <y>5</y>
      <width>1326</width>
-     <height>681</height>
+     <height>686</height>
     </rect>
    </property>
    <property name="currentIndex">
@@ -8184,7 +8184,7 @@ QSpinBox::up-button,QSpinBox::down-button
         <x>15</x>
         <y>15</y>
         <width>831</width>
-        <height>678</height>
+        <height>631</height>
        </rect>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_102">
@@ -9494,8 +9494,8 @@ QSpinBox::up-button,QSpinBox::down-button
     <widget class="QGroupBox" name="groupBox_20">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>30</y>
+       <x>25</x>
+       <y>20</y>
        <width>1286</width>
        <height>401</height>
       </rect>
@@ -9506,9 +9506,9 @@ QSpinBox::up-button,QSpinBox::down-button
      <widget class="QTextEdit" name="mmap1">
       <property name="geometry">
        <rect>
-        <x>20</x>
+        <x>185</x>
         <y>105</y>
-        <width>546</width>
+        <width>411</width>
         <height>276</height>
        </rect>
       </property>
@@ -9516,9 +9516,9 @@ QSpinBox::up-button,QSpinBox::down-button
      <widget class="QTextEdit" name="mmap2">
       <property name="geometry">
        <rect>
-        <x>685</x>
+        <x>815</x>
         <y>105</y>
-        <width>546</width>
+        <width>416</width>
         <height>276</height>
        </rect>
       </property>
@@ -9571,12 +9571,470 @@ QSpinBox::up-button,QSpinBox::down-button
        </item>
       </layout>
      </widget>
+     <widget class="QGroupBox" name="groupBox_22">
+      <property name="geometry">
+       <rect>
+        <x>15</x>
+        <y>120</y>
+        <width>151</width>
+        <height>271</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string> 图例</string>
+      </property>
+      <widget class="QWidget" name="">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>131</width>
+         <height>246</height>
+        </rect>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_26">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_103">
+          <item>
+           <widget class="QLabel" name="label_48">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="font">
+             <font>
+              <family>华文琥珀</family>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: black;</string>
+            </property>
+            <property name="text">
+             <string>●</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_52">
+            <property name="text">
+             <string>TextLabel</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_153">
+          <item>
+           <widget class="QLabel" name="label_55">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="font">
+             <font>
+              <family>华文琥珀</family>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: red;</string>
+            </property>
+            <property name="text">
+             <string>●</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_57">
+            <property name="text">
+             <string>TextLabel</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_154">
+          <item>
+           <widget class="QLabel" name="label_59">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="font">
+             <font>
+              <family>华文琥珀</family>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: green;</string>
+            </property>
+            <property name="text">
+             <string>●</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_61">
+            <property name="text">
+             <string>TextLabel</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_155">
+          <item>
+           <widget class="QLabel" name="label_62">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="font">
+             <font>
+              <family>华文琥珀</family>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: blue;</string>
+            </property>
+            <property name="text">
+             <string>●</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_71">
+            <property name="text">
+             <string>TextLabel</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_156">
+          <item>
+           <widget class="QLabel" name="label_75">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="font">
+             <font>
+              <family>华文琥珀</family>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: cyan;</string>
+            </property>
+            <property name="text">
+             <string>●</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_76">
+            <property name="text">
+             <string>TextLabel</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_157">
+          <item>
+           <widget class="QLabel" name="label_86">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="font">
+             <font>
+              <family>华文琥珀</family>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: magenta;</string>
+            </property>
+            <property name="text">
+             <string>●</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_88">
+            <property name="text">
+             <string>TextLabel</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_158">
+          <item>
+           <widget class="QLabel" name="label_104">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="font">
+             <font>
+              <family>华文琥珀</family>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: yellow;</string>
+            </property>
+            <property name="text">
+             <string>●</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_105">
+            <property name="text">
+             <string>TextLabel</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_159">
+          <item>
+           <widget class="QLabel" name="label_107">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="font">
+             <font>
+              <family>华文琥珀</family>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: gray;</string>
+            </property>
+            <property name="text">
+             <string>●</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_122">
+            <property name="text">
+             <string>TextLabel</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_160">
+          <item>
+           <widget class="QLabel" name="label_147">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="font">
+             <font>
+              <family>华文琥珀</family>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: darkRed;</string>
+            </property>
+            <property name="text">
+             <string>●</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_148">
+            <property name="text">
+             <string>TextLabel</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_161">
+          <item>
+           <widget class="QLabel" name="label_155">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="font">
+             <font>
+              <family>华文琥珀</family>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: darkBlue;</string>
+            </property>
+            <property name="text">
+             <string>●</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_156">
+            <property name="text">
+             <string>TextLabel</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="groupBox_23">
+      <property name="geometry">
+       <rect>
+        <x>665</x>
+        <y>120</y>
+        <width>120</width>
+        <height>271</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string> 图例</string>
+      </property>
+      <widget class="QWidget" name="layoutWidget_15">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>101</width>
+         <height>61</height>
+        </rect>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_27">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_163">
+          <item>
+           <widget class="QLabel" name="label_175">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="font">
+             <font>
+              <family>华文琥珀</family>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: red;</string>
+            </property>
+            <property name="text">
+             <string>●</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_176">
+            <property name="text">
+             <string>TextLabel</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_164">
+          <item>
+           <widget class="QLabel" name="label_177">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="font">
+             <font>
+              <family>华文琥珀</family>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: green;</string>
+            </property>
+            <property name="text">
+             <string>●</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_178">
+            <property name="text">
+             <string>TextLabel</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </widget>
     </widget>
     <widget class="QGroupBox" name="groupBox_21">
      <property name="geometry">
       <rect>
-       <x>30</x>
-       <y>450</y>
+       <x>55</x>
+       <y>440</y>
        <width>1276</width>
        <height>196</height>
       </rect>

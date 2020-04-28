@@ -50,10 +50,10 @@ Display::Display(QWidget *parent)
     b1format.setForeground(Qt::yellow);
     b2format.setForeground(Qt::gray);
     d1format.setForeground(Qt::darkRed);
-    d2format.setForeground(Qt::darkYellow);
+    d2format.setForeground(Qt::darkBlue);
 
-    qformat.setForeground(Qt::darkCyan);
-    nformat.setForeground(Qt::darkGreen);
+    qformat.setForeground(Qt::red);
+    nformat.setForeground(Qt::green);
 }
 
 bool Display::parameterPrepare()
