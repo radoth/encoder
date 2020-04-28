@@ -9,6 +9,8 @@
 #include "checkdatathread.h"
 #include "refreshui.h"
 #include "refreshbar.h"
+#include "displaychart.h"
+#include "visual3d.h"
 
 Display::Display(QWidget *parent)
     : QWidget(parent)
@@ -25,6 +27,33 @@ Display::Display(QWidget *parent)
     ((QSpinBox *)(ui->searchTable->cellWidget(0,2)))->setValue(11);
     ((QSpinBox *)(ui->searchTable->cellWidget(0,3)))->setValue(11);
     ui->outputLine->setReadOnly(true);
+
+    sformat.setFont(QFont("微软雅黑",9));
+    iformat.setFont(QFont("微软雅黑",9));
+    oformat.setFont(QFont("微软雅黑",9));
+    f1format.setFont(QFont("微软雅黑",9));
+    f2format.setFont(QFont("微软雅黑",9));
+    pformat.setFont(QFont("微软雅黑",9));
+    b1format.setFont(QFont("微软雅黑",9));
+    b2format.setFont(QFont("微软雅黑",9));
+    d1format.setFont(QFont("微软雅黑",9));
+    d2format.setFont(QFont("微软雅黑",9));
+    qformat.setFont(QFont("微软雅黑",9));
+    nformat.setFont(QFont("微软雅黑",9));
+
+    sformat.setForeground(Qt::black);
+    iformat.setForeground(Qt::red);
+    oformat.setForeground(Qt::green);
+    f1format.setForeground(Qt::blue);
+    f2format.setForeground(Qt::cyan);
+    pformat.setForeground(Qt::magenta);
+    b1format.setForeground(Qt::yellow);
+    b2format.setForeground(Qt::gray);
+    d1format.setForeground(Qt::darkRed);
+    d2format.setForeground(Qt::darkYellow);
+
+    qformat.setForeground(Qt::darkCyan);
+    nformat.setForeground(Qt::darkGreen);
 }
 
 bool Display::parameterPrepare()
@@ -37,7 +66,7 @@ bool Display::parameterPrepare()
     strcpy(id_string,"ZYC");
 
     if(fileNAME.simplified().isEmpty())
-        strcpy(tplorg,"bad");
+        {error("invalid filename");return false;}
     else strcpy(tplorg,fileNAME.toStdString().c_str());
 
     if(fileRECONS.simplified().isEmpty())
@@ -46,7 +75,156 @@ bool Display::parameterPrepare()
 
     strcpy(iqname,"-");
     strcpy(niqname,"-");
-    strcpy(statname,"stat.out");
+    strcpy(statname,"-");
+
+    if(ui->useDefaultInMatrix->isChecked())
+    {
+        load_iquant = 0;
+        for (i=0; i<64; i++)
+          intra_q[i] = default_intra_quantizer_matrix[i];
+    }
+    else{
+        qDebug()<<"ready!!!!!!!";
+        load_iquant = 1;
+        intra_q[0]=ui->xq0->value();
+        intra_q[1]=ui->xq1->value();
+        intra_q[2]=ui->xq2->value();
+        intra_q[3]=ui->xq3->value();
+        intra_q[4]=ui->xq4->value();
+        intra_q[5]=ui->xq5->value();
+        intra_q[6]=ui->xq6->value();
+        intra_q[7]=ui->xq7->value();
+        intra_q[8]=ui->xq8->value();
+        intra_q[9]=ui->xq9->value();
+        intra_q[10]=ui->xq10->value();
+        intra_q[11]=ui->xq11->value();
+        intra_q[12]=ui->xq12->value();
+        intra_q[13]=ui->xq13->value();
+        intra_q[14]=ui->xq14->value();
+        intra_q[15]=ui->xq15->value();
+        intra_q[16]=ui->xq16->value();
+        intra_q[17]=ui->xq17->value();
+        intra_q[18]=ui->xq18->value();
+        intra_q[19]=ui->xq19->value();
+        intra_q[20]=ui->xq20->value();
+        intra_q[21]=ui->xq21->value();
+        intra_q[22]=ui->xq22->value();
+        intra_q[23]=ui->xq23->value();
+        intra_q[24]=ui->xq24->value();
+        intra_q[25]=ui->xq25->value();
+        intra_q[26]=ui->xq26->value();
+        intra_q[27]=ui->xq27->value();
+        intra_q[28]=ui->xq28->value();
+        intra_q[29]=ui->xq29->value();
+        intra_q[30]=ui->xq30->value();
+        intra_q[31]=ui->xq31->value();
+        intra_q[32]=ui->xq32->value();
+        intra_q[33]=ui->xq33->value();
+        intra_q[34]=ui->xq34->value();
+        intra_q[35]=ui->xq35->value();
+        intra_q[36]=ui->xq36->value();
+        intra_q[37]=ui->xq37->value();
+        intra_q[38]=ui->xq38->value();
+        intra_q[39]=ui->xq40->value();
+        intra_q[40]=ui->xq41->value();
+        intra_q[41]=ui->xq42->value();
+        intra_q[42]=ui->xq43->value();
+        intra_q[43]=ui->xq44->value();
+        intra_q[44]=ui->xq45->value();
+        intra_q[45]=ui->xq46->value();
+        intra_q[46]=ui->xq47->value();
+        intra_q[47]=ui->xq48->value();
+        intra_q[48]=ui->xq49->value();
+        intra_q[49]=ui->xq50->value();
+        intra_q[50]=ui->xq51->value();
+        intra_q[51]=ui->xq52->value();
+        intra_q[52]=ui->xq53->value();
+        intra_q[53]=ui->xq54->value();
+        intra_q[54]=ui->xq55->value();
+        intra_q[55]=ui->xq56->value();
+        intra_q[56]=ui->xq57->value();
+        intra_q[57]=ui->xq58->value();
+        intra_q[58]=ui->xq59->value();
+        intra_q[59]=ui->xq60->value();
+        intra_q[60]=ui->xq61->value();
+        intra_q[61]=ui->xq62->value();
+        intra_q[62]=ui->xq63->value();
+        intra_q[63]=ui->xq64->value();
+    }
+
+    if(ui->useDefaultOutMatrix->isChecked())
+    {
+        load_niquant = 0;
+        for (i=0; i<64; i++)
+          inter_q[i] = 16;
+    }
+    else{
+        load_niquant = 1;
+        inter_q[0]=ui->xq0_4->value();
+        inter_q[1]=ui->xq1_4->value();
+        inter_q[2]=ui->xq2_4->value();
+        inter_q[3]=ui->xq3_4->value();
+        inter_q[4]=ui->xq4_4->value();
+        inter_q[5]=ui->xq5_4->value();
+        inter_q[6]=ui->xq6_4->value();
+        inter_q[7]=ui->xq7_4->value();
+        inter_q[8]=ui->xq8_4->value();
+        inter_q[9]=ui->xq9_4->value();
+        inter_q[10]=ui->xq10_4->value();
+        inter_q[11]=ui->xq11_4->value();
+        inter_q[12]=ui->xq12_4->value();
+        inter_q[13]=ui->xq13_4->value();
+        inter_q[14]=ui->xq14_4->value();
+        inter_q[15]=ui->xq15_4->value();
+        inter_q[16]=ui->xq16_4->value();
+        inter_q[17]=ui->xq17_4->value();
+        inter_q[18]=ui->xq18_4->value();
+        inter_q[19]=ui->xq19_4->value();
+        inter_q[20]=ui->xq20_4->value();
+        inter_q[21]=ui->xq21_4->value();
+        inter_q[22]=ui->xq22_4->value();
+        inter_q[23]=ui->xq23_4->value();
+        inter_q[24]=ui->xq24_4->value();
+        inter_q[25]=ui->xq25_4->value();
+        inter_q[26]=ui->xq26_4->value();
+        inter_q[27]=ui->xq27_4->value();
+        inter_q[28]=ui->xq28_4->value();
+        inter_q[29]=ui->xq29_4->value();
+        inter_q[30]=ui->xq30_4->value();
+        inter_q[31]=ui->xq31_4->value();
+        inter_q[32]=ui->xq32_4->value();
+        inter_q[33]=ui->xq33_4->value();
+        inter_q[34]=ui->xq34_4->value();
+        inter_q[35]=ui->xq35_4->value();
+        inter_q[36]=ui->xq36_4->value();
+        inter_q[37]=ui->xq37_4->value();
+        inter_q[38]=ui->xq38_4->value();
+        inter_q[39]=ui->xq40_4->value();
+        inter_q[40]=ui->xq41_4->value();
+        inter_q[41]=ui->xq42_4->value();
+        inter_q[42]=ui->xq43_4->value();
+        inter_q[43]=ui->xq44_4->value();
+        inter_q[44]=ui->xq45_4->value();
+        inter_q[45]=ui->xq46_4->value();
+        inter_q[46]=ui->xq47_4->value();
+        inter_q[47]=ui->xq48_4->value();
+        inter_q[48]=ui->xq49_4->value();
+        inter_q[49]=ui->xq50_4->value();
+        inter_q[50]=ui->xq51_4->value();
+        inter_q[51]=ui->xq52_4->value();
+        inter_q[52]=ui->xq53_4->value();
+        inter_q[53]=ui->xq54_4->value();
+        inter_q[54]=ui->xq55_4->value();
+        inter_q[55]=ui->xq56_4->value();
+        inter_q[56]=ui->xq57_4->value();
+        inter_q[57]=ui->xq58_4->value();
+        inter_q[58]=ui->xq59_4->value();
+        inter_q[59]=ui->xq60_4->value();
+        inter_q[60]=ui->xq61_4->value();
+        inter_q[61]=ui->xq62_4->value();
+        inter_q[62]=ui->xq63_4->value();
+        inter_q[63]=ui->xq64_4->value();
+    }
 
     if(ui->chooseYUVFormat->isChecked())
         inputtype=1;
@@ -707,6 +885,68 @@ void Display::setGlobalData()
 
 }
 
+void Display::setMMap1(int num)
+{
+    if(num>=pictureDATA.size())
+        return;
+
+    ui->mmap1->setReadOnly(true);
+    ui->mmap1->clear();
+    ui->mmap1->moveCursor(QTextCursor::End);
+    QTextCursor cursor=ui->mmap1->textCursor();
+
+
+    for(int i=0;i<pictureDATA[num].rountineOut;i++)
+    {
+        for(int j=0;j<pictureDATA[num].rountineIn;j++)
+        {
+            switch((pictureDATA[num].mmap1)[i][j])
+            {
+            case 'S':cursor.insertText("●",sformat);break;
+            case 'I':cursor.insertText("●",iformat);break;
+            case '0':cursor.insertText("●",oformat);break;
+            case 'F':cursor.insertText("●",f1format);break;
+            case 'f':cursor.insertText("●",f2format);break;
+            case 'p':cursor.insertText("●",pformat);break;
+            case 'B':cursor.insertText("●",b1format);break;
+            case 'b':cursor.insertText("●",b2format);break;
+            case 'D':cursor.insertText("●",d1format);break;
+            case 'd':cursor.insertText("●",d2format);break;
+            default:break;
+            }
+        }
+        cursor.insertText("\n");
+    }
+    ui->mmap1->setFocusPolicy(Qt::NoFocus);
+}
+
+void Display::setMMap2(int num)
+{
+    if(num>=pictureDATA.size())
+        return;
+
+    ui->mmap2->setReadOnly(true);
+    ui->mmap2->clear();
+    ui->mmap2->moveCursor(QTextCursor::End);
+    QTextCursor cursor=ui->mmap2->textCursor();
+
+
+    for(int i=0;i<pictureDATA[num].rountineOut;i++)
+    {
+        for(int j=0;j<pictureDATA[num].rountineIn;j++)
+        {
+            switch((pictureDATA[num].mmap2)[i][j])
+            {
+            case 'Q':cursor.insertText("●",sformat);break;
+            case 'N':cursor.insertText("●",iformat);break;
+            default:break;
+            }
+        }
+        cursor.insertText("\n");
+    }
+    ui->mmap2->setFocusPolicy(Qt::NoFocus);
+}
+
 Display::~Display()
 {
     delete ui;
@@ -747,6 +987,12 @@ void Display::onProcessEnded(bool status)
         ui->frameSlider->setMinimum(0);
         ui->frameSlider->setMaximum(pictureDATA.size()-1);
         ui->frameSlider->setSingleStep(1);
+        ui->visualSpin->setMinimum(0);
+        ui->visualSlider->setMaximum(pictureDATA.size()-1);
+        ui->visualSlider->setSingleStep(1);
+        ui->visualSpin->setMinimum(0);
+        ui->visualSpin->setMaximum(pictureDATA.size()-1);
+        ui->visualSpin->setSingleStep(1);
     }
     else QMessageBox::critical(this,"编码失败","编码失败。\n"+errorTextGlobal);
     ui->pushButton->setEnabled(true);
@@ -890,7 +1136,6 @@ void Display::on_yesReImage_clicked()
 void Display::on_useDefaultInMatrix_clicked()
 {
     ui->CustomInMatrix->setEnabled(false);
-    ui->CustomInMatrix->clear();
 }
 
 void Display::on_useCustomInMatrix_clicked()
@@ -901,7 +1146,6 @@ void Display::on_useCustomInMatrix_clicked()
 void Display::on_useDefaultOutMatrix_clicked()
 {
     ui->CustomOutMatrix->setEnabled(false);
-    ui->CustomOutMatrix->clear();
 
 }
 
@@ -916,12 +1160,8 @@ void Display::on_pushButton_clicked()
 
     if(parameterPrepare()==false)
     {
-        QMessageBox::critical(this,"严重错误",errorTextGlobal);
-        return;
-    }
-
-    if(readquantmat()==false)
-    {
+        if(errorTextGlobal.simplified().isEmpty())
+            errorTextGlobal="参数设置有误";
         QMessageBox::critical(this,"严重错误",errorTextGlobal);
         return;
     }
@@ -947,6 +1187,8 @@ void Display::on_pushButton_clicked()
 
     if(init()==false)
     {
+        if(errorTextGlobal.simplified().isEmpty())
+            errorTextGlobal="参数设置有误";
         QMessageBox::critical(this,"严重错误",errorTextGlobal);
         fclose(outfile);
         fclose(statfile);
@@ -1014,4 +1256,420 @@ void Display::on_frameSlider_valueChanged(int value)
 void Display::on_frameSpin_valueChanged(int arg1)
 {
     ui->frameSlider->setValue(arg1);
+}
+
+void Display::on_RRRRRRRRButton_clicked()
+{
+    chartsInt.clear();
+    for(int i=0;i<groupDATA.size();i++)
+        chartsInt.push_back(groupDATA[i].R);
+    DisplayChart::showChartint("GOP 目标编码位数");
+}
+
+void Display::on_NpButton_clicked()
+{
+    chartsInt.clear();
+    for(int i=0;i<groupDATA.size();i++)
+        chartsInt.push_back(groupDATA[i].Np);
+    DisplayChart::showChartint("GOP 中P帧数量");
+}
+
+
+void Display::on_NbButton_clicked()
+{
+    chartsInt.clear();
+    for(int i=0;i<groupDATA.size();i++)
+        chartsInt.push_back(groupDATA[i].Nb);
+    DisplayChart::showChartint("GOP 中B帧数量");
+}
+
+void Display::on_dispNoButton_clicked()
+{
+    chartsInt.clear();
+    for(int i=0;i<pictureDATA.size();i++)
+        chartsInt.push_back(pictureDATA[i].dispNo);
+    DisplayChart::showChartint("帧顺序号");
+}
+
+void Display::on_dispNoButton_2_clicked()
+{
+    chartsInt.clear();
+    for(int i=0;i<pictureDATA.size();i++)
+        chartsInt.push_back(pictureDATA[i].codeNo);
+    DisplayChart::showChartint("帧编码序号");
+}
+
+void Display::on_pictureTimeButton_clicked()
+{
+    chartsInt.clear();
+    for(int i=0;i<pictureDATA.size();i++)
+        chartsInt.push_back(pictureDATA[i].pictureTime);
+    DisplayChart::showChartint("编码耗时");
+}
+
+void Display::on_picTypeButton_clicked()
+{
+    DisplayChart::showThreeBar();
+}
+
+void Display::on_framePredDCTButton_clicked()
+{
+
+}
+
+void Display::on_qScaleTypeButton_clicked()
+{
+
+}
+
+void Display::on_intravlcButton_clicked()
+{
+
+}
+
+void Display::on_altscanButton_clicked()
+{
+
+}
+
+void Display::on_forSeaWindButton_clicked()
+{
+
+}
+
+void Display::on_forSeaRangeButton_clicked()
+{
+
+}
+
+void Display::on_backSeaWindButton_clicked()
+{
+
+}
+
+void Display::on_backSeaScopeButton_clicked()
+{
+
+}
+
+void Display::on_vbvDelayButton_clicked()
+{
+    chartsInt.clear();
+    for(int i=0;i<pictureDATA.size();i++)
+        chartsInt.push_back(pictureDATA[i].vbvDelay);
+    DisplayChart::showChartint("VBV延迟");
+}
+
+void Display::on_vbvBitCountButton_clicked()
+{
+    chartsInt.clear();
+    for(int i=0;i<pictureDATA.size();i++)
+        chartsInt.push_back(pictureDATA[i].bitcount);
+    DisplayChart::showChartint("VBV延迟");
+}
+
+void Display::on_vbvdcdTime_clicked()
+{
+    chartsDouble.clear();
+    for(int i=0;i<pictureDATA.size();i++)
+        chartsDouble.push_back(pictureDATA[i].vbvDcdTime);
+    DisplayChart::showCharDouble("VBV解码时间");
+}
+
+void Display::on_bitcntEOPButton_clicked()
+{
+    chartsInt.clear();
+    for(int i=0;i<pictureDATA.size();i++)
+        chartsInt.push_back(pictureDATA[i].bitcnt_EOP);
+    DisplayChart::showChartint("VBV最终位数");
+}
+
+void Display::on_targetNumberofBitsButton_clicked()
+{
+    chartsInt.clear();
+    for(int i=0;i<pictureDATA.size();i++)
+        chartsInt.push_back(pictureDATA[i].targetNumberOfBits);
+    DisplayChart::showChartint("目标编码位数");
+}
+
+void Display::on_actualBitsButton_clicked()
+{
+    chartsInt.clear();
+    for(int i=0;i<pictureDATA.size();i++)
+        chartsInt.push_back(pictureDATA[i].actualBits);
+    DisplayChart::showChartint("实际编码位数");
+}
+
+void Display::on_avgQuanParaButton_clicked()
+{
+    chartsDouble.clear();
+    for(int i=0;i<pictureDATA.size();i++)
+        chartsDouble.push_back(pictureDATA[i].avgQuanPara);
+    DisplayChart::showCharDouble("平均量化参数");
+}
+
+void Display::on_reaminNumberGOPButton_clicked()
+{
+    chartsInt.clear();
+    for(int i=0;i<pictureDATA.size();i++)
+        chartsInt.push_back(pictureDATA[i].reaminNumberGOP);
+    DisplayChart::showChartint("当前GOP中剩余位数");
+}
+
+void Display::on_XiiiButton_clicked()
+{
+    chartsInt.clear();
+    for(int i=0;i<pictureDATA.size();i++)
+        chartsInt.push_back(pictureDATA[i].Xi);
+    DisplayChart::showChartint("Xi");
+}
+
+void Display::on_XpppButton_clicked()
+{
+    chartsInt.clear();
+    for(int i=0;i<pictureDATA.size();i++)
+        chartsInt.push_back(pictureDATA[i].Xp);
+    DisplayChart::showChartint("Xp");
+}
+
+void Display::on_XbbbButton_clicked()
+{
+    chartsInt.clear();
+    for(int i=0;i<pictureDATA.size();i++)
+        chartsInt.push_back(pictureDATA[i].Xb);
+    DisplayChart::showChartint("Xb");
+}
+
+void Display::on_tempRefButton_clicked()
+{
+    chartsInt.clear();
+    for(int i=0;i<pictureDATA.size();i++)
+        chartsInt.push_back(pictureDATA[i].tempRef);
+    DisplayChart::showChartint("时间参考系坐标");
+}
+
+void Display::on_d0iiiiiiiButton_clicked()
+{
+    chartsInt.clear();
+    for(int i=0;i<pictureDATA.size();i++)
+        chartsInt.push_back(pictureDATA[i].d0i);
+    DisplayChart::showChartint("d0i");
+}
+
+void Display::on_d0pppppButton_clicked()
+{
+    chartsInt.clear();
+    for(int i=0;i<pictureDATA.size();i++)
+        chartsInt.push_back(pictureDATA[i].d0p);
+    DisplayChart::showChartint("d0p");
+}
+
+void Display::on_d0bbbbbbbbButton_clicked()
+{
+    chartsInt.clear();
+    for(int i=0;i<pictureDATA.size();i++)
+        chartsInt.push_back(pictureDATA[i].d0b);
+    DisplayChart::showChartint("d0b");
+}
+
+void Display::on_nppppppppButton_clicked()
+{
+    chartsInt.clear();
+    for(int i=0;i<pictureDATA.size();i++)
+        chartsInt.push_back(pictureDATA[i].Np);
+    DisplayChart::showChartint("Np");
+}
+
+void Display::on_nbbbbbbbButton_clicked()
+{
+    chartsInt.clear();
+    for(int i=0;i<pictureDATA.size();i++)
+        chartsInt.push_back(pictureDATA[i].Nb);
+    DisplayChart::showChartint("Nb");
+}
+
+void Display::on_avg_acttttttButton_clicked()
+{
+    chartsInt.clear();
+    for(int i=0;i<pictureDATA.size();i++)
+        chartsInt.push_back(pictureDATA[i].avg_act);
+    DisplayChart::showChartint("avg_act");
+}
+
+void Display::on_YVButton_clicked()
+{
+    chartsDouble.clear();
+    for(int i=0;i<pictureDATA.size();i++)
+        chartsDouble.push_back(pictureDATA[i].YV);
+    DisplayChart::showCharDouble("Y分量幅度");
+}
+
+void Display::on_YMSEDBButton_clicked()
+{
+    chartsDouble.clear();
+    chartsDoubleDouble.clear();
+    for(int i=0;i<pictureDATA.size();i++)
+    {
+        chartsDouble.push_back(pictureDATA[i].YMSE);
+        chartsDoubleDouble.push_back(pictureDATA[i].YMSEdb);
+    }
+    DisplayChart::showCharDoubleDouble("Y分量信噪比");
+}
+
+void Display::on_YSNRButton_clicked()
+{
+    chartsDouble.clear();
+    for(int i=0;i<pictureDATA.size();i++)
+        chartsDouble.push_back(pictureDATA[i].YSNR);
+    DisplayChart::showCharDouble("Y分量信噪比");
+}
+
+void Display::on_UVButton_clicked()
+{
+    chartsDouble.clear();
+    for(int i=0;i<pictureDATA.size();i++)
+        chartsDouble.push_back(pictureDATA[i].UV);
+    DisplayChart::showCharDouble("U分量幅度");
+}
+
+void Display::on_UMSEDBButton_clicked()
+{
+    chartsDouble.clear();
+    chartsDoubleDouble.clear();
+    for(int i=0;i<pictureDATA.size();i++)
+    {
+        chartsDouble.push_back(pictureDATA[i].UMSE);
+        chartsDoubleDouble.push_back(pictureDATA[i].UMSEdb);
+    }
+    DisplayChart::showCharDoubleDouble("U分量信噪比");
+}
+
+void Display::on_USNRButton_clicked()
+{
+    chartsDouble.clear();
+    for(int i=0;i<pictureDATA.size();i++)
+        chartsDouble.push_back(pictureDATA[i].USNR);
+    DisplayChart::showCharDouble("U分量信噪比");
+}
+
+void Display::on_VVButton_clicked()
+{
+    chartsDouble.clear();
+    for(int i=0;i<pictureDATA.size();i++)
+        chartsDouble.push_back(pictureDATA[i].VV);
+    DisplayChart::showCharDouble("V分量幅度");
+}
+
+void Display::on_VMSEDBButton_clicked()
+{
+    chartsDouble.clear();
+    chartsDoubleDouble.clear();
+    for(int i=0;i<pictureDATA.size();i++)
+    {
+        chartsDouble.push_back(pictureDATA[i].VMSE);
+        chartsDoubleDouble.push_back(pictureDATA[i].VMSEdb);
+    }
+    DisplayChart::showCharDoubleDouble("V分量信噪比");
+}
+
+void Display::on_VSNRButton_clicked()
+{
+    chartsDouble.clear();
+    for(int i=0;i<pictureDATA.size();i++)
+        chartsDouble.push_back(pictureDATA[i].VSNR);
+    DisplayChart::showCharDouble("V分量信噪比");
+}
+
+void Display::on_hash1Button_clicked()
+{
+    chartsInt.clear();
+    for(int i=0;i<pictureDATA.size();i++)
+        chartsInt.push_back(pictureDATA[i].hash1);
+    DisplayChart::showChartint("帧内编码宏块");
+}
+
+void Display::on_hash2Button_clicked()
+{
+    chartsInt.clear();
+    for(int i=0;i<pictureDATA.size();i++)
+        chartsInt.push_back(pictureDATA[i].hash2);
+    DisplayChart::showChartint("已编码宏块");
+}
+
+void Display::on_hash3Button_clicked()
+{
+    chartsInt.clear();
+    for(int i=0;i<pictureDATA.size();i++)
+        chartsInt.push_back(pictureDATA[i].hash3);
+    DisplayChart::showChartint("未编码宏块");
+}
+
+void Display::on_hash4Button_clicked()
+{
+    chartsInt.clear();
+    for(int i=0;i<pictureDATA.size();i++)
+        chartsInt.push_back(pictureDATA[i].hash4);
+    DisplayChart::showChartint("已跳过宏块");
+}
+
+void Display::on_hash5Button_clicked()
+{
+    chartsInt.clear();
+    for(int i=0;i<pictureDATA.size();i++)
+        chartsInt.push_back(pictureDATA[i].hash5);
+    DisplayChart::showChartint("前向预测宏块");
+}
+
+void Display::on_hash6Button_clicked()
+{
+    chartsInt.clear();
+    for(int i=0;i<pictureDATA.size();i++)
+        chartsInt.push_back(pictureDATA[i].hash6);
+    DisplayChart::showChartint("后向预测宏块");
+}
+
+void Display::on_hash7Button_clicked()
+{
+    chartsInt.clear();
+    for(int i=0;i<pictureDATA.size();i++)
+        chartsInt.push_back(pictureDATA[i].hash7);
+    DisplayChart::showChartint("双向内插预测宏块");
+}
+
+void Display::on_visualSlider_valueChanged(int value)
+{
+    ui->visualSpin->setValue(value);
+}
+
+void Display::on_visualSpin_valueChanged(int arg1)
+{
+    ui->visualSlider->setValue(arg1);
+}
+
+void Display::on_confirmVisual_clicked()
+{
+    ui->confirmVisual->setText("正在查询...");
+    ui->confirmVisual->setEnabled(false);
+    setMMap1(ui->visualSpin->value());
+    setMMap2(ui->visualSpin->value());
+    ui->confirmVisual->setText("查询");
+    ui->confirmVisual->setEnabled(true);
+}
+
+void Display::on_cubeSlider_valueChanged(int value)
+{
+    ui->cubeSpin->setValue(value);
+}
+
+void Display::on_cubeSpin_valueChanged(int arg1)
+{
+    ui->cubeSlider->setValue(arg1);
+}
+
+void Display::on_confirmCube_clicked()
+{
+    dispPointe3D=ui->cubeSpin->value();
+    if(dispPointe3D>=pictureDATA.size())
+        return;
+    Visual3D::disp();
 }

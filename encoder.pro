@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui charts datavisualization
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -18,6 +18,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     checkdatathread.cpp \
     conform.cpp \
+    displaychart.cpp \
     fdctref.cpp \
     display.cpp \
     gettimeofday.cpp \
@@ -37,21 +38,26 @@ SOURCES += \
     readpic.cpp \
     refreshbar.cpp \
     refreshui.cpp \
+    scatterdatamodifier.cpp \
     signalshooter.cpp \
     stats.cpp \
     transfrm.cpp \
+    visual3d.cpp \
     writepic.cpp
 
 HEADERS += \
     checkdatathread.h \
     config.h \
     display.h \
+    displaychart.h \
     gettimeofday.h \
     global.h \
     mpeg2enc.h \
     refreshbar.h \
     refreshui.h \
+    scatterdatamodifier.h \
     signalshooter.h \
+    visual3d.h \
     vlc.h
 
 FORMS += \

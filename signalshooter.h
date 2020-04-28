@@ -13,6 +13,8 @@ public:
 
 signals:
     void testSignal();
+
+
 };
 
 #endif // SIGNALSHOOTER_H

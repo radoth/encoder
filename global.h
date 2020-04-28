@@ -1,5 +1,6 @@
 /* global.h, 全局变量及函数声明*/
 
+#pragma once
 #include "mpeg2enc.h"
 #include "gettimeofday.h"
 #include "signalshooter.h"
@@ -368,3 +369,9 @@ struct pictureStatictics
 
 EXTERN QVector<pictureStatictics> pictureDATA;
 EXTERN pictureStatictics tmpPicture;
+
+/* charts */
+EXTERN QVector<int> chartsInt;
+EXTERN QVector<double> chartsDouble;
+EXTERN QVector<double> chartsDoubleDouble;
+EXTERN int dispPointe3D;
