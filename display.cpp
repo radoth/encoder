@@ -64,6 +64,12 @@ Display::Display(QWidget *parent)
     ui->tab_2->setEnabled(false);
     ui->tab_3->setEnabled(false);
     ui->tab_4->setEnabled(false);
+
+    setWindowFlags(windowFlags()&~Qt::WindowMaximizeButtonHint);
+
+    setFixedSize(this->width(),this->height());
+
+    setWindowTitle("交互式数据可视化的MPEG-1和MPEG-2图形化视频编码器");
 }
 
 bool Display::parameterPrepare()

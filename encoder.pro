@@ -66,6 +66,7 @@ FORMS += \
 TRANSLATIONS += \
     encoder_zh_CN.ts
 
+RC_ICONS = icon.ico
 
 msvc {
     QMAKE_CFLAGS += /utf-8
