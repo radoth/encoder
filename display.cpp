@@ -73,7 +73,7 @@ bool Display::parameterPrepare()
     extern int r,Xi,Xb,Xp,d0i,d0p,d0b; /* rate control */
     extern double avg_act;
 
-    strcpy(id_string,"ZYC");
+    strcpy(id_string,"Zhang Yuanchi homework");
 
     if(fileNAME.simplified().isEmpty())
         {error("invalid filename");return false;}
