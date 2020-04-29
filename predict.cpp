@@ -143,7 +143,7 @@ static void predict_mb(unsigned char *oldref[],unsigned char *newref[],unsigned 
         if (!quiet)
           {
             //fprintf(stderr,"invalid motion_type\n");
-            warningTextGlobal.append("invalid motion_type");
+            warningTextGlobal.append("运动类型无效");
         }
       }
     }
@@ -207,7 +207,7 @@ static void predict_mb(unsigned char *oldref[],unsigned char *newref[],unsigned 
         if (!quiet)
           {
             //fprintf(stderr,"invalid motion_type\n");
-            warningTextGlobal.append("invalid motion_type");
+            warningTextGlobal.append("运动类型无效");
         }
       }
     }
@@ -265,7 +265,7 @@ static void predict_mb(unsigned char *oldref[],unsigned char *newref[],unsigned 
         if (!quiet)
           {
             //fprintf(stderr,"invalid motion_type\n");
-            warningTextGlobal.append("invalid motion_type");
+            warningTextGlobal.append("运动类型无效");
         }
       }
     }

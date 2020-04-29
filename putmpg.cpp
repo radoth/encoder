@@ -110,7 +110,7 @@ void putmv(int dmv,int f_code)
     if (!quiet)
       {
         //fprintf(stderr,"invalid motion vector\n");
-        warningTextGlobal.append("invalid motion vector");
+        warningTextGlobal.append("运动类型无效");
     }
 
   /* split dmv into motion_code and motion_residual */

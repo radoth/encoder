@@ -41,7 +41,7 @@ void Visual3D::disp()
     QHBoxLayout *hLayout = new QHBoxLayout(widget);
     hLayout->addWidget(container, 1);
 
-    widget->setWindowTitle(QStringLiteral("A Cosine Wave"));
+    widget->setWindowTitle(QStringLiteral("三维图"));
 
     ScatterDataModifier *modifier = new ScatterDataModifier(graph);
 

@@ -81,22 +81,6 @@ private slots:
 
     void on_picTypeButton_clicked();
 
-    void on_framePredDCTButton_clicked();
-
-    void on_qScaleTypeButton_clicked();
-
-    void on_intravlcButton_clicked();
-
-    void on_altscanButton_clicked();
-
-    void on_forSeaWindButton_clicked();
-
-    void on_forSeaRangeButton_clicked();
-
-    void on_backSeaWindButton_clicked();
-
-    void on_backSeaScopeButton_clicked();
-
     void on_vbvDelayButton_clicked();
 
     void on_vbvBitCountButton_clicked();

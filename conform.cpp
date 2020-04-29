@@ -176,7 +176,7 @@ bool profile_and_level_checks()
     if (!quiet)
       {
         //fprintf(stderr,"Warning: profile uses a reserved value, conformance checks skipped\n");
-        warningTextGlobal.append("Warning: profile uses a reserved value, conformance checks skipped.");
+        warningTextGlobal.append("警告：配置文件使用保留值，跳过一致性检查。");
       }
     return true;
   }

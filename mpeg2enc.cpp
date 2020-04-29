@@ -277,7 +277,7 @@ bool readparmfile(char *fname)
         if (!quiet)
           {
             //fprintf(stderr,"Warning: setting constrained_parameters_flag = 0\n");
-            warningTextGlobal.append("Warning: setting constrained_parameters_flag = 0");
+            warningTextGlobal.append("警告：设置 constrained_parameters_flag = 0");
         }
         constrparms = 0;
       }
@@ -292,7 +292,7 @@ bool readparmfile(char *fname)
           if (!quiet)
             {
               //fprintf(stderr,"Warning: setting constrained_parameters_flag = 0\n");
-              warningTextGlobal.append("Warning: setting constrained_parameters_flag = 0");
+              warningTextGlobal.append("警告：设置 constrained_parameters_flag = 0");
           }
           constrparms = 0;
           break;
@@ -303,7 +303,7 @@ bool readparmfile(char *fname)
           if (!quiet)
             {
               //fprintf(stderr,"Warning: setting constrained_parameters_flag = 0\n");
-              warningTextGlobal.append("Warning: setting constrained_parameters_flag = 0");
+              warningTextGlobal.append("警告：设置 constrained_parameters_flag = 0");
           }
           constrparms = 0;
           break;
@@ -316,7 +316,7 @@ bool readparmfile(char *fname)
             if (!quiet)
               {
                 //fprintf(stderr,"Warning: setting constrained_parameters_flag = 0\n");
-                warningTextGlobal.append("Warning: setting constrained_parameters_flag = 0");
+                warningTextGlobal.append("警告：设置 constrained_parameters_flag = 0");
             }
             constrparms = 0;
             break;
@@ -327,7 +327,7 @@ bool readparmfile(char *fname)
             if (!quiet)
               {
                 //fprintf(stderr,"Warning: setting constrained_parameters_flag = 0\n");
-                warningTextGlobal.append("Warning: setting constrained_parameters_flag = 0");
+                warningTextGlobal.append("警告：设置 constrained_parameters_flag = 0");
             }
             constrparms = 0;
             break;
@@ -346,7 +346,7 @@ bool readparmfile(char *fname)
       if (!quiet)
         {
           //fprintf(stderr,"Warning: setting progressive_sequence = 1\n");
-          warningTextGlobal.append("Warning: setting progressive_sequence = 1");
+          warningTextGlobal.append("警告：设置 progressive_sequence = 1");
       }
       prog_seq = 1;
     }
@@ -356,7 +356,7 @@ bool readparmfile(char *fname)
       if (!quiet)
         {
           //fprintf(stderr,"Warning: setting chroma_format = 1 (4:2:0)\n");
-          warningTextGlobal.append("Warning: setting chroma_format = 1 (4:2:0)");
+          warningTextGlobal.append("警告：设置 chroma_format = 1 (4:2:0)");
       }
       chroma_format = CHROMA420;
     }
@@ -366,7 +366,7 @@ bool readparmfile(char *fname)
       if (!quiet)
         {
           //fprintf(stderr,"Warning: setting intra_dc_precision = 0\n");
-          warningTextGlobal.append("Warning: setting intra_dc_precision = 0");
+          warningTextGlobal.append("警告：设置 intra_dc_precision = 0");
       }
       dc_prec = 0;
     }
@@ -377,7 +377,7 @@ bool readparmfile(char *fname)
         if (!quiet)
           {
             //fprintf(stderr,"Warning: setting qscale_tab[%d] = 0\n",i);
-            warningTextGlobal.append(QString("Warning: setting qscale_tab[%1] = 0").arg(i));
+            warningTextGlobal.append(QString("警告：设置 qscale_tab[%1] = 0").arg(i));
         }
         qscale_tab[i] = 0;
       }
@@ -388,7 +388,7 @@ bool readparmfile(char *fname)
         if (!quiet)
           {
             //fprintf(stderr,"Warning: setting intravlc_tab[%d] = 0\n",i);
-            warningTextGlobal.append(QString("Warning: setting intravlc_tab[%1] = 0").arg(i));
+            warningTextGlobal.append(QString("警告：设置 intravlc_tab[%1] = 0").arg(i));
         }
         intravlc_tab[i] = 0;
       }
@@ -399,7 +399,7 @@ bool readparmfile(char *fname)
         if (!quiet)
           {
             //fprintf(stderr,"Warning: setting altscan_tab[%d] = 0\n",i);
-            warningTextGlobal.append(QString("Warning: setting altscan_tab[%1] = 0").arg(i));
+            warningTextGlobal.append(QString("警告：设置 altscan_tab[%1] = 0").arg(i));
         }
         altscan_tab[i] = 0;
       }
@@ -410,7 +410,7 @@ bool readparmfile(char *fname)
     if (!quiet)
       {
         //fprintf(stderr,"Warning: setting constrained_parameters_flag = 0\n");
-        warningTextGlobal.append("Warning: setting constrained_parameters_flag = 0");
+        warningTextGlobal.append("警告：设置 constrained_parameters_flag = 0");
     }
     constrparms = 0;
   }
@@ -420,7 +420,7 @@ bool readparmfile(char *fname)
     if (!quiet)
       {
         //fprintf(stderr,"Warning: setting progressive_frame = 1\n");
-        warningTextGlobal.append("Warning: setting progressive_frame = 1");
+        warningTextGlobal.append("警告：设置 progressive_frame = 1");
     }
     prog_frame = 1;
   }
@@ -430,7 +430,7 @@ bool readparmfile(char *fname)
     if (!quiet)
       {
         //fprintf(stderr,"Warning: setting field_pictures = 0\n");
-        warningTextGlobal.append("Warning: setting field_pictures = 0");
+        warningTextGlobal.append("警告：设置 field_pictures = 0");
     }
     fieldpic = 0;
   }
@@ -440,7 +440,7 @@ bool readparmfile(char *fname)
     if (!quiet)
       {
         //fprintf(stderr,"Warning: setting repeat_first_field = 0\n");
-        warningTextGlobal.append("Warning: setting repeat_first_field = 0");
+        warningTextGlobal.append("警告：设置 repeat_first_field = 0");
     }
     repeatfirst = 0;
   }
@@ -453,7 +453,7 @@ bool readparmfile(char *fname)
         if (!quiet)
           {
             //fprintf(stderr,"Warning: setting frame_pred_frame_dct[%d] = 1\n",i);
-            warningTextGlobal.append(QString("Warning: setting frame_pred_frame_dct[%1] = 1").arg(i));
+            warningTextGlobal.append(QString("警告：设置 frame_pred_frame_dct[%1] = 1").arg(i));
         }
         frame_pred_dct_tab[i] = 1;
       }
@@ -464,7 +464,7 @@ bool readparmfile(char *fname)
     if (!quiet)
       {
         //fprintf(stderr,"Warning: setting top_field_first = 0\n");
-        warningTextGlobal.append("Warning: setting top_field_first = 0");
+        warningTextGlobal.append("警告：设置 top_field_first = 0");
     }
     topfirst = 0;
   }
@@ -479,7 +479,7 @@ bool readparmfile(char *fname)
           //fprintf(stderr,
           //"Warning: reducing forward horizontal search width to %d\n",
           //(4<<motion_data[i].forw_hor_f_code)-1);
-          warningTextGlobal.append(QString("Warning: reducing forward horizontal search width to %1").arg((4<<motion_data[i].forw_hor_f_code)-1));
+          warningTextGlobal.append(QString("警告：将向前的水平搜索宽度减小到 %1").arg((4<<motion_data[i].forw_hor_f_code)-1));
       }
       motion_data[i].sxf = (4<<motion_data[i].forw_hor_f_code)-1;
     }
@@ -491,7 +491,7 @@ bool readparmfile(char *fname)
           //fprintf(stderr,
           //"Warning: reducing forward vertical search width to %d\n",
           //(4<<motion_data[i].forw_vert_f_code)-1);
-          warningTextGlobal.append(QString("Warning: reducing forward vertical search width to %1").arg((4<<motion_data[i].forw_vert_f_code)-1));
+          warningTextGlobal.append(QString("警告：将向前的垂直搜索宽度减小到 %1").arg((4<<motion_data[i].forw_vert_f_code)-1));
       }
       motion_data[i].syf = (4<<motion_data[i].forw_vert_f_code)-1;
     }
@@ -505,7 +505,7 @@ bool readparmfile(char *fname)
             //fprintf(stderr,
             //"Warning: reducing backward horizontal search width to %d\n",
             //(4<<motion_data[i].back_hor_f_code)-1);
-            warningTextGlobal.append(QString("Warning: reducing backward horizontal search width to %1").arg((4<<motion_data[i].back_hor_f_code)-1));
+            warningTextGlobal.append(QString("警告：将向后的水平搜索宽度减小到 %1").arg((4<<motion_data[i].back_hor_f_code)-1));
         }
         motion_data[i].sxb = (4<<motion_data[i].back_hor_f_code)-1;
       }
@@ -517,7 +517,7 @@ bool readparmfile(char *fname)
             //fprintf(stderr,
             //"Warning: reducing backward vertical search width to %d\n",
             //(4<<motion_data[i].back_vert_f_code)-1);
-            warningTextGlobal.append(QString("Warning: reducing backward vertical search width to %1").arg((4<<motion_data[i].back_vert_f_code)-1));
+            warningTextGlobal.append(QString("警告：将向后的垂直搜索宽度减小到 %1").arg((4<<motion_data[i].back_vert_f_code)-1));
         }
         motion_data[i].syb = (4<<motion_data[i].back_vert_f_code)-1;
       }

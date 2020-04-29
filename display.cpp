@@ -54,6 +54,16 @@ Display::Display(QWidget *parent)
 
     qformat.setForeground(Qt::red);
     nformat.setForeground(Qt::green);
+
+
+    ui->mmap1->setReadOnly(true);
+    ui->mmap1->setFocusPolicy(Qt::NoFocus);
+    ui->mmap2->setReadOnly(true);
+    ui->mmap2->setFocusPolicy(Qt::NoFocus);
+
+    ui->tab_2->setEnabled(false);
+    ui->tab_3->setEnabled(false);
+    ui->tab_4->setEnabled(false);
 }
 
 bool Display::parameterPrepare()
@@ -527,7 +537,7 @@ bool Display::parameterPrepare()
           if (!quiet)
             {
               //fprintf(stderr,"Warning: setting constrained_parameters_flag = 0\n");
-              warningTextGlobal.append("Warning: setting constrained_parameters_flag = 0");
+              warningTextGlobal.append("警告：设置constrained_parameters_flag = 0");
           }
           constrparms = 0;
         }
@@ -542,7 +552,7 @@ bool Display::parameterPrepare()
             if (!quiet)
               {
                 //fprintf(stderr,"Warning: setting constrained_parameters_flag = 0\n");
-                warningTextGlobal.append("Warning: setting constrained_parameters_flag = 0");
+                warningTextGlobal.append("警告：设置 constrained_parameters_flag = 0");
             }
             constrparms = 0;
             break;
@@ -553,7 +563,7 @@ bool Display::parameterPrepare()
             if (!quiet)
               {
                 //fprintf(stderr,"Warning: setting constrained_parameters_flag = 0\n");
-                warningTextGlobal.append("Warning: setting constrained_parameters_flag = 0");
+                warningTextGlobal.append("警告：设置 setting constrained_parameters_flag = 0");
             }
             constrparms = 0;
             break;
@@ -566,7 +576,7 @@ bool Display::parameterPrepare()
               if (!quiet)
                 {
                   //fprintf(stderr,"Warning: setting constrained_parameters_flag = 0\n");
-                  warningTextGlobal.append("Warning: setting constrained_parameters_flag = 0");
+                  warningTextGlobal.append("警告：设置 constrained_parameters_flag = 0");
               }
               constrparms = 0;
               break;
@@ -577,7 +587,7 @@ bool Display::parameterPrepare()
               if (!quiet)
                 {
                   //fprintf(stderr,"Warning: setting constrained_parameters_flag = 0\n");
-                  warningTextGlobal.append("Warning: setting constrained_parameters_flag = 0");
+                  warningTextGlobal.append("警告：设置 constrained_parameters_flag = 0");
               }
               constrparms = 0;
               break;
@@ -596,7 +606,7 @@ bool Display::parameterPrepare()
         if (!quiet)
           {
             //fprintf(stderr,"Warning: setting progressive_sequence = 1\n");
-            warningTextGlobal.append("Warning: setting progressive_sequence = 1");
+            warningTextGlobal.append("警告：设置 progressive_sequence = 1");
         }
         prog_seq = 1;
       }
@@ -606,7 +616,7 @@ bool Display::parameterPrepare()
         if (!quiet)
           {
             //fprintf(stderr,"Warning: setting chroma_format = 1 (4:2:0)\n");
-            warningTextGlobal.append("Warning: setting chroma_format = 1 (4:2:0)");
+            warningTextGlobal.append("警告：设置 chroma_format = 1 (4:2:0)");
         }
         chroma_format = CHROMA420;
       }
@@ -616,7 +626,7 @@ bool Display::parameterPrepare()
         if (!quiet)
           {
             //fprintf(stderr,"Warning: setting intra_dc_precision = 0\n");
-            warningTextGlobal.append("Warning: setting intra_dc_precision = 0");
+            warningTextGlobal.append("警告：设置 intra_dc_precision = 0");
         }
         dc_prec = 0;
       }
@@ -627,7 +637,7 @@ bool Display::parameterPrepare()
           if (!quiet)
             {
               //fprintf(stderr,"Warning: setting qscale_tab[%d] = 0\n",i);
-              warningTextGlobal.append(QString("Warning: setting qscale_tab[%1] = 0").arg(i));
+              warningTextGlobal.append(QString("警告：设置 qscale_tab[%1] = 0").arg(i));
           }
           qscale_tab[i] = 0;
         }
@@ -638,7 +648,7 @@ bool Display::parameterPrepare()
           if (!quiet)
             {
               //fprintf(stderr,"Warning: setting intravlc_tab[%d] = 0\n",i);
-              warningTextGlobal.append(QString("Warning: setting intravlc_tab[%1] = 0").arg(i));
+              warningTextGlobal.append(QString("警告：设置 intravlc_tab[%1] = 0").arg(i));
           }
           intravlc_tab[i] = 0;
         }
@@ -649,7 +659,7 @@ bool Display::parameterPrepare()
           if (!quiet)
             {
               //fprintf(stderr,"Warning: setting altscan_tab[%d] = 0\n",i);
-              warningTextGlobal.append(QString("Warning: setting altscan_tab[%1] = 0").arg(i));
+              warningTextGlobal.append(QString("警告：设置 altscan_tab[%1] = 0").arg(i));
           }
           altscan_tab[i] = 0;
         }
@@ -660,7 +670,7 @@ bool Display::parameterPrepare()
       if (!quiet)
         {
           //fprintf(stderr,"Warning: setting constrained_parameters_flag = 0\n");
-          warningTextGlobal.append("Warning: setting constrained_parameters_flag = 0");
+          warningTextGlobal.append("警告：设置 constrained_parameters_flag = 0");
       }
       constrparms = 0;
     }
@@ -670,7 +680,7 @@ bool Display::parameterPrepare()
       if (!quiet)
         {
           //fprintf(stderr,"Warning: setting progressive_frame = 1\n");
-          warningTextGlobal.append("Warning: setting progressive_frame = 1");
+          warningTextGlobal.append("警告：设置 progressive_frame = 1");
       }
       prog_frame = 1;
     }
@@ -680,7 +690,7 @@ bool Display::parameterPrepare()
       if (!quiet)
         {
           //fprintf(stderr,"Warning: setting field_pictures = 0\n");
-          warningTextGlobal.append("Warning: setting field_pictures = 0");
+          warningTextGlobal.append("警告：设置 field_pictures = 0");
       }
       fieldpic = 0;
     }
@@ -690,7 +700,7 @@ bool Display::parameterPrepare()
       if (!quiet)
         {
           //fprintf(stderr,"Warning: setting repeat_first_field = 0\n");
-          warningTextGlobal.append("Warning: setting repeat_first_field = 0");
+          warningTextGlobal.append("警告：设置 repeat_first_field = 0");
       }
       repeatfirst = 0;
     }
@@ -703,7 +713,7 @@ bool Display::parameterPrepare()
           if (!quiet)
             {
               //fprintf(stderr,"Warning: setting frame_pred_frame_dct[%d] = 1\n",i);
-              warningTextGlobal.append(QString("Warning: setting frame_pred_frame_dct[%1] = 1").arg(i));
+              warningTextGlobal.append(QString("警告：设置 frame_pred_frame_dct[%1] = 1").arg(i));
           }
           frame_pred_dct_tab[i] = 1;
         }
@@ -714,7 +724,7 @@ bool Display::parameterPrepare()
       if (!quiet)
         {
           //fprintf(stderr,"Warning: setting top_field_first = 0\n");
-          warningTextGlobal.append("Warning: setting top_field_first = 0");
+          warningTextGlobal.append("警告：设置 top_field_first = 0");
       }
       topfirst = 0;
     }
@@ -729,7 +739,7 @@ bool Display::parameterPrepare()
             //fprintf(stderr,
             //"Warning: reducing forward horizontal search width to %d\n",
             //(4<<motion_data[i].forw_hor_f_code)-1);
-            warningTextGlobal.append(QString("Warning: reducing forward horizontal search width to %1").arg((4<<motion_data[i].forw_hor_f_code)-1));
+            warningTextGlobal.append(QString("警告：将向前的水平搜索宽度减小到 %1").arg((4<<motion_data[i].forw_hor_f_code)-1));
         }
         motion_data[i].sxf = (4<<motion_data[i].forw_hor_f_code)-1;
       }
@@ -741,7 +751,7 @@ bool Display::parameterPrepare()
             //fprintf(stderr,
             //"Warning: reducing forward vertical search width to %d\n",
             //(4<<motion_data[i].forw_vert_f_code)-1);
-            warningTextGlobal.append(QString("Warning: reducing forward vertical search width to %1").arg((4<<motion_data[i].forw_vert_f_code)-1));
+            warningTextGlobal.append(QString("警告：将向前的垂直搜索宽度减小到 %1").arg((4<<motion_data[i].forw_vert_f_code)-1));
         }
         motion_data[i].syf = (4<<motion_data[i].forw_vert_f_code)-1;
       }
@@ -755,7 +765,7 @@ bool Display::parameterPrepare()
               //fprintf(stderr,
               //"Warning: reducing backward horizontal search width to %d\n",
               //(4<<motion_data[i].back_hor_f_code)-1);
-              warningTextGlobal.append(QString("Warning: reducing backward horizontal search width to %1").arg((4<<motion_data[i].back_hor_f_code)-1));
+              warningTextGlobal.append(QString("警告：将向后的水平搜索宽度减小到 %1").arg((4<<motion_data[i].back_hor_f_code)-1));
           }
           motion_data[i].sxb = (4<<motion_data[i].back_hor_f_code)-1;
         }
@@ -767,7 +777,7 @@ bool Display::parameterPrepare()
               //fprintf(stderr,
               //"Warning: reducing backward vertical search width to %d\n",
               //(4<<motion_data[i].back_vert_f_code)-1);
-              warningTextGlobal.append(QString("Warning: reducing backward vertical search width to %1").arg((4<<motion_data[i].back_vert_f_code)-1));
+              warningTextGlobal.append(QString("警告：将向后的垂直搜索宽度减小到 %1").arg((4<<motion_data[i].back_vert_f_code)-1));
           }
           motion_data[i].syb = (4<<motion_data[i].back_vert_f_code)-1;
         }
@@ -937,8 +947,9 @@ void Display::setMMap2(int num)
         {
             switch((pictureDATA[num].mmap2)[i][j])
             {
-            case 'Q':cursor.insertText("●",sformat);break;
-            case 'N':cursor.insertText("●",iformat);break;
+            case ' ':cursor.insertText("●",f1format);break;
+            case 'Q':cursor.insertText("●",qformat);break;
+            case 'N':cursor.insertText("●",nformat);break;
             default:break;
             }
         }
@@ -987,12 +998,25 @@ void Display::onProcessEnded(bool status)
         ui->frameSlider->setMinimum(0);
         ui->frameSlider->setMaximum(pictureDATA.size()-1);
         ui->frameSlider->setSingleStep(1);
-        ui->visualSpin->setMinimum(0);
+
+
+
+        ui->tab_2->setEnabled(true);
+        ui->tab_3->setEnabled(true);
+        ui->tab_4->setEnabled(true);
+
+        ui->visualSlider->setMinimum(0);
         ui->visualSlider->setMaximum(pictureDATA.size()-1);
         ui->visualSlider->setSingleStep(1);
         ui->visualSpin->setMinimum(0);
         ui->visualSpin->setMaximum(pictureDATA.size()-1);
         ui->visualSpin->setSingleStep(1);
+        ui->cubeSlider->setMinimum(0);
+        ui->cubeSlider->setMaximum(pictureDATA.size()-1);
+        ui->cubeSlider->setSingleStep(1);
+        ui->cubeSpin->setMinimum(0);
+        ui->cubeSpin->setMaximum(pictureDATA.size()-1);
+        ui->cubeSpin->setSingleStep(1);
     }
     else QMessageBox::critical(this,"编码失败","编码失败。\n"+errorTextGlobal);
     ui->pushButton->setEnabled(true);
@@ -1308,46 +1332,6 @@ void Display::on_pictureTimeButton_clicked()
 void Display::on_picTypeButton_clicked()
 {
     DisplayChart::showThreeBar();
-}
-
-void Display::on_framePredDCTButton_clicked()
-{
-
-}
-
-void Display::on_qScaleTypeButton_clicked()
-{
-
-}
-
-void Display::on_intravlcButton_clicked()
-{
-
-}
-
-void Display::on_altscanButton_clicked()
-{
-
-}
-
-void Display::on_forSeaWindButton_clicked()
-{
-
-}
-
-void Display::on_forSeaRangeButton_clicked()
-{
-
-}
-
-void Display::on_backSeaWindButton_clicked()
-{
-
-}
-
-void Display::on_backSeaScopeButton_clicked()
-{
-
 }
 
 void Display::on_vbvDelayButton_clicked()
