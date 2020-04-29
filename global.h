@@ -122,20 +122,6 @@ void dct_type_estimation (unsigned char *pred, unsigned char *cur,
   bool writeframe (char *fname, unsigned char *frame[]);
 
 
-/* global variables */
-
-EXTERN char version[]
-#ifdef GLOBAL
-  ="mpeg2encode V1.2, 96/07/19"
-#endif
-;
-
-EXTERN char author[]
-#ifdef GLOBAL
-  ="(C) 1996, MPEG Software Simulation Group"
-#endif
-;
-
 /* zig-zag scan */
 EXTERN unsigned char zig_zag_scan[64]
 #ifdef GLOBAL

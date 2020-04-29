@@ -12,40 +12,6 @@
 
 /* private prototypes */
 
-
-int mainORI(int argc,char *argv[])
-{
-  signalshooter =new SignalShooter();
-
-  if (argc!=3)
-  {
-    printf("\n%s, %s\n",version,author);
-    printf("Usage: mpeg2encode in.par out.m2v\n");
-    //exit(0);
-  }
-
-  /* read parameter file */
-  readparmfile(argv[1]);
-
-  /* read quantization matrices */
-  readquantmat();
-
-  /* open output file */
-  if (!(outfile=fopen(argv[2],"wb")))
-  {
-     sprintf(errortext,"Couldn't create output file %s",argv[2]);
-     error(errortext);
-  }
-
-  init();
-  putseq();
-
-  fclose(outfile);
-
-  system("PAUSE");
-  return 0;
-}
-
 bool init()
 {
   int i, size;
