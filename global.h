@@ -21,8 +21,6 @@ bool profile_and_level_checks ();
 
 /* mpeg2enc.c */
 bool init ();
-bool readparmfile (char *fname);
-bool readquantmat ();
 
 /* fdctref.c */
 void init_fdct (void);
@@ -220,11 +218,9 @@ EXTERN unsigned char *clp;
 
 /* name strings */
 EXTERN char id_string[256], tplorg[256], tplref[256];
-EXTERN char iqname[256], niqname[256];
-EXTERN char statname[256];
 EXTERN char errortext[256];
 
-EXTERN FILE *outfile, *statfile; /* file descriptors */
+EXTERN FILE *outfile; /* file descriptors */
 EXTERN int inputtype; /* format of input frames */
 
 EXTERN int quiet; /* suppress warnings */

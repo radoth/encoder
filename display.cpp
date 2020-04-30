@@ -89,9 +89,6 @@ bool Display::parameterPrepare()
         strcpy(tplref,"-");
     else strcpy(tplref,fileRECONS.toStdString().c_str());
 
-    strcpy(iqname,"-");
-    strcpy(niqname,"-");
-    strcpy(statname,"-");
 
     if(ui->useDefaultInMatrix->isChecked())
     {
@@ -429,9 +426,6 @@ bool Display::parameterPrepare()
     qDebug()<<"===============";
     qDebug()<<"tplorg="<<tplorg;
     qDebug()<<"tplref="<<tplref;
-    qDebug()<<"iqname="<<iqname;
-    qDebug()<<"niqname="<<niqname;
-    qDebug()<<"statname="<<statname;
     qDebug()<<"inputtype="<<inputtype;
     qDebug()<<"nframes="<<nframes;
     qDebug()<<"frame0"<<frame0;
