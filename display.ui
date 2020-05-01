@@ -9836,7 +9836,7 @@ QSpinBox::up-button,QSpinBox::down-button
           <item>
            <widget class="QLabel" name="label_181">
             <property name="text">
-             <string>线性量化已编码</string>
+             <string>线性量化编码</string>
             </property>
            </widget>
           </item>
@@ -9870,7 +9870,7 @@ QSpinBox::up-button,QSpinBox::down-button
           <item>
            <widget class="QLabel" name="label_176">
             <property name="text">
-             <string>线性量化未编码</string>
+             <string>非线性量化编码</string>
             </property>
            </widget>
           </item>
@@ -9913,7 +9913,7 @@ QSpinBox::up-button,QSpinBox::down-button
        </layout>
       </widget>
      </widget>
-     <widget class="QWidget" name="">
+     <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -9966,7 +9966,7 @@ QSpinBox::up-button,QSpinBox::down-button
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="">
+     <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
        <rect>
         <x>215</x>
@@ -9988,7 +9988,7 @@ QSpinBox::up-button,QSpinBox::down-button
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="">
+     <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
        <rect>
         <x>880</x>
@@ -10023,7 +10023,7 @@ QSpinBox::up-button,QSpinBox::down-button
      <property name="title">
       <string>  宏块动态量化参数三维可视化</string>
      </property>
-     <widget class="QWidget" name="">
+     <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
        <rect>
         <x>15</x>
@@ -10113,9 +10113,9 @@ QSpinBox::up-button,QSpinBox::down-button
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="buttonGroup_4"/>
-  <buttongroup name="buttonGroup_5"/>
-  <buttongroup name="buttonGroup_2"/>
   <buttongroup name="buttonGroup"/>
+  <buttongroup name="buttonGroup_2"/>
+  <buttongroup name="buttonGroup_5"/>
+  <buttongroup name="buttonGroup_4"/>
  </buttongroups>
 </ui>

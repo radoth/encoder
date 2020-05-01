@@ -5,7 +5,9 @@
 #include "config.h"
 #include "global.h"
 
-/* private prototypes */
+/* output motion vectors (6.2.5.2, 6.3.16.2)
+this function also updates the predictions for motion vectors (PMV)
+ */
 static void putmvs (int MV[2][2][2], int PMV[2][2][2],
   int mv_field_sel[2][2], int dmvector[2], int s, int motion_type,
   int hor_f_code, int vert_f_code);

@@ -11,29 +11,29 @@
 #define W6 1108 /* 2048*sqrt(2)*cos(6*pi/16) */
 #define W7 565  /* 2048*sqrt(2)*cos(7*pi/16) */
 
-/* global declarations */
+
 void init_idct (void);
 void idct (short *block);
 
-/* private data */
-static short iclip[1024]; /* clipping table */
+
+static short iclip[1024]; /* 剪裁表 */
 static short *iclp;
 
-/* private prototypes */
+
 static void idctrow (short *blk);
 static void idctcol (short *blk);
 
-/* row (horizontal) IDCT
+/* 横向/水平 IDCT
  *
  *           7                       pi         1
  * dst[k] = sum c[l] * src[l] * cos( -- * ( k + - ) * l )
  *          l=0                      8          2
  *
- * where: c[0]    = 128
+ * 其中: c[0]    = 128
  *        c[1..7] = 128*sqrt(2)
  */
 
-static void idctrow(short *blk)
+static void idctrow(short *blk)//利用蝶形算法对元素所在的行进行一维反dct变换，结果替代原来的位置
 {
   int x0, x1, x2, x3, x4, x5, x6, x7, x8;
 
@@ -85,16 +85,16 @@ static void idctrow(short *blk)
   blk[7] = (x7-x1)>>8;
 }
 
-/* column (vertical) IDCT
+/* 垂直/列 IDCT
  *
  *             7                         pi         1
  * dst[8*k] = sum c[l] * src[8*l] * cos( -- * ( k + - ) * l )
  *            l=0                        8          2
  *
- * where: c[0]    = 1/1024
+ * 其中: c[0]    = 1/1024
  *        c[1..7] = (1/1024)*sqrt(2)
  */
-static void idctcol(short *blk)
+static void idctcol(short *blk)//利用蝶形算法对元素所在的列进行一维反dct变换，结果替代原来的位置
 {
   int x0, x1, x2, x3, x4, x5, x6, x7, x8;
 
@@ -147,8 +147,8 @@ static void idctcol(short *blk)
   blk[8*7] = iclp[(x7-x1)>>14];
 }
 
-/* two dimensional inverse discrete cosine transform */
-void idct(short *block)
+
+void idct(short *block)//二维逆向DCT变换,block是需要做反变换的数组的指针
 {
   int i;
 

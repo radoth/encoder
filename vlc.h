@@ -3,14 +3,14 @@
 
 typedef struct
 {
-  unsigned char code; /* right justified */
+  unsigned char code;
   char len;
 } VLCtable;
 
-/* for codes longer than 8 bits (excluding leading zeroes) */
+/* 除了前导0以外长度大于一个字节的编码 */
 typedef struct
 {
-  unsigned short code; /* right justified */
+  unsigned short code;
   char len;
 } sVLCtable;
 

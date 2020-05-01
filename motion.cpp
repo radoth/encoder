@@ -93,15 +93,17 @@ void motion_estimation (unsigned char *oldorg, unsigned char *neworg,
          /*根据图像结构的类型来判断是进行帧预测还是场预测*/
       if (pict_struct==FRAME_PICTURE)
         frame_ME(oldorg,neworg,oldref,newref,cur,i,j,sxf,syf,sxb,syb,mbi);
+      //采用帧预测
       else
         field_ME(oldorg,neworg,oldref,newref,cur,curref,i,j,sxf,syf,sxb,syb,
           mbi,secondfield,ipflag);
+      //采用场预测
       mbi++;
     }
 
     if (!quiet)
     {
-        currentGroup++;
+        currentGroup++;//输出统计信息
       //putc('.',stderr);
       //fflush(stderr);
     }

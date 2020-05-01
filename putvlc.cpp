@@ -28,9 +28,9 @@ static bool putDC(sVLCtable *tab,int val)
 {
   int absval, size;
 
-  absval = (val<0) ? -val : val; /* abs(val) */
+  absval = (val<0) ? -val : val; /* 生成绝对值 */
 
-  if (absval>2047 || (mpeg1 && absval>255))
+  if (absval>2047 || (mpeg1 && absval>255))     //遇到不合法的直流系数，报错
   {
     sprintf(errortext,"DC value out of range (%d)\n",val);
     {error(errortext);return false;}
@@ -77,19 +77,19 @@ bool putAC(int run,int signed_level,int vlcformat)
   int level, len;
   VLCtable *ptab = NULL;
 
-  level = (signed_level<0) ? -signed_level : signed_level; /* abs(signed_level) */
+  level = (signed_level<0) ? -signed_level : signed_level; /* 对 signed_level 取绝对值 */
 
   /* 要保证游程和级别（level）有效 */
-  if (run<0 || run>63 || level==0 || level>2047 || (mpeg1 && level>255))
+  if (run<0 || run>63 || level==0 || level>2047 || (mpeg1 && level>255))     //在越界时报错
   {
     sprintf(errortext,"AC value out of range (run=%d, signed_level=%d)\n",
       run,signed_level);
     {error(errortext);return false;}
   }
 
-  len = 0;
+  len = 0;     //初始化长度为0
 
-  if (run<2 && level<41)
+  if (run<2 && level<41)     //两种可以查表的情况
   {
     /* 根据vlcformat 选择采用表B-14 还是 B-15 */
 	  if (vlcformat)
@@ -141,19 +141,19 @@ bool putAC(int run,int signed_level,int vlcformat)
 /* 为macroblock_address_increment 进行VLC编码 */
 void putaddrinc(int addrinc)
 {
-  while (addrinc>33)
+  while (addrinc>33)     //大于33时没有霍夫曼编码
   {
-    putbits(0x08,11); /* macroblock_escape */
+    putbits(0x08,11); /* 宏块转义 */
     addrinc-= 33;
   }
 
-  putbits(addrinctab[addrinc-1].code,addrinctab[addrinc-1].len);
+  putbits(addrinctab[addrinc-1].code,addrinctab[addrinc-1].len);     //输出对应的比特流
 }
 
 /* 为macroblock_type 进行VLC */
 void putmbtype(int pict_type,int mb_type)
 {
-  putbits(mbtypetab[pict_type-1][mb_type].code,
+  putbits(mbtypetab[pict_type-1][mb_type].code,     //输出宏块类型对应的比特流
           mbtypetab[pict_type-1][mb_type].len);
 }
 
@@ -162,7 +162,7 @@ void putmotioncode(int motion_code)
 {
   int abscode;
 
-  abscode = (motion_code>=0) ? motion_code : -motion_code; /* abs(motion_code) */
+  abscode = (motion_code>=0) ? motion_code : -motion_code; /* 对运动编码取绝对值 */
   putbits(motionvectab[abscode].code,motionvectab[abscode].len);
   if (motion_code!=0)
     putbits(motion_code<0,1);  /* 标识, 0为正, 1为负 */
