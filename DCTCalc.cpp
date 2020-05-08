@@ -15,12 +15,12 @@
 #endif
 
 /* 全局声明 */
-void init_fdct (void);
-void fdct (short *block);
+void initFdct (void);
+void fDCTCalc (short *block);
 
 static double c[8][8]; /* 变换系数 */
 
-void init_fdct()//利用这个函数得到DCT变换的变换核，并且赋给C矩阵
+void initFdct()//利用这个函数得到DCT变换的变换核，并且赋给C矩阵
 {
   int i, j;
   double s;
@@ -34,7 +34,7 @@ void init_fdct()//利用这个函数得到DCT变换的变换核，并且赋给C�
   }
 }
 
-void fdct(short *block)//dct变换函数,block是需要变换的矩阵的指针，得到的结果的指针
+void fDCTCalc(short *block)//dct变换函数,block是需要变换的矩阵的指针，得到的结果的指针
 {
   int i, j, k;
   double s;

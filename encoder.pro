@@ -16,13 +16,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    DCTCalc.cpp \
     DIQuan.cpp \
     checkdatathread.cpp \
     codeGenerate.cpp \
     codeRoutinueControl.cpp \
     dataInput.cpp \
     displaychart.cpp \
-    fdctref.cpp \
     display.cpp \
     feedback.cpp \
     gettimeofday.cpp \
