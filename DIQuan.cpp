@@ -5,7 +5,7 @@
 #include "commonData.h"
 
 /* 对MPEG-1图像量化的子函数 */
-static void innerSubQuan(short *src,short *dst,int dc_prec,unsigned char *quant_mat,int mquant)
+static void innerSubQuan(short *dst,short *src,int dc_prec,unsigned char *quant_mat,int mquant)
 {
     //mpeg1的帧内反量化
   int i, val;

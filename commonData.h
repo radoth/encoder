@@ -13,43 +13,43 @@
 #define EXTERN
 #endif
 
-/* prototypes of global functions */
 
-/* conform.c */
+
+
 bool rangeChecks ();
 bool profileAndLevelChecks ();
 
-/* mpeg2enc.c */
+
 bool init ();
 
-/* fdctref.c */
+
 void initFdct ();
 void fDCTCalc (short *block);
 
-/* idct.c */
+
 void idct (short *block);
 void initIdct (void);
 
-/* motion.c */
+
 void motionEstimation (unsigned char *oldorg, unsigned char *neworg,
   unsigned char *oldref, unsigned char *newref, unsigned char *cur,
   unsigned char *curref, int sxf, int syf, int sxb, int syb,
   struct mbinfo *mbi, int secondfield, int ipflag);
 
-/* mpeg2enc.c */
+
 void error (QString text);
 
-/* predict.c */
+
 void mainPredictCtrl (unsigned char *reff[], unsigned char *refb[],
   unsigned char *cur[3], int secondfield, struct mbinfo *mbi);
 
-/* putbits.c */
+
 void writeInit (void);
 void writeData (int val, int n);
 void dataAlign (void);
 int dataCount (void);
 
-/* puthdr.c */
+
 void mainHeaderAdd (void);
 void seqExtHeaderAdd (void);
 void seqDispExtHeaderAdd (void);
@@ -59,18 +59,18 @@ void picHeaderAdd (void);
 void picCodeExtHeaderAdd (void);
 void fileEndAdd (void);
 
-/* putmpg.c */
+
 bool innerBlockCodeCtrl (short *blk, int cc);
 bool crossBlockCodeCtrl (short *blk);
 void motionVectorCodeCtrl (int dmv, int f_code);
 
-/* putpic.c */
+
 bool putpict (unsigned char *frame);
 
-/* putseq.c */
+
 bool routineCtrl (void);
 
-/* putvlc.c */
+
 bool dcYGenerate (int val);
 bool dcUVGenerate (int val);
 bool acGenerateBegin (int run, int val);
@@ -81,7 +81,7 @@ void motionCodeGenerate (int motion_code);
 void DMVectorCodeGene (int dmv);
 void codedBlockPatternCodeGene (int cbp);
 
-/* quantize.c */
+
 int innerQuan (short *src, short *dst, int dc_prec,
   unsigned char *quant_mat, int mquant);
 int crossQuan (short *src, short *dst,
@@ -91,7 +91,7 @@ void innerIQuan (short *src, short *dst, int dc_prec,
 void outerIQuan (short *src, short *dst,
   unsigned char *quant_mat, int mquant);
 
-/* ratectl.c */
+
 void feedbackInit (void);
 void GOPControlInit (int np, int nb);
 void picControlInit (unsigned char *frame);
@@ -101,14 +101,14 @@ int virtualBufferMeasure (int j);
 void endPictureBitPut (void);
 void delayCalc (void);
 
-/* readpic.c */
+
 bool frameReadControl (char *fname, unsigned char *frame[],int framenum);
 
-/* stats.c */
+
 void calcRatio (unsigned char *org[3], unsigned char *rec[3]);
 void insertStatistics (void);
 
-/* transfrm.c */
+
 void matrixTransform (unsigned char *pred[], unsigned char *cur[],
   struct mbinfo *mbi, short blocks[][64]);
 void matrixInverseTransform (unsigned char *pred[], unsigned char *cur[],
@@ -116,11 +116,11 @@ void matrixInverseTransform (unsigned char *pred[], unsigned char *cur[],
 void chooseDCT (unsigned char *pred, unsigned char *cur,
   struct mbinfo *mbi);
 
-/* writepic.c */
+
   bool reconstructPicture (char *fname, unsigned char *frame[]);
 
 
-/* zig-zag scan */
+
 EXTERN unsigned char zig_zag_scan[64]
 #ifdef GLOBAL
 =
@@ -133,7 +133,7 @@ EXTERN unsigned char zig_zag_scan[64]
 #endif
 ;
 
-/* alternate scan */
+
 EXTERN unsigned char alternate_scan[64]
 #ifdef GLOBAL
 =
@@ -146,7 +146,7 @@ EXTERN unsigned char alternate_scan[64]
 #endif
 ;
 
-/* default intra quantization matrix */
+
 EXTERN unsigned char default_intra_quantizer_matrix[64]
 #ifdef GLOBAL
 =
@@ -163,7 +163,7 @@ EXTERN unsigned char default_intra_quantizer_matrix[64]
 #endif
 ;
 
-/* non-linear quantization coefficient table */
+
 EXTERN unsigned char non_linear_mquant_table[32]
 #ifdef GLOBAL
 =
@@ -176,10 +176,7 @@ EXTERN unsigned char non_linear_mquant_table[32]
 #endif
 ;
 
-/* non-linear mquant table for mapping from scale to code
- * since reconstruction levels are not bijective with the index map,
- * it is up to the designer to determine most of the quantization levels
- */
+
 
 EXTERN unsigned char map_non_linear_mquant[113] 
 #ifdef GLOBAL
@@ -194,49 +191,49 @@ EXTERN unsigned char map_non_linear_mquant[113]
 #endif
 ;
 
-/* picture data arrays */
 
-/* reconstructed frames */
+
+
 EXTERN unsigned char *newrefframe[3], *oldrefframe[3], *auxframe[3];
-/* original frames */
+
 EXTERN unsigned char *neworgframe[3], *oldorgframe[3], *auxorgframe[3];
-/* prediction of current frame */
+
 EXTERN unsigned char *predframe[3];
-/* 8*8 block data */
+
 EXTERN short (*blocks)[64];
-/* intra / non_intra quantization matrices */
+
 EXTERN unsigned char intra_q[64], inter_q[64];
 EXTERN unsigned char chrom_intra_q[64],chrom_inter_q[64];
-/* prediction values for DCT coefficient (0,0) */
+
 EXTERN int dc_dct_pred[3];
-/* macroblock side information array */
+
 EXTERN struct mbinfo *mbinfo;
-/* motion estimation parameters */
+
 EXTERN struct motion_data *motion_data;
-/* clipping (=saturation) table */
+
 EXTERN unsigned char *clp;
 
-/* name strings */
+
 EXTERN char id_string[256], tplorg[256], tplref[256];
 EXTERN char errortext[256];
 
-EXTERN FILE *outfile; /* file descriptors */
-EXTERN int inputtype; /* format of input frames */
+EXTERN FILE *outfile;
+EXTERN int inputtype;
 
-EXTERN int quiet; /* suppress warnings */
+EXTERN int quiet;
 
 
-/* coding model parameters */
 
-EXTERN int N; /* number of frames in Group of Pictures */
-EXTERN int M; /* distance between I/P frames */
-EXTERN int P; /* intra slice refresh interval */
-EXTERN int nframes; /* total number of frames to encode */
-EXTERN int frame0, tc0; /* number and timecode of first frame */
-EXTERN int mpeg1; /* ISO/IEC IS 11172-2 sequence */
-EXTERN int fieldpic; /* use field pictures */
 
-/* sequence specific data (sequence header) */
+EXTERN int N;
+EXTERN int M;
+EXTERN int P;
+EXTERN int nframes;
+EXTERN int frame0, tc0;
+EXTERN int mpeg1;
+EXTERN int fieldpic;
+
+
 
 EXTERN int horizontal_size, vertical_size; /* frame size (pels) */
 EXTERN int width, height; /* encoded frame size (pels) multiples of 16 or 32 */
