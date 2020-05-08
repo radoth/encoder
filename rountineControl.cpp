@@ -1,4 +1,4 @@
-/* putseq.c, 和序列有关的程序*/
+/* 和序列有关的程序*/
 
 
 #include <cstdio>

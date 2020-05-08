@@ -1,4 +1,4 @@
-/* readpic.c, 读取源图像*/
+/* 读取源图像*/
 
 #include "timeSettings.h"
 #include <cstdio>

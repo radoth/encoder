@@ -1,4 +1,4 @@
-/* stats.c, 编码数据统计*/
+/* 编码数据统计*/
 
 
 #include "timeSettings.h"

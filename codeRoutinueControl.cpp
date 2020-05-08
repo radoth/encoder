@@ -1,4 +1,4 @@
-/* putmpg.c, 块和运动向量编码函数*/
+/* 块和运动向量编码函数*/
 
 #include "timeSettings.h"
 #include <cstdio>

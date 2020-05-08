@@ -1,4 +1,4 @@
-/* conform.c, 一致性检测*/
+/* 一致性检测*/
 
 
 #include <cstdio>

@@ -1,4 +1,4 @@
-/* global.h, 全局变量及函数声明*/
+/* 全局变量及函数声明*/
 
 #pragma once
 #include "initialize.h"

@@ -1,4 +1,4 @@
-/* puthdr.c, 产生头信息                                         */
+/* 产生头信息                                         */
 
 
 #include <cstdio>

@@ -1,4 +1,4 @@
-/* vlc.h, 变长编码表*/
+/* 变长编码表*/
 
 
 typedef struct

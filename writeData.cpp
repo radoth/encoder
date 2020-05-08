@@ -1,4 +1,4 @@
-/* putbits.c, 比特输出                                             */
+/* 比特输出                                             */
 
 
 #include <cstdio>

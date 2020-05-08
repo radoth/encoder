@@ -1,4 +1,4 @@
-/* idct.c, 反向快速离散余弦变换*/
+/* 反向快速离散余弦变换*/
 
 #include "timeSettings.h"
 

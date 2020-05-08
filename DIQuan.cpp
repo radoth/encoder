@@ -1,4 +1,4 @@
-/* quantize.c, 量化和逆量化函数*/
+/*  量化和逆量化函数*/
 
 #include "timeSettings.h"
 #include <cstdio>

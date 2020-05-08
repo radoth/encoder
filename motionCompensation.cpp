@@ -1,4 +1,4 @@
-/* predict.c, 运动补偿预测*/
+/* 运动补偿预测*/
 
 
 #include "timeSettings.h"
