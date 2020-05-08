@@ -18,7 +18,7 @@ bool init()
   static int block_count_tab[3] = {6,8,12};
 
   writeInit();
-  init_fdct();
+  initFdct();
   initIdct();
 
   /* round picture dimensions to nearest multiple of 16 or 32 */

@@ -96,7 +96,7 @@ void matrixTransform(unsigned char *pred[],unsigned char *cur[],struct mbinfo *m
         }
 
         restorePrediction(pred[cc]+offs,cur[cc]+offs,lx,blocks[k*block_count+n]);
-        fdct(blocks[k*block_count+n]);
+        fDCTCalc(blocks[k*block_count+n]);
       }
 
       k++;

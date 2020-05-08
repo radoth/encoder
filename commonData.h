@@ -23,8 +23,8 @@ bool profileAndLevelChecks ();
 bool init ();
 
 /* fdctref.c */
-void init_fdct ();
-void fdct (short *block);
+void initFdct ();
+void fDCTCalc (short *block);
 
 /* idct.c */
 void idct (short *block);
