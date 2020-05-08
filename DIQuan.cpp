@@ -1,21 +1,55 @@
 /* quantize.c, 量化和逆量化函数*/
 
-
+#include "timeSettings.h"
 #include <cstdio>
-#include "config.h"
-#include "global.h"
+#include "commonData.h"
 
-static void iquant1_intra (short *src, short *dst,
-  int dc_prec, unsigned char *quant_mat, int mquant);
-static void iquant1_non_intra (short *src, short *dst,
-  unsigned char *quant_mat, int mquant);
+/* 对MPEG-1图像量化的子函数 */
+static void innerSubQuan(short *src,short *dst,int dc_prec,unsigned char *quant_mat,int mquant)
+{
+    //mpeg1的帧内反量化
+  int i, val;
+
+  dst[0] = src[0] << (3-dc_prec);//直流系数反量化
+  for (i=1; i<64; i++)//交流系数反量化
+  {
+    val = (int)(src[i]*quant_mat[i]*mquant)/16;
+
+    if ((val&1)==0 && val!=0)//错误控制
+      val+= (val>0) ? -1 : 1;
+
+    //大小限制，饱和时削波
+    dst[i] = (val>2047) ? 2047 : ((val<-2048) ? -2048 : val);
+  }
+}
+
+/* 非帧内图像的逆量化 */
+static void crossSubQuan(short *src,short *dst,unsigned char *quant_mat,int mquant)
+{
+ //mpeg1的帧间反量化
+  int i, val;
+
+  for (i=0; i<64; i++)
+  {
+    val = src[i];
+    if (val!=0)
+    {
+      val = (int)((2*val+(val>0 ? 1 : -1))*quant_mat[i]*mquant)/32;
+
+      if ((val&1)==0 && val!=0)//同前，差错控制
+        val+= (val>0) ? -1 : 1;
+    }
+    //同前，饱和时削波
+    dst[i] = (val>2047) ? 2047 : ((val<-2048) ? -2048 : val);
+  }
+}
 
 /* 在趋近于0时该量化器的补偿为1/8stepsize
 （但DC系数例外）
  */
 
 //帧内量化
-int quant_intra(short *src,short *dst,int dc_prec,unsigned char *quant_mat,int mquant)
+int innerQuan(short *src,short *dst,int dc_prec,unsigned char *quant_mat,int mquant)
 //输入参数分别是输入和输出数组的指针，直流系数的量化精度控制参数，量化数组和码率的控制参数
 {
   int i;
@@ -43,14 +77,6 @@ int quant_intra(short *src,short *dst,int dc_prec,unsigned char *quant_mat,int m
     }
 
     dst[i] = (x>=0) ? y : -y;//量化结果取绝对值
-
-#if 0
-    if (x<0)
-      x = -x;
-    d = mquant*quant_mat[i];
-    y = (16*x + ((3*d)>>3)) / d;
-    dst[i] = (src[i]<0) ? -y : y;
-#endif
   }
 
   return 1;
@@ -58,7 +84,7 @@ int quant_intra(short *src,short *dst,int dc_prec,unsigned char *quant_mat,int m
 
 /*接下来的quant_non_intra是对非帧内方式的量化*/
 //帧间量化，没有直流系数的量化，所以参数比帧内量化少dc_prec
-int quant_non_intra(short *src,short *dst,unsigned char *quant_mat,int mquant)
+int crossQuan(short *src,short *dst,unsigned char *quant_mat,int mquant)
 {
   int i;
   int x, y, d;
@@ -90,14 +116,14 @@ int quant_non_intra(short *src,short *dst,unsigned char *quant_mat,int mquant)
 }
 
 /* 帧内图像的逆量化 */
-void iquant_intra(short *src,short *dst,int dc_prec,unsigned char *quant_mat,int mquant)
+void innerIQuan(short *src,short *dst,int dc_prec,unsigned char *quant_mat,int mquant)
 {
     //帧内反量化
   int i, val, sum;
 
 /*由于要求MPEG-2向下兼容，因此对于MPEG-1量化方式，采取相应的算法*/
   if (mpeg1)//如果是mpeg1，调用mpeg1的反量化函数
-    iquant1_intra(src,dst,dc_prec,quant_mat,mquant);
+    innerSubQuan(src,dst,dc_prec,quant_mat,mquant);
   else
       //mpeg2的量化
   {
@@ -118,13 +144,13 @@ void iquant_intra(short *src,short *dst,int dc_prec,unsigned char *quant_mat,int
 }
 
 /* 非帧内图像的逆量化 */
-void iquant_non_intra(short *src,short *dst,unsigned char *quant_mat,int mquant)
+void outerIQuan(short *src,short *dst,unsigned char *quant_mat,int mquant)
 {
     //帧间反量化
   int i, val, sum;
 
   if (mpeg1)//如果是mpeg1,调用mpeg1的帧间反量化函数
-    iquant1_non_intra(src,dst,quant_mat,mquant);
+    crossSubQuan(src,dst,quant_mat,mquant);
   else
       //mpeg2的反量化
   {
@@ -144,42 +170,4 @@ void iquant_non_intra(short *src,short *dst,unsigned char *quant_mat,int mquant)
   }
 }
 
-/* 对MPEG-1图像量化的子函数 */
-static void iquant1_intra(short *src,short *dst,int dc_prec,unsigned char *quant_mat,int mquant)
-{
-    //mpeg1的帧内反量化
-  int i, val;
 
-  dst[0] = src[0] << (3-dc_prec);//直流系数反量化
-  for (i=1; i<64; i++)//交流系数反量化
-  {
-    val = (int)(src[i]*quant_mat[i]*mquant)/16;
-
-    if ((val&1)==0 && val!=0)//错误控制
-      val+= (val>0) ? -1 : 1;
-
-    //大小限制，饱和时削波
-    dst[i] = (val>2047) ? 2047 : ((val<-2048) ? -2048 : val);
-  }
-}
-
-/* 非帧内图像的逆量化 */
-static void iquant1_non_intra(short *src,short *dst,unsigned char *quant_mat,int mquant)
-{
- //mpeg1的帧间反量化
-  int i, val;
-
-  for (i=0; i<64; i++)
-  {
-    val = src[i];
-    if (val!=0)
-    {
-      val = (int)((2*val+(val>0 ? 1 : -1))*quant_mat[i]*mquant)/32;
-
-      if ((val&1)==0 && val!=0)//同前，差错控制
-        val+= (val>0) ? -1 : 1;
-    }
-    //同前，饱和时削波
-    dst[i] = (val>2047) ? 2047 : ((val<-2048) ? -2048 : val);
-  }
-}

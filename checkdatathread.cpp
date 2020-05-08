@@ -1,5 +1,6 @@
 #include "checkdatathread.h"
-#include "global.h"
+#include "commonData.h"
+#include "timeSettings.h"
 
 checkDataThread::checkDataThread()
 {
@@ -11,7 +12,7 @@ void checkDataThread::run()
      frameAll=nframes;
      currentGroup=1;
      currentField=1;
-    putSeqStatus=putseq();
+    putSeqStatus=routineCtrl();
     fclose(outfile);
     ifRunning=false;
      emit ProcessEnded(putSeqStatus);

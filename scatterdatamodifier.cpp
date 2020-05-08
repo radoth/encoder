@@ -37,7 +37,7 @@
 #include <QtCore/qmath.h>
 #include <QtCore/qrandom.h>
 #include <QtWidgets/QComboBox>
-#include "global.h"
+#include "commonData.h"
 using namespace QtDataVisualization;
 
 //#define RANDOM_SCATTER // Uncomment this to switch to random scatter

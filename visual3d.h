@@ -25,7 +25,7 @@
 #include <QtCore/qrandom.h>
 #include <QtWidgets/QComboBox>
 
-#include "global.h"
+#include "commonData.h"
 
 class Visual3D
 {

@@ -1,6 +1,6 @@
 #ifndef DISPLAYCHART_H
 #define DISPLAYCHART_H
-#include "global.h"
+#include "commonData.h"
 
 class DisplayChart
 {

@@ -3,12 +3,12 @@
 
 #include <cstdio>
 #include <cstdlib>
+#include "timeSettings.h"
 
-#include "config.h"
-#include "global.h"
+#include "commonData.h"
 
 /* check for (level independent) parameter limits */
-bool range_checks()
+bool rangeChecks()
 {
   int i;
 
@@ -160,7 +160,7 @@ static struct level_limits {
 #define H14  6
 #define HL   4
 
-bool profile_and_level_checks()
+bool profileAndLevelChecks()
 {
   int i;
   struct level_limits *maxval;

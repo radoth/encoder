@@ -1,20 +1,44 @@
-/* transfrm.c,  前向/逆变换*/
+/*前向/逆变换*/
 
-
+#include "timeSettings.h"
 
 #include <cstdio>
 #include <cmath>
-#include "config.h"
-#include "global.h"
 
-/* private prototypes*/
-static void add_pred (unsigned char *pred, unsigned char *cur,
-  int lx, short *blk);
-static void sub_pred (unsigned char *pred, unsigned char *cur,
-  int lx, short *blk);
+#include "commonData.h"
+
+/* add prediction and prediction error, saturate to 0...255 */
+static void processPrediction(unsigned char *pred,unsigned char *cur,int lx,short *blk)
+{
+  int i, j;
+
+  for (j=0; j<8; j++)
+  {
+    for (i=0; i<8; i++)
+      cur[i] = clp[blk[i] + pred[i]];
+    blk+= 8;
+    cur+= lx;
+    pred+= lx;
+  }
+}
+
+/* subtract prediction from block data */
+static void restorePrediction(unsigned char *pred,unsigned char *cur,int lx,short *blk)
+{
+  int i, j;
+
+  for (j=0; j<8; j++)
+  {
+    for (i=0; i<8; i++)
+      blk[i] = cur[i] - pred[i];
+    blk+= 8;
+    cur+= lx;
+    pred+= lx;
+  }
+}
 
 /* subtract prediction and transform prediction error */
-void transform(unsigned char *pred[],unsigned char *cur[],struct mbinfo *mbi,short blocks[][64])
+void matrixTransform(unsigned char *pred[],unsigned char *cur[],struct mbinfo *mbi,short blocks[][64])
 {
   int i, j, i1, j1, k, n, cc, offs, lx;
 
@@ -71,7 +95,7 @@ void transform(unsigned char *pred[],unsigned char *cur[],struct mbinfo *mbi,sho
             offs += chrom_width;
         }
 
-        sub_pred(pred[cc]+offs,cur[cc]+offs,lx,blocks[k*block_count+n]);
+        restorePrediction(pred[cc]+offs,cur[cc]+offs,lx,blocks[k*block_count+n]);
         fdct(blocks[k*block_count+n]);
       }
 
@@ -80,7 +104,7 @@ void transform(unsigned char *pred[],unsigned char *cur[],struct mbinfo *mbi,sho
 }
 
 /* inverse transform prediction error and add prediction */
-void itransform(unsigned char *pred[],unsigned char *cur[],struct mbinfo *mbi,short blocks[][64])
+void matrixInverseTransform(unsigned char *pred[],unsigned char *cur[],struct mbinfo *mbi,short blocks[][64])
 {
   int i, j, i1, j1, k, n, cc, offs, lx;
 
@@ -139,49 +163,20 @@ void itransform(unsigned char *pred[],unsigned char *cur[],struct mbinfo *mbi,sh
         }
 
         idct(blocks[k*block_count+n]);
-        add_pred(pred[cc]+offs,cur[cc]+offs,lx,blocks[k*block_count+n]);
+        processPrediction(pred[cc]+offs,cur[cc]+offs,lx,blocks[k*block_count+n]);
       }
 
       k++;
     }
 }
 
-/* add prediction and prediction error, saturate to 0...255 */
-static void add_pred(unsigned char *pred,unsigned char *cur,int lx,short *blk)
-{
-  int i, j;
-
-  for (j=0; j<8; j++)
-  {
-    for (i=0; i<8; i++)
-      cur[i] = clp[blk[i] + pred[i]];
-    blk+= 8;
-    cur+= lx;
-    pred+= lx;
-  }
-}
-
-/* subtract prediction from block data */
-static void sub_pred(unsigned char *pred,unsigned char *cur,int lx,short *blk)
-{
-  int i, j;
-
-  for (j=0; j<8; j++)
-  {
-    for (i=0; i<8; i++)
-      blk[i] = cur[i] - pred[i];
-    blk+= 8;
-    cur+= lx;
-    pred+= lx;
-  }
-}
 
 /*
  * select between frame and field DCT
  *
  * preliminary version: based on inter-field correlation
  */
-void dct_type_estimation(unsigned char *pred,unsigned char *cur,struct mbinfo *mbi)
+void chooseDCT(unsigned char *pred,unsigned char *cur,struct mbinfo *mbi)
 {
   short blk0[128], blk1[128];
   int i, j, i0, j0, k, offs, s0, s1, sq0, sq1, s01;

@@ -1,5 +1,5 @@
 #include "refreshbar.h"
-#include "global.h"
+#include "commonData.h"
 
 RefreshBar::RefreshBar()
 {

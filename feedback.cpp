@@ -5,12 +5,73 @@
 #include <cstdio>
 #include <cmath>
 
-#include "config.h"
-#include "global.h"
+#include "timeSettings.h"
+#include "commonData.h"
 
-/* private prototypes */
-static void calc_actj (unsigned char *frame);
-static double var_sblk (unsigned char *p, int lx);
+/* compute variance of 8x8 block */
+static double varianceCalc(unsigned char *p,int lx)
+{
+  int i, j;
+  unsigned int v, s, s2;
+
+  s = s2 = 0;
+
+  for (j=0; j<8; j++)
+  {
+    for (i=0; i<8; i++)
+    {
+      v = *p++;
+      s+= v;
+      s2+= v*v;
+    }
+    p+= lx - 8;
+  }
+
+  return s2/64.0 - (s/64.0)*(s/64.0);
+}
+
+static void actjDetermine(unsigned char *frame)
+{
+  int i,j,k;
+  unsigned char *p;
+  double actj,var;
+
+  k = 0;
+
+  for (j=0; j<height2; j+=16)
+    for (i=0; i<width; i+=16)
+    {
+      p = frame + ((pict_struct==BOTTOM_FIELD)?width:0) + i + width2*j;
+
+      /* take minimum spatial activity measure of luminance blocks */
+
+      actj = varianceCalc(p,width2);
+      var = varianceCalc(p+8,width2);
+      if (var<actj) actj = var;
+      var = varianceCalc(p+8*width2,width2);
+      if (var<actj) actj = var;
+      var = varianceCalc(p+8*width2+8,width2);
+      if (var<actj) actj = var;
+
+      if (!fieldpic && !prog_seq)
+      {
+        /* field */
+        var = varianceCalc(p,width<<1);
+        if (var<actj) actj = var;
+        var = varianceCalc(p+8,width<<1);
+        if (var<actj) actj = var;
+        var = varianceCalc(p+width,width<<1);
+        if (var<actj) actj = var;
+        var = varianceCalc(p+width+8,width<<1);
+        if (var<actj) actj = var;
+      }
+
+      actj+= 1.0;
+
+      mbinfo[k++].act = actj;
+    }
+}
+
 
 /* rate control variables */
 int Xi, Xp, Xb, r, d0i, d0p, d0b;
@@ -20,7 +81,7 @@ static double actsum;
 static int Np, Nb, S, Q;
 static int prev_mquant;
 
-void rc_init_seq()
+void feedbackInit()
 {
   /* reaction parameter (constant) */
   if (r==0)  r = (int)floor(2.0*bit_rate/frame_rate + 0.5);
@@ -65,7 +126,7 @@ void rc_init_seq()
   globalDATA.avgAct=avg_act;
 }
 
-void rc_init_GOP(int np,int nb)
+void GOPControlInit(int np,int nb)
 {
   R += (int) floor((1 + np + nb) * bit_rate / frame_rate + 0.5);
   Np = fieldpic ? 2*np+1 : np;
@@ -85,7 +146,7 @@ void rc_init_GOP(int np,int nb)
    be modified to fit image content */
 
 /* Step 1: compute target bits for current picture being coded */
-void rc_init_pict(unsigned char *frame)
+void picControlInit(unsigned char *frame)
 {
   double Tmin;
 
@@ -110,10 +171,10 @@ void rc_init_pict(unsigned char *frame)
   if (T<Tmin)
     T = Tmin;
 
-  S = bitcount();
+  S = dataCount();
   Q = 0;
 
-  calc_actj(frame);
+  actjDetermine(frame);
   actsum = 0.0;
 
   //fprintf(statfile,"\nrate control: start of picture\n");
@@ -121,53 +182,13 @@ void rc_init_pict(unsigned char *frame)
   tmpPicture.targetNumberOfBits=T;
 }
 
-static void calc_actj(unsigned char *frame)
-{
-  int i,j,k;
-  unsigned char *p;
-  double actj,var;
 
-  k = 0;
 
-  for (j=0; j<height2; j+=16)
-    for (i=0; i<width; i+=16)
-    {
-      p = frame + ((pict_struct==BOTTOM_FIELD)?width:0) + i + width2*j;
-
-      /* take minimum spatial activity measure of luminance blocks */
-
-      actj = var_sblk(p,width2);
-      var = var_sblk(p+8,width2);
-      if (var<actj) actj = var;
-      var = var_sblk(p+8*width2,width2);
-      if (var<actj) actj = var;
-      var = var_sblk(p+8*width2+8,width2);
-      if (var<actj) actj = var;
-
-      if (!fieldpic && !prog_seq)
-      {
-        /* field */
-        var = var_sblk(p,width<<1);
-        if (var<actj) actj = var;
-        var = var_sblk(p+8,width<<1);
-        if (var<actj) actj = var;
-        var = var_sblk(p+width,width<<1);
-        if (var<actj) actj = var;
-        var = var_sblk(p+width+8,width<<1);
-        if (var<actj) actj = var;
-      }
-
-      actj+= 1.0;
-
-      mbinfo[k++].act = actj;
-    }
-}
-
-void rc_update_pict()
+void updateCalc()
 {
   double X;
 
-  S = bitcount() - S; /* total # of bits in picture */
+  S = dataCount() - S; /* total # of bits in picture */
   R-= S; /* remaining # of bits in GOP */
   X = (int) floor(S*((0.5*(double)Q)/(mb_width*mb_height2)) + 0.5);
   d+= S - T;
@@ -220,7 +241,7 @@ void rc_update_pict()
 }
 
 /* compute initial quantization stepsize (at the beginning of picture) */
-int rc_start_mb()
+int stepSizeQuantization()
 {
   int mquant;
 
@@ -260,13 +281,13 @@ int rc_start_mb()
 }
 
 /* Step 2: measure virtual buffer - estimated buffer discrepancy */
-int rc_calc_mquant(int j)
+int virtualBufferMeasure(int j)
 {
   int mquant;
   double dj, Qj, actj, N_actj;
 
   /* measure virtual buffer discrepancy from uniform distribution model */
-  dj = d + (bitcount()-S) - j*(T/(mb_width*mb_height2));
+  dj = d + (dataCount()-S) - j*(T/(mb_width*mb_height2));
 
   /* scale against dynamic range of mquant and the bits/picture count */
   Qj = dj*31.0/r;
@@ -322,27 +343,7 @@ int rc_calc_mquant(int j)
   return mquant;
 }
 
-/* compute variance of 8x8 block */
-static double var_sblk(unsigned char *p,int lx)
-{
-  int i, j;
-  unsigned int v, s, s2;
 
-  s = s2 = 0;
-
-  for (j=0; j<8; j++)
-  {
-    for (i=0; i<8; i++)
-    {
-      v = *p++;
-      s+= v;
-      s2+= v*v;
-    }
-    p+= lx - 8;
-  }
-
-  return s2/64.0 - (s/64.0)*(s/64.0);
-}
 
 /* VBV calculations
  *
@@ -358,9 +359,9 @@ static double var_sblk(unsigned char *p,int lx)
 
 static int bitcnt_EOP;
 
-void vbv_end_of_picture()
+void endPictureBitPut()
 {
-  bitcnt_EOP = bitcount();
+  bitcnt_EOP = dataCount();
   bitcnt_EOP = (bitcnt_EOP + 7) & ~7; /* account for bit stuffing */
 }
 
@@ -370,7 +371,7 @@ void vbv_end_of_picture()
  * reference point for vbv_delay
  */
 
-void calc_vbv_delay()
+void delayCalc()
 {
   double picture_delay;
   static double next_ip_delay; /* due to frame reordering delay */
@@ -486,7 +487,7 @@ void calc_vbv_delay()
   decoding_time += picture_delay;
 
   /* warning: bitcount() may overflow (e.g. after 9 min. at 8 Mbit/s */
-  vbv_delay = (int)(decoding_time - bitcount()*90000.0/bit_rate);
+  vbv_delay = (int)(decoding_time - dataCount()*90000.0/bit_rate);
 
   /* check for overflow (current picture) */
   if ((decoding_time - bitcnt_EOP*90000.0/bit_rate)
@@ -503,7 +504,7 @@ void calc_vbv_delay()
     //"\nvbv_delay=%d (bitcount=%d, decoding_time=%.2f, bitcnt_EOP=%d)\n",
     //vbv_delay,bitcount(),decoding_time,bitcnt_EOP);
   tmpPicture.vbvDelay=vbv_delay;
-  tmpPicture.bitcount=bitcount();
+  tmpPicture.bitcount=dataCount();
   tmpPicture.vbvDcdTime=decoding_time;
   tmpPicture.bitcnt_EOP=bitcnt_EOP;
 

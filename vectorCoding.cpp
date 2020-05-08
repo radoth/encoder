@@ -2,15 +2,91 @@
 
 
 #include <cstdio>
-#include "config.h"
-#include "global.h"
+#include "timeSettings.h"
+#include "commonData.h"
 
 /* output motion vectors (6.2.5.2, 6.3.16.2)
-this function also updates the predictions for motion vectors (PMV)
+ *
+ * this routine also updates the predictions for motion vectors (PMV)
  */
-static void putmvs (int MV[2][2][2], int PMV[2][2][2],
-  int mv_field_sel[2][2], int dmvector[2], int s, int motion_type,
-  int hor_f_code, int vert_f_code);
+
+static void vectorCode(int MV[2][2][2],int PMV[2][2][2],int mv_field_sel[2][2],int dmvector[2],int s,int motion_type,
+  int hor_f_code,int vert_f_code)
+{
+  if (pict_struct==FRAME_PICTURE)
+  {
+    if (motion_type==MC_FRAME)
+    {
+      /* frame prediction */
+      motionVectorCodeCtrl(MV[0][s][0]-PMV[0][s][0],hor_f_code);
+      motionVectorCodeCtrl(MV[0][s][1]-PMV[0][s][1],vert_f_code);
+      PMV[0][s][0]=PMV[1][s][0]=MV[0][s][0];
+      PMV[0][s][1]=PMV[1][s][1]=MV[0][s][1];
+    }
+    else if (motion_type==MC_FIELD)
+    {
+      /* field prediction */
+      writeData(mv_field_sel[0][s],1);
+      motionVectorCodeCtrl(MV[0][s][0]-PMV[0][s][0],hor_f_code);
+      motionVectorCodeCtrl((MV[0][s][1]>>1)-(PMV[0][s][1]>>1),vert_f_code);
+      writeData(mv_field_sel[1][s],1);
+      motionVectorCodeCtrl(MV[1][s][0]-PMV[1][s][0],hor_f_code);
+      motionVectorCodeCtrl((MV[1][s][1]>>1)-(PMV[1][s][1]>>1),vert_f_code);
+      PMV[0][s][0]=MV[0][s][0];
+      PMV[0][s][1]=MV[0][s][1];
+      PMV[1][s][0]=MV[1][s][0];
+      PMV[1][s][1]=MV[1][s][1];
+    }
+    else
+    {
+      /* dual prime prediction */
+      motionVectorCodeCtrl(MV[0][s][0]-PMV[0][s][0],hor_f_code);
+      DMVectorCodeGene(dmvector[0]);
+      motionVectorCodeCtrl((MV[0][s][1]>>1)-(PMV[0][s][1]>>1),vert_f_code);
+      DMVectorCodeGene(dmvector[1]);
+      PMV[0][s][0]=PMV[1][s][0]=MV[0][s][0];
+      PMV[0][s][1]=PMV[1][s][1]=MV[0][s][1];
+    }
+  }
+  else
+  {
+    /* field picture */
+    if (motion_type==MC_FIELD)
+    {
+      /* field prediction */
+      writeData(mv_field_sel[0][s],1);
+      motionVectorCodeCtrl(MV[0][s][0]-PMV[0][s][0],hor_f_code);
+      motionVectorCodeCtrl(MV[0][s][1]-PMV[0][s][1],vert_f_code);
+      PMV[0][s][0]=PMV[1][s][0]=MV[0][s][0];
+      PMV[0][s][1]=PMV[1][s][1]=MV[0][s][1];
+    }
+    else if (motion_type==MC_16X8)
+    {
+      /* 16x8 prediction */
+      writeData(mv_field_sel[0][s],1);
+      motionVectorCodeCtrl(MV[0][s][0]-PMV[0][s][0],hor_f_code);
+      motionVectorCodeCtrl(MV[0][s][1]-PMV[0][s][1],vert_f_code);
+      writeData(mv_field_sel[1][s],1);
+      motionVectorCodeCtrl(MV[1][s][0]-PMV[1][s][0],hor_f_code);
+      motionVectorCodeCtrl(MV[1][s][1]-PMV[1][s][1],vert_f_code);
+      PMV[0][s][0]=MV[0][s][0];
+      PMV[0][s][1]=MV[0][s][1];
+      PMV[1][s][0]=MV[1][s][0];
+      PMV[1][s][1]=MV[1][s][1];
+    }
+    else
+    {
+      /* dual prime prediction */
+      motionVectorCodeCtrl(MV[0][s][0]-PMV[0][s][0],hor_f_code);
+      DMVectorCodeGene(dmvector[0]);
+      motionVectorCodeCtrl(MV[0][s][1]-PMV[0][s][1],vert_f_code);
+      DMVectorCodeGene(dmvector[1]);
+      PMV[0][s][0]=PMV[1][s][0]=MV[0][s][0];
+      PMV[0][s][1]=PMV[1][s][1]=MV[0][s][1];
+    }
+  }
+}
+
 
 /* quantization / variable length encoding of a complete picture */
 bool putpict(unsigned char *frame)
@@ -21,15 +97,15 @@ bool putpict(unsigned char *frame)
   int prev_mquant;
   int cbp, MBAinc;
 
-  rc_init_pict(frame); /* set up rate control */
+  picControlInit(frame); /* set up rate control */
 
   /* picture header and picture coding extension */
-  putpicthdr();
+  picHeaderAdd();
 
   if (!mpeg1)
-    putpictcodext();
+    picCodeExtHeaderAdd();
 
-  prev_mquant = rc_start_mb(); /* initialize quantization parameter */
+  prev_mquant = stepSizeQuantization(); /* initialize quantization parameter */
 
   k = 0;
 
@@ -43,21 +119,21 @@ bool putpict(unsigned char *frame)
       if (i==0)
       {
         /* slice header (6.2.4) */
-        alignbits();
+        dataAlign();
 
         if (mpeg1 || vertical_size<=2800)
-          putbits(SLICE_MIN_START+j,32); /* slice_start_code */
+          writeData(SLICE_MIN_START+j,32); /* slice_start_code */
         else
         {
-          putbits(SLICE_MIN_START+(j&127),32); /* slice_start_code */
-          putbits(j>>7,3); /* slice_vertical_position_extension */
+          writeData(SLICE_MIN_START+(j&127),32); /* slice_start_code */
+          writeData(j>>7,3); /* slice_vertical_position_extension */
         }
   
         /* quantiser_scale_code */
-        putbits(q_scale_type ? map_non_linear_mquant[prev_mquant]
+        writeData(q_scale_type ? map_non_linear_mquant[prev_mquant]
                              : prev_mquant >> 1, 5);
   
-        putbits(0,1); /* extra_bit_slice */
+        writeData(0,1); /* extra_bit_slice */
   
         /* reset predictors */
 
@@ -73,13 +149,13 @@ bool putpict(unsigned char *frame)
       mb_type = mbinfo[k].mb_type;
 
       /* determine mquant (rate control) */
-      mbinfo[k].mquant = rc_calc_mquant(k);
+      mbinfo[k].mquant = virtualBufferMeasure(k);
 
       /* quantize macroblock */
       if (mb_type & MB_INTRA)
       {
         for (comp=0; comp<block_count; comp++)
-          quant_intra(blocks[k*block_count+comp],blocks[k*block_count+comp],
+          innerQuan(blocks[k*block_count+comp],blocks[k*block_count+comp],
                       dc_prec,intra_q,mbinfo[k].mquant);
         mbinfo[k].cbp = cbp = (1<<block_count) - 1;
       }
@@ -87,7 +163,7 @@ bool putpict(unsigned char *frame)
       {
         cbp = 0;
         for (comp=0;comp<block_count;comp++)
-          cbp = (cbp<<1) | quant_non_intra(blocks[k*block_count+comp],
+          cbp = (cbp<<1) | crossQuan(blocks[k*block_count+comp],
                                            blocks[k*block_count+comp],
                                            inter_q,mbinfo[k].mquant);
 
@@ -189,20 +265,20 @@ bool putpict(unsigned char *frame)
       if (pict_type==P_TYPE && !cbp && !(mb_type&MB_FORWARD))
         mb_type|= MB_FORWARD;
 
-      putaddrinc(MBAinc); /* macroblock_address_increment */
+      addressCodeGenerate(MBAinc); /* macroblock_address_increment */
       MBAinc = 1;
 
-      putmbtype(pict_type,mb_type); /* macroblock type */
+      macroTypeCodeGene(pict_type,mb_type); /* macroblock type */
 
       if (mb_type & (MB_FORWARD|MB_BACKWARD) && !frame_pred_dct)
-        putbits(mbinfo[k].motion_type,2);
+        writeData(mbinfo[k].motion_type,2);
 
       if (pict_struct==FRAME_PICTURE && cbp && !frame_pred_dct)
-        putbits(mbinfo[k].dct_type,1);
+        writeData(mbinfo[k].dct_type,1);
 
       if (mb_type & MB_QUANT)
       {
-        putbits(q_scale_type ? map_non_linear_mquant[mbinfo[k].mquant]
+        writeData(q_scale_type ? map_non_linear_mquant[mbinfo[k].mquant]
                              : mbinfo[k].mquant>>1,5);
         prev_mquant = mbinfo[k].mquant;
       }
@@ -210,22 +286,22 @@ bool putpict(unsigned char *frame)
       if (mb_type & MB_FORWARD)
       {
         /* forward motion vectors, update predictors */
-        putmvs(mbinfo[k].MV,PMV,mbinfo[k].mv_field_sel,mbinfo[k].dmvector,0,
+        vectorCode(mbinfo[k].MV,PMV,mbinfo[k].mv_field_sel,mbinfo[k].dmvector,0,
           mbinfo[k].motion_type,forw_hor_f_code,forw_vert_f_code);
       }
 
       if (mb_type & MB_BACKWARD)
       {
         /* backward motion vectors, update predictors */
-        putmvs(mbinfo[k].MV,PMV,mbinfo[k].mv_field_sel,mbinfo[k].dmvector,1,
+        vectorCode(mbinfo[k].MV,PMV,mbinfo[k].mv_field_sel,mbinfo[k].dmvector,1,
           mbinfo[k].motion_type,back_hor_f_code,back_vert_f_code);
       }
 
       if (mb_type & MB_PATTERN)
       {
-        putcbp((cbp >> (block_count-6)) & 63);
+        codedBlockPatternCodeGene((cbp >> (block_count-6)) & 63);
         if (chroma_format!=CHROMA420)
-          putbits(cbp,block_count-6);
+          writeData(cbp,block_count-6);
       }
 
       for (comp=0; comp<block_count; comp++)
@@ -236,11 +312,11 @@ bool putpict(unsigned char *frame)
           if (mb_type & MB_INTRA)
           {
             cc = (comp<4) ? 0 : (comp&1)+1;
-            if(putintrablk(blocks[k*block_count+comp],cc)==false)
+            if(innerBlockCodeCtrl(blocks[k*block_count+comp],cc)==false)
                 return false;
           }
           else
-            if(putnonintrablk(blocks[k*block_count+comp])==false)
+            if(crossBlockCodeCtrl(blocks[k*block_count+comp])==false)
                 return false;
         }
       }
@@ -261,90 +337,7 @@ bool putpict(unsigned char *frame)
     }
   }
 
-  rc_update_pict();
-  vbv_end_of_picture();
+  updateCalc();
+  endPictureBitPut();
   return true;
-}
-
-
-/* output motion vectors (6.2.5.2, 6.3.16.2)
- *
- * this routine also updates the predictions for motion vectors (PMV)
- */
- 
-static void putmvs(int MV[2][2][2],int PMV[2][2][2],int mv_field_sel[2][2],int dmvector[2],int s,int motion_type,
-  int hor_f_code,int vert_f_code)
-{
-  if (pict_struct==FRAME_PICTURE)
-  {
-    if (motion_type==MC_FRAME)
-    {
-      /* frame prediction */
-      putmv(MV[0][s][0]-PMV[0][s][0],hor_f_code);
-      putmv(MV[0][s][1]-PMV[0][s][1],vert_f_code);
-      PMV[0][s][0]=PMV[1][s][0]=MV[0][s][0];
-      PMV[0][s][1]=PMV[1][s][1]=MV[0][s][1];
-    }
-    else if (motion_type==MC_FIELD)
-    {
-      /* field prediction */
-      putbits(mv_field_sel[0][s],1);
-      putmv(MV[0][s][0]-PMV[0][s][0],hor_f_code);
-      putmv((MV[0][s][1]>>1)-(PMV[0][s][1]>>1),vert_f_code);
-      putbits(mv_field_sel[1][s],1);
-      putmv(MV[1][s][0]-PMV[1][s][0],hor_f_code);
-      putmv((MV[1][s][1]>>1)-(PMV[1][s][1]>>1),vert_f_code);
-      PMV[0][s][0]=MV[0][s][0];
-      PMV[0][s][1]=MV[0][s][1];
-      PMV[1][s][0]=MV[1][s][0];
-      PMV[1][s][1]=MV[1][s][1];
-    }
-    else
-    {
-      /* dual prime prediction */
-      putmv(MV[0][s][0]-PMV[0][s][0],hor_f_code);
-      putdmv(dmvector[0]);
-      putmv((MV[0][s][1]>>1)-(PMV[0][s][1]>>1),vert_f_code);
-      putdmv(dmvector[1]);
-      PMV[0][s][0]=PMV[1][s][0]=MV[0][s][0];
-      PMV[0][s][1]=PMV[1][s][1]=MV[0][s][1];
-    }
-  }
-  else
-  {
-    /* field picture */
-    if (motion_type==MC_FIELD)
-    {
-      /* field prediction */
-      putbits(mv_field_sel[0][s],1);
-      putmv(MV[0][s][0]-PMV[0][s][0],hor_f_code);
-      putmv(MV[0][s][1]-PMV[0][s][1],vert_f_code);
-      PMV[0][s][0]=PMV[1][s][0]=MV[0][s][0];
-      PMV[0][s][1]=PMV[1][s][1]=MV[0][s][1];
-    }
-    else if (motion_type==MC_16X8)
-    {
-      /* 16x8 prediction */
-      putbits(mv_field_sel[0][s],1);
-      putmv(MV[0][s][0]-PMV[0][s][0],hor_f_code);
-      putmv(MV[0][s][1]-PMV[0][s][1],vert_f_code);
-      putbits(mv_field_sel[1][s],1);
-      putmv(MV[1][s][0]-PMV[1][s][0],hor_f_code);
-      putmv(MV[1][s][1]-PMV[1][s][1],vert_f_code);
-      PMV[0][s][0]=MV[0][s][0];
-      PMV[0][s][1]=MV[0][s][1];
-      PMV[1][s][0]=MV[1][s][0];
-      PMV[1][s][1]=MV[1][s][1];
-    }
-    else
-    {
-      /* dual prime prediction */
-      putmv(MV[0][s][0]-PMV[0][s][0],hor_f_code);
-      putdmv(dmvector[0]);
-      putmv(MV[0][s][1]-PMV[0][s][1],vert_f_code);
-      putdmv(dmvector[1]);
-      PMV[0][s][0]=PMV[1][s][0]=MV[0][s][0];
-      PMV[0][s][1]=PMV[1][s][1]=MV[0][s][1];
-    }
-  }
 }

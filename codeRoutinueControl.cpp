@@ -1,12 +1,11 @@
 /* putmpg.c, 块和运动向量编码函数*/
 
-
+#include "timeSettings.h"
 #include <cstdio>
-#include "config.h"
-#include "global.h"
+#include "commonData.h"
 
 /* generate variable length codes for an intra-coded block (6.2.6, 6.3.17) */
-bool putintrablk(short *blk,int cc)
+bool innerBlockCodeCtrl(short *blk,int cc)
 {
   int n, dct_diff, run, signed_level;
 
@@ -16,12 +15,12 @@ bool putintrablk(short *blk,int cc)
 
   if (cc==0)
     {
-      if(putDClum(dct_diff)==false)
+      if(dcYGenerate(dct_diff)==false)
         return false;
   }
   else
     {
-        if(putDCchrom(dct_diff)==false)
+        if(dcUVGenerate(dct_diff)==false)
         return false;
     }
 
@@ -33,7 +32,7 @@ bool putintrablk(short *blk,int cc)
     signed_level = blk[(altscan ? alternate_scan : zig_zag_scan)[n]];
     if (signed_level!=0)
     {
-      if(putAC(run,signed_level,intravlc)==false)
+      if(acGenerateElse(run,signed_level,intravlc)==false)
           return false;
       run = 0;
     }
@@ -43,15 +42,15 @@ bool putintrablk(short *blk,int cc)
 
   /* End of Block -- normative block punctuation */
   if (intravlc)
-    putbits(6,4); /* 0110 (Table B-15) */
+    writeData(6,4); /* 0110 (Table B-15) */
   else
-    putbits(2,2); /* 10 (Table B-14) */
+    writeData(2,2); /* 10 (Table B-14) */
 
   return true;
 }
 
 /* generate variable length codes for a non-intra-coded block (6.2.6, 6.3.17) */
-bool putnonintrablk(short *blk)
+bool crossBlockCodeCtrl(short *blk)
 {
   int n, run, signed_level, first;
 
@@ -68,12 +67,12 @@ bool putnonintrablk(short *blk)
       if (first)
       {
         /* first coefficient in non-intra block */
-        if(putACfirst(run,signed_level)==false)
+        if(acGenerateBegin(run,signed_level)==false)
             return false;
         first = 0;
       }
       else
-        if(putAC(run,signed_level,0)==false)
+        if(acGenerateElse(run,signed_level,0)==false)
             return false;
 
       run = 0;
@@ -83,13 +82,13 @@ bool putnonintrablk(short *blk)
   }
 
   /* End of Block -- normative block punctuation  */
-  putbits(2,2);
+  writeData(2,2);
 
   return true;
 }
 
 /* generate variable length code for a motion vector component (7.6.3.1) */
-void putmv(int dmv,int f_code)
+void motionVectorCodeCtrl(int dmv,int f_code)
 {
   int r_size, f, vmin, vmax, dv, temp, motion_code, motion_residual;
 
@@ -120,8 +119,8 @@ void putmv(int dmv,int f_code)
     motion_code = -motion_code;
   motion_residual = temp & (f-1);
 
-  putmotioncode(motion_code); /* variable length code */
+  motionCodeGenerate(motion_code); /* variable length code */
 
   if (r_size!=0 && motion_code!=0)
-    putbits(motion_residual,r_size); /* fixed length code */
+    writeData(motion_residual,r_size); /* fixed length code */
 }

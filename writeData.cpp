@@ -2,8 +2,8 @@
 
 
 #include <cstdio>
-#include "config.h"
 
+#include "timeSettings.h"
 extern FILE *outfile; /* the only global var we need here */
 
 /* private data */
@@ -12,14 +12,14 @@ static int outcnt;
 static int bytecnt;
 
 /* 初始化缓冲区，在初次写入或填充前调用 */
-void initbits()
+void writeInit()
 {
   outcnt = 8;
   bytecnt = 0;
 }
 
 /* 从缓冲区val中向文件写入最多不超过32b的数据。 */
-void putbits(int val,int n)
+void writeData(int val,int n)
 {
   int i;
   unsigned int mask;
@@ -46,14 +46,14 @@ void putbits(int val,int n)
 }
 
 /* 满足字节边界而填充0比特 */
-void alignbits()
+void dataAlign()
 {
   if (outcnt!=8)
-    putbits(0,outcnt);
+    writeData(0,outcnt);
 }
 
 /* 返回生成的全部比特计数 */
-int bitcount()
+int dataCount()
 {
   return 8*bytecnt + (8-outcnt);
 }

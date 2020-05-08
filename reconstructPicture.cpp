@@ -1,13 +1,11 @@
-/* writepic.c, 恢复重建图像*/
-
-
+/*恢复重建图像*/
 
 #include <cstdio>
 #include <cstdlib>
-#include "config.h"
-#include "global.h"
+#include "timeSettings.h"
+#include "commonData.h"
 
-bool writeframe(char *fname,unsigned char *frame[])
+bool reconstructPicture(char *fname,unsigned char *frame[])
 
 {
   int chrom_hsize, chrom_vsize;

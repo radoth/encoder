@@ -2,7 +2,7 @@
 #define DISPLAY_H
 
 #include <QWidget>
-#include"global.h"
+#include"commonData.h"
 #include <QTextDocument>
 #include <QTextFrame>
 #include <QDateTime>

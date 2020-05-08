@@ -505,7 +505,7 @@ bool Display::parameterPrepare()
     repeatfirst = !!repeatfirst;
     prog_frame = !!prog_frame;
 
-    if(range_checks()==false)
+    if(rangeChecks()==false)
         return false;
 
     static double ratetab[8]=
@@ -520,7 +520,7 @@ bool Display::parameterPrepare()
 
     if (!mpeg1)
     {
-      if(profile_and_level_checks()==false)
+      if(profileAndLevelChecks()==false)
           return false;
     }
     else

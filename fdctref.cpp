@@ -4,7 +4,7 @@
 
 #include <cmath>
 
-#include "config.h"
+#include "timeSettings.h"
 
 #ifndef PI
 # ifdef M_PI

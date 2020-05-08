@@ -16,49 +16,49 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    DIQuan.cpp \
     checkdatathread.cpp \
-    conform.cpp \
+    codeGenerate.cpp \
+    codeRoutinueControl.cpp \
+    dataInput.cpp \
     displaychart.cpp \
     fdctref.cpp \
     display.cpp \
+    feedback.cpp \
     gettimeofday.cpp \
-    idct.cpp \
+    headerGenerate.cpp \
+    identicalCheck.cpp \
+    initialize.cpp \
+    inverseDCT.cpp \
     main.cpp \
-    motion.cpp \
-    mpeg2enc.cpp \
-    predict.cpp \
-    putbits.cpp \
-    puthdr.cpp \
-    putmpg.cpp \
-    putpic.cpp \
-    putseq.cpp \
-    putvlc.cpp \
-    quantize.cpp \
-    ratectl.cpp \
-    readpic.cpp \
+    matrixTransformation.cpp \
+    motionCompensation.cpp \
+    motionEstimate.cpp \
+    reconstructPicture.cpp \
     refreshbar.cpp \
     refreshui.cpp \
+    rountineControl.cpp \
     scatterdatamodifier.cpp \
     signalshooter.cpp \
-    stats.cpp \
-    transfrm.cpp \
+    vectorCoding.cpp \
     visual3d.cpp \
-    writepic.cpp
+    workStatistics.cpp \
+    writeData.cpp
 
 HEADERS += \
     checkdatathread.h \
-    config.h \
+    commonData.h \
     display.h \
     displaychart.h \
     gettimeofday.h \
-    global.h \
-    mpeg2enc.h \
+    initialize.h \
+    presetTables.h \
     refreshbar.h \
     refreshui.h \
     scatterdatamodifier.h \
     signalshooter.h \
-    visual3d.h \
-    vlc.h
+    timeSettings.h \
+    visual3d.h
 
 FORMS += \
     display.ui

@@ -1,7 +1,7 @@
 /* global.h, 全局变量及函数声明*/
 
 #pragma once
-#include "mpeg2enc.h"
+#include "initialize.h"
 #include "gettimeofday.h"
 #include "signalshooter.h"
 #include <QString>
@@ -16,8 +16,8 @@
 /* prototypes of global functions */
 
 /* conform.c */
-bool range_checks ();
-bool profile_and_level_checks ();
+bool rangeChecks ();
+bool profileAndLevelChecks ();
 
 /* mpeg2enc.c */
 bool init ();
@@ -28,10 +28,10 @@ void fdct (short *block);
 
 /* idct.c */
 void idct (short *block);
-void init_idct (void);
+void initIdct (void);
 
 /* motion.c */
-void motion_estimation (unsigned char *oldorg, unsigned char *neworg,
+void motionEstimation (unsigned char *oldorg, unsigned char *neworg,
   unsigned char *oldref, unsigned char *newref, unsigned char *cur,
   unsigned char *curref, int sxf, int syf, int sxb, int syb,
   struct mbinfo *mbi, int secondfield, int ipflag);
@@ -40,84 +40,84 @@ void motion_estimation (unsigned char *oldorg, unsigned char *neworg,
 void error (QString text);
 
 /* predict.c */
-void predict (unsigned char *reff[], unsigned char *refb[],
+void mainPredictCtrl (unsigned char *reff[], unsigned char *refb[],
   unsigned char *cur[3], int secondfield, struct mbinfo *mbi);
 
 /* putbits.c */
-void initbits (void);
-void putbits (int val, int n);
-void alignbits (void);
-int bitcount (void);
+void writeInit (void);
+void writeData (int val, int n);
+void dataAlign (void);
+int dataCount (void);
 
 /* puthdr.c */
-void putseqhdr (void);
-void putseqext (void);
-void putseqdispext (void);
-void putuserdata (char *userdata);
-void putgophdr (int frame, int closed_gop);
-void putpicthdr (void);
-void putpictcodext (void);
-void putseqend (void);
+void mainHeaderAdd (void);
+void seqExtHeaderAdd (void);
+void seqDispExtHeaderAdd (void);
+void usrDataHeaderAdd (char *userdata);
+void GOPHeaderAdd (int frame, int closed_gop);
+void picHeaderAdd (void);
+void picCodeExtHeaderAdd (void);
+void fileEndAdd (void);
 
 /* putmpg.c */
-bool putintrablk (short *blk, int cc);
-bool putnonintrablk (short *blk);
-void putmv (int dmv, int f_code);
+bool innerBlockCodeCtrl (short *blk, int cc);
+bool crossBlockCodeCtrl (short *blk);
+void motionVectorCodeCtrl (int dmv, int f_code);
 
 /* putpic.c */
 bool putpict (unsigned char *frame);
 
 /* putseq.c */
-bool putseq (void);
+bool routineCtrl (void);
 
 /* putvlc.c */
-bool putDClum (int val);
-bool putDCchrom (int val);
-bool putACfirst (int run, int val);
-bool putAC (int run, int signed_level, int vlcformat);
-void putaddrinc (int addrinc);
-void putmbtype (int pict_type, int mb_type);
-void putmotioncode (int motion_code);
-void putdmv (int dmv);
-void putcbp (int cbp);
+bool dcYGenerate (int val);
+bool dcUVGenerate (int val);
+bool acGenerateBegin (int run, int val);
+bool acGenerateElse (int run, int signed_level, int vlcformat);
+void addressCodeGenerate (int addrinc);
+void macroTypeCodeGene (int pict_type, int mb_type);
+void motionCodeGenerate (int motion_code);
+void DMVectorCodeGene (int dmv);
+void codedBlockPatternCodeGene (int cbp);
 
 /* quantize.c */
-int quant_intra (short *src, short *dst, int dc_prec,
+int innerQuan (short *src, short *dst, int dc_prec,
   unsigned char *quant_mat, int mquant);
-int quant_non_intra (short *src, short *dst,
+int crossQuan (short *src, short *dst,
   unsigned char *quant_mat, int mquant);
-void iquant_intra (short *src, short *dst, int dc_prec,
+void innerIQuan (short *src, short *dst, int dc_prec,
   unsigned char *quant_mat, int mquant);
-void iquant_non_intra (short *src, short *dst,
+void outerIQuan (short *src, short *dst,
   unsigned char *quant_mat, int mquant);
 
 /* ratectl.c */
-void rc_init_seq (void);
-void rc_init_GOP (int np, int nb);
-void rc_init_pict (unsigned char *frame);
-void rc_update_pict (void);
-int rc_start_mb (void);
-int rc_calc_mquant (int j);
-void vbv_end_of_picture (void);
-void calc_vbv_delay (void);
+void feedbackInit (void);
+void GOPControlInit (int np, int nb);
+void picControlInit (unsigned char *frame);
+void updateCalc (void);
+int stepSizeQuantization (void);
+int virtualBufferMeasure (int j);
+void endPictureBitPut (void);
+void delayCalc (void);
 
 /* readpic.c */
-bool readframe (char *fname, unsigned char *frame[],int framenum);
+bool frameReadControl (char *fname, unsigned char *frame[],int framenum);
 
 /* stats.c */
-void calcSNR (unsigned char *org[3], unsigned char *rec[3]);
-void stats (void);
+void calcRatio (unsigned char *org[3], unsigned char *rec[3]);
+void insertStatistics (void);
 
 /* transfrm.c */
-void transform (unsigned char *pred[], unsigned char *cur[],
+void matrixTransform (unsigned char *pred[], unsigned char *cur[],
   struct mbinfo *mbi, short blocks[][64]);
-void itransform (unsigned char *pred[], unsigned char *cur[],
+void matrixInverseTransform (unsigned char *pred[], unsigned char *cur[],
   struct mbinfo *mbi, short blocks[][64]);
-void dct_type_estimation (unsigned char *pred, unsigned char *cur,
+void chooseDCT (unsigned char *pred, unsigned char *cur,
   struct mbinfo *mbi);
 
 /* writepic.c */
-  bool writeframe (char *fname, unsigned char *frame[]);
+  bool reconstructPicture (char *fname, unsigned char *frame[]);
 
 
 /* zig-zag scan */
@@ -300,6 +300,8 @@ EXTERN QString errorTextGlobal;
 EXTERN QVector<QString> warningTextGlobal;
 EXTERN bool putSeqStatus,ifRunning;
 EXTERN int currentFrame,frameAll,currentGroup,currentField;
+
+
 
 /* statictics */
 struct globalStatistics

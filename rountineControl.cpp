@@ -3,10 +3,10 @@
 
 #include <cstdio>
 #include <cstring>
-#include "config.h"
-#include "global.h"
+#include "timeSettings.h"
+#include "commonData.h"
 
-bool putseq()
+bool routineCtrl()
 {
   /* this routine assumes (N % M) == 0 */
   int i, j, k, f, f0, n, np, nb, sxf=0, syf=0, sxb=0, syb=0;
@@ -18,19 +18,19 @@ bool putseq()
   struct timeval tv_start, tv_end;
   double picture_time, total_time = 0;
 
-  rc_init_seq(); /* initialize rate control */
+  feedbackInit(); /* initialize rate control */
 
   /* sequence header, sequence extension and sequence display extension */
-  putseqhdr();
+  mainHeaderAdd();
   if (!mpeg1)
   {
-    putseqext();
-    putseqdispext();
+    seqExtHeaderAdd();
+    seqDispExtHeaderAdd();
   }
 
   /* optionally output some text data (description, copyright or whatever) */
   if (strlen(id_string) > 1)
-    putuserdata(id_string);
+    usrDataHeaderAdd(id_string);
 
   /* loop through all frames in encoding/decoding order */
   for (i=0; i<nframes; i++)
@@ -99,9 +99,9 @@ bool putseq()
         /* number of B frames */
         nb = n - np - 1;
 
-        rc_init_GOP(np,nb);
+        GOPControlInit(np,nb);
 
-        putgophdr(f0,i==0); /* set closed_GOP in first GOP only */
+        GOPHeaderAdd(f0,i==0); /* set closed_GOP in first GOP only */
       }
       else
       {
@@ -190,7 +190,7 @@ bool putseq()
     }
 
     sprintf(name,tplorg,f+frame0);
-    if(readframe(name, neworg, f + frame0)==false)
+    if(frameReadControl(name, neworg, f + frame0)==false)
         return false;
 
     if (fieldpic)
@@ -204,14 +204,14 @@ bool putseq()
 
       pict_struct = topfirst ? TOP_FIELD : BOTTOM_FIELD;
 
-      motion_estimation(oldorgframe[0],neworgframe[0],
+      motionEstimation(oldorgframe[0],neworgframe[0],
                         oldrefframe[0],newrefframe[0],
                         neworg[0],newref[0],
                         sxf,syf,sxb,syb,mbinfo,0,0);
 
-      predict(oldrefframe,newrefframe,predframe,0,mbinfo);
-      dct_type_estimation(predframe[0],neworg[0],mbinfo);
-      transform(predframe,neworg,mbinfo,blocks);
+      mainPredictCtrl(oldrefframe,newrefframe,predframe,0,mbinfo);
+      chooseDCT(predframe[0],neworg[0],mbinfo);
+      matrixTransform(predframe,neworg,mbinfo,blocks);
 
       if(putpict(neworg[0])==false)
           return false;
@@ -220,17 +220,17 @@ bool putseq()
       {
         if (mbinfo[k].mb_type & MB_INTRA)
           for (j=0; j<block_count; j++)
-            iquant_intra(blocks[k*block_count+j],blocks[k*block_count+j],
+            innerIQuan(blocks[k*block_count+j],blocks[k*block_count+j],
                          dc_prec,intra_q,mbinfo[k].mquant);
         else
           for (j=0;j<block_count;j++)
-            iquant_non_intra(blocks[k*block_count+j],blocks[k*block_count+j],
+            outerIQuan(blocks[k*block_count+j],blocks[k*block_count+j],
                              inter_q,mbinfo[k].mquant);
       }
 
-      itransform(predframe,newref,mbinfo,blocks);
-      calcSNR(neworg,newref);
-      stats();
+      matrixInverseTransform(predframe,newref,mbinfo,blocks);
+      calcRatio(neworg,newref);
+      insertStatistics();
 
       if (!quiet)
       {
@@ -253,14 +253,14 @@ bool putseq()
         syf = motion_data[0].syf;
       }
 
-      motion_estimation(oldorgframe[0],neworgframe[0],
+      motionEstimation(oldorgframe[0],neworgframe[0],
                         oldrefframe[0],newrefframe[0],
                         neworg[0],newref[0],
                         sxf,syf,sxb,syb,mbinfo,1,ipflag);
 
-      predict(oldrefframe,newrefframe,predframe,1,mbinfo);
-      dct_type_estimation(predframe[0],neworg[0],mbinfo);
-      transform(predframe,neworg,mbinfo,blocks);
+      mainPredictCtrl(oldrefframe,newrefframe,predframe,1,mbinfo);
+      chooseDCT(predframe[0],neworg[0],mbinfo);
+      matrixTransform(predframe,neworg,mbinfo,blocks);
 
       if(putpict(neworg[0])==false)
           return false;
@@ -269,17 +269,17 @@ bool putseq()
       {
         if (mbinfo[k].mb_type & MB_INTRA)
           for (j=0; j<block_count; j++)
-            iquant_intra(blocks[k*block_count+j],blocks[k*block_count+j],
+            innerIQuan(blocks[k*block_count+j],blocks[k*block_count+j],
                          dc_prec,intra_q,mbinfo[k].mquant);
         else
           for (j=0;j<block_count;j++)
-            iquant_non_intra(blocks[k*block_count+j],blocks[k*block_count+j],
+            outerIQuan(blocks[k*block_count+j],blocks[k*block_count+j],
                              inter_q,mbinfo[k].mquant);
       }
 
-      itransform(predframe,newref,mbinfo,blocks);
-      calcSNR(neworg,newref);
-      stats();
+      matrixInverseTransform(predframe,newref,mbinfo,blocks);
+      calcRatio(neworg,newref);
+      insertStatistics();
     }
     else
     {
@@ -291,14 +291,14 @@ bool putseq()
        * and reconstructed frames (...refframe) for half pel search
        */
 
-      motion_estimation(oldorgframe[0],neworgframe[0],
+      motionEstimation(oldorgframe[0],neworgframe[0],
                         oldrefframe[0],newrefframe[0],
                         neworg[0],newref[0],
                         sxf,syf,sxb,syb,mbinfo,0,0);
 
-      predict(oldrefframe,newrefframe,predframe,0,mbinfo);
-      dct_type_estimation(predframe[0],neworg[0],mbinfo);
-      transform(predframe,neworg,mbinfo,blocks);
+      mainPredictCtrl(oldrefframe,newrefframe,predframe,0,mbinfo);
+      chooseDCT(predframe[0],neworg[0],mbinfo);
+      matrixTransform(predframe,neworg,mbinfo,blocks);
 
       if(putpict(neworg[0])==false)
           return false;
@@ -307,17 +307,17 @@ bool putseq()
       {
         if (mbinfo[k].mb_type & MB_INTRA)
           for (j=0; j<block_count; j++)
-            iquant_intra(blocks[k*block_count+j],blocks[k*block_count+j],
+            innerIQuan(blocks[k*block_count+j],blocks[k*block_count+j],
                          dc_prec,intra_q,mbinfo[k].mquant);
         else
           for (j=0;j<block_count;j++)
-            iquant_non_intra(blocks[k*block_count+j],blocks[k*block_count+j],
+            outerIQuan(blocks[k*block_count+j],blocks[k*block_count+j],
                              inter_q,mbinfo[k].mquant);
       }
 
-      itransform(predframe,newref,mbinfo,blocks);
-      calcSNR(neworg,newref);
-      stats();
+      matrixInverseTransform(predframe,newref,mbinfo,blocks);
+      calcRatio(neworg,newref);
+      insertStatistics();
     }
 
 	gettimeofday(&tv_end, NULL);
@@ -329,7 +329,7 @@ bool putseq()
     tmpPicture.pictureTime=picture_time;
 
     sprintf(name,tplref,f+frame0);
-    if(writeframe(name,newref)==false)
+    if(reconstructPicture(name,newref)==false)
         return false;
 
   }
@@ -339,7 +339,7 @@ bool putseq()
     globalDATA.nframes=nframes;
     globalDATA.fps=nframes*1000000/total_time;
 
-  putseqend();
+  fileEndAdd();
 
   return true;
 }

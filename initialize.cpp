@@ -6,10 +6,10 @@
 #include <cstdlib>
 
 #define GLOBAL /* used by global.h */
-#include "config.h"
-#include "global.h"
-#include <QString>
 
+#include "commonData.h"
+#include <QString>
+#include "timeSettings.h"
 /* private prototypes */
 
 bool init()
@@ -17,9 +17,9 @@ bool init()
   int i, size;
   static int block_count_tab[3] = {6,8,12};
 
-  initbits();
+  writeInit();
   init_fdct();
-  init_idct();
+  initIdct();
 
   /* round picture dimensions to nearest multiple of 16 or 32 */
   mb_width = (horizontal_size+15)/16;

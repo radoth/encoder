@@ -1,8 +1,8 @@
 /* idct.c, 反向快速离散余弦变换*/
 
+#include "timeSettings.h"
 
 
-#include "config.h"
 
 #define W1 2841 /* 2048*sqrt(2)*cos(1*pi/16) */
 #define W2 2676 /* 2048*sqrt(2)*cos(2*pi/16) */
@@ -12,7 +12,7 @@
 #define W7 565  /* 2048*sqrt(2)*cos(7*pi/16) */
 
 
-void init_idct (void);
+void initIdct (void);
 void idct (short *block);
 
 
@@ -159,7 +159,7 @@ void idct(short *block)//二维逆向DCT变换,block是需要做反变换的数�
     idctcol(block+i);
 }
 
-void init_idct()
+void initIdct()
 {
   int i;
 

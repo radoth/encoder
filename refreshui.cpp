@@ -1,5 +1,5 @@
 #include "refreshui.h"
-#include "global.h"
+#include "commonData.h"
 
 RefreshUI::RefreshUI()
 {
