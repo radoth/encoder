@@ -1,13 +1,10 @@
 /* 变长编码表*/
 
-
 typedef struct
 {
   unsigned char code;
   char len;
 } VLCtable;
-
-/* 除了前导0以外长度大于一个字节的编码 */
 typedef struct
 {
   unsigned short code;
@@ -29,11 +26,6 @@ static VLCtable addrinctab[33]=
   {0x18,11}
 };
 
-
-/* Table B-2, B-3, B-4 variable length codes for macroblock_type
- *
- * indexed by [macroblock_type]
- */
 
 static VLCtable mbtypetab[3][32]=
 {
@@ -60,18 +52,6 @@ static VLCtable mbtypetab[3][32]=
  }
 };
 
-
-/* Table B-5 ... B-8 variable length codes for macroblock_type in
- *  scalable sequences
- *
- * not implemented
- */
-
-/* Table B-9, variable length codes for coded_block_pattern
- *
- * indexed by [coded_block_pattern]
- */
-
 static VLCtable cbptable[64]=
 {
   {0x01,9}, {0x0b,5}, {0x09,5}, {0x0d,6}, 
@@ -92,13 +72,6 @@ static VLCtable cbptable[64]=
   {0x07,3}, {0x0a,5}, {0x08,5}, {0x0c,6}
 };
 
-
-/* Table B-10, variable length codes for motion_code
- *
- * indexed by [abs(motion_code)]
- * sign of motion_code is treated elsewhere
- */
-
 static VLCtable motionvectab[17]=
 {
   {0x01,1},  {0x01,2},  {0x01,3},  {0x01,4},
@@ -108,28 +81,12 @@ static VLCtable motionvectab[17]=
   {0x0c,10}
 };
 
-
-/* Table B-11, variable length codes for dmvector
- *
- * treated elsewhere
- */
-
-/* Table B-12, variable length codes for dct_dc_size_luminance
- *
- * indexed by [dct_dc_size_luminance]
- */
-
 static sVLCtable DClumtab[12]=
 {
   {0x0004,3}, {0x0000,2}, {0x0001,2}, {0x0005,3}, {0x0006,3}, {0x000e,4},
   {0x001e,5}, {0x003e,6}, {0x007e,7}, {0x00fe,8}, {0x01fe,9}, {0x01ff,9}
 };
 
-
-/* Table B-13, variable length codes for dct_dc_size_chrominance
- *
- * indexed by [dct_dc_size_chrominance]
- */
 
 static sVLCtable DCchromtab[12]=
 {
@@ -138,17 +95,8 @@ static sVLCtable DCchromtab[12]=
 };
 
 
-/* Table B-14, DCT coefficients table zero
- *
- * indexed by [run][level-1]
- * split into two tables (dct_code_tab1, dct_code_tab2) to reduce size
- * 'first DCT coefficient' condition and 'End of Block' are treated elsewhere
- * codes do not include s (sign bit)
- */
-
-static VLCtable dct_code_tab1[2][40]=
+static VLCtable dctCodeTab1[2][40]=
 {
- /* run = 0, level = 1...40 */
  {
   {0x03, 2}, {0x04, 4}, {0x05, 5}, {0x06, 7},
   {0x26, 8}, {0x21, 8}, {0x0a,10}, {0x1d,12},
@@ -161,7 +109,6 @@ static VLCtable dct_code_tab1[2][40]=
   {0x17,15}, {0x16,15}, {0x15,15}, {0x14,15},
   {0x13,15}, {0x12,15}, {0x11,15}, {0x10,15}
  },
- /* run = 1, level = 1...18 */
  {
   {0x03, 3}, {0x06, 6}, {0x25, 8}, {0x0c,10},
   {0x1b,12}, {0x16,13}, {0x15,13}, {0x1f,15},
@@ -176,9 +123,8 @@ static VLCtable dct_code_tab1[2][40]=
  }
 };
 
-static VLCtable dct_code_tab2[30][5]=
+static VLCtable dctCodeTab2[30][5]=
 {
-  /* run = 2...31, level = 1...5 */
   {{0x05, 4}, {0x04, 7}, {0x0b,10}, {0x14,12}, {0x14,13}},
   {{0x07, 5}, {0x24, 8}, {0x1c,12}, {0x13,13}, {0x00, 0}},
   {{0x06, 5}, {0x0f,10}, {0x12,12}, {0x00, 0}, {0x00, 0}},
@@ -212,17 +158,8 @@ static VLCtable dct_code_tab2[30][5]=
 };
 
 
-/* Table B-15, DCT coefficients table one
- *
- * indexed by [run][level-1]
- * split into two tables (dct_code_tab1a, dct_code_tab2a) to reduce size
- * 'End of Block' is treated elsewhere
- * codes do not include s (sign bit)
- */
-
-static VLCtable dct_code_tab1a[2][40]=
+static VLCtable dctCodeTab1a[2][40]=
 {
- /* run = 0, level = 1...40 */
  {
   {0x02, 2}, {0x06, 3}, {0x07, 4}, {0x1c, 5},
   {0x1d, 5}, {0x05, 6}, {0x04, 6}, {0x7b, 7},
@@ -235,7 +172,6 @@ static VLCtable dct_code_tab1a[2][40]=
   {0x17,15}, {0x16,15}, {0x15,15}, {0x14,15},
   {0x13,15}, {0x12,15}, {0x11,15}, {0x10,15}
  },
- /* run = 1, level = 1...18 */
  {
   {0x02, 3}, {0x06, 5}, {0x79, 7}, {0x27, 8},
   {0x20, 8}, {0x16,13}, {0x15,13}, {0x1f,15},
@@ -250,9 +186,8 @@ static VLCtable dct_code_tab1a[2][40]=
  }
 };
 
-static VLCtable dct_code_tab2a[30][5]=
+static VLCtable dctCodeTab2a[30][5]=
 {
-  /* run = 2...31, level = 1...5 */
   {{0x05, 5}, {0x07, 7}, {0xfc, 8}, {0x0c,10}, {0x14,13}},
   {{0x07, 5}, {0x26, 8}, {0x1c,12}, {0x13,13}, {0x00, 0}},
   {{0x06, 6}, {0xfd, 8}, {0x12,12}, {0x00, 0}, {0x00, 0}},

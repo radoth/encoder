@@ -1,12 +1,12 @@
-/* 比特输出                                             */
+/* 比特输出*/
 
 
 #include <cstdio>
 
 #include "timeSettings.h"
-extern FILE *outfile; /* the only global var we need here */
+extern FILE *outfile;
 
-/* private data */
+
 static unsigned char outbfr;
 static int outcnt;
 static int bytecnt;

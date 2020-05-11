@@ -38,22 +38,22 @@ static void actjDetermine(unsigned char *frame)
 
   k = 0;
 
-  for (j=0; j<height2; j+=16)
+  for (j=0; j<pictureHeight; j+=16)
     for (i=0; i<width; i+=16)
     {
-      p = frame + ((pict_struct==BOTTOM_FIELD)?width:0) + i + width2*j;
+      p = frame + ((pictStruct==BOTTOM_FIELD)?width:0) + i + pictureWidth*j;
 
       /* take minimum spatial activity measure of luminance blocks */
 
-      actj = varianceCalc(p,width2);
-      var = varianceCalc(p+8,width2);
+      actj = varianceCalc(p,pictureWidth);
+      var = varianceCalc(p+8,pictureWidth);
       if (var<actj) actj = var;
-      var = varianceCalc(p+8*width2,width2);
+      var = varianceCalc(p+8*pictureWidth,pictureWidth);
       if (var<actj) actj = var;
-      var = varianceCalc(p+8*width2+8,width2);
+      var = varianceCalc(p+8*pictureWidth+8,pictureWidth);
       if (var<actj) actj = var;
 
-      if (!fieldpic && !prog_seq)
+      if (!fieldPicFlag && !progSeq)
       {
         /* field */
         var = varianceCalc(p,width<<1);
@@ -68,7 +68,7 @@ static void actjDetermine(unsigned char *frame)
 
       actj+= 1.0;
 
-      mbinfo[k++].act = actj;
+      MacroBlockInfo[k++].act = actj;
     }
 }
 
@@ -84,7 +84,7 @@ static int prev_mquant;
 void feedbackInit()
 {
   /* reaction parameter (constant) */
-  if (r==0)  r = (int)floor(2.0*bit_rate/frame_rate + 0.5);
+  if (r==0)  r = (int)floor(2.0*bitRate/frameRate + 0.5);
 
   /* average activity */
   if (avg_act==0.0)  avg_act = 400.0;
@@ -93,9 +93,9 @@ void feedbackInit()
   R = 0;
 
   /* global complexity measure */
-  if (Xi==0) Xi = (int)floor(160.0*bit_rate/115.0 + 0.5);
-  if (Xp==0) Xp = (int)floor( 60.0*bit_rate/115.0 + 0.5);
-  if (Xb==0) Xb = (int)floor( 42.0*bit_rate/115.0 + 0.5);
+  if (Xi==0) Xi = (int)floor(160.0*bitRate/115.0 + 0.5);
+  if (Xp==0) Xp = (int)floor( 60.0*bitRate/115.0 + 0.5);
+  if (Xb==0) Xb = (int)floor( 42.0*bitRate/115.0 + 0.5);
 
   /* virtual buffer fullness */
   if (d0i==0) d0i = (int)floor(10.0*r/31.0 + 0.5);
@@ -128,9 +128,9 @@ void feedbackInit()
 
 void GOPControlInit(int np,int nb)
 {
-  R += (int) floor((1 + np + nb) * bit_rate / frame_rate + 0.5);
-  Np = fieldpic ? 2*np+1 : np;
-  Nb = fieldpic ? 2*nb : nb;
+  R += (int) floor((1 + np + nb) * bitRate / frameRate + 0.5);
+  Np = fieldPicFlag ? 2*np+1 : np;
+  Nb = fieldPicFlag ? 2*nb : nb;
 
   //fprintf(statfile,"\nrate control: new group of pictures (GOP)\n");
   //fprintf(statfile," target number of bits for GOP: R=%d\n",R);
@@ -150,7 +150,7 @@ void picControlInit(unsigned char *frame)
 {
   double Tmin;
 
-  switch (pict_type)
+  switch (pictType)
   {
   case I_TYPE:
     T = (int) floor(R/(1.0+Np*Xp/(Xi*1.0)+Nb*Xb/(Xi*1.4)) + 0.5);
@@ -166,7 +166,7 @@ void picControlInit(unsigned char *frame)
     break;
   }
 
-  Tmin = (int) floor(bit_rate/(8.0*frame_rate) + 0.5);
+  Tmin = (int) floor(bitRate/(8.0*frameRate) + 0.5);
 
   if (T<Tmin)
     T = Tmin;
@@ -190,11 +190,11 @@ void updateCalc()
 
   S = dataCount() - S; /* total # of bits in picture */
   R-= S; /* remaining # of bits in GOP */
-  X = (int) floor(S*((0.5*(double)Q)/(mb_width*mb_height2)) + 0.5);
+  X = (int) floor(S*((0.5*(double)Q)/(macroBlockWidth*mbHeight2)) + 0.5);
   d+= S - T;
-  avg_act = actsum/(mb_width*mb_height2);
+  avg_act = actsum/(macroBlockWidth*mbHeight2);
 
-  switch (pict_type)
+  switch (pictType)
   {
   case I_TYPE:
     Xi = X;
@@ -227,7 +227,7 @@ void updateCalc()
   //fprintf(statfile," remaining number of B pictures in GOP: Nb=%d\n",Nb);
   //fprintf(statfile," average activity: avg_act=%.1f\n", avg_act);
   tmpPicture.actualBits=S;
-  tmpPicture.avgQuanPara=(double)Q/(mb_width*mb_height2);
+  tmpPicture.avgQuanPara=(double)Q/(macroBlockWidth*mbHeight2);
   tmpPicture.reaminNumberGOP=R;
   tmpPicture.Xi=Xi;
   tmpPicture.Xp=Xp;
@@ -245,7 +245,7 @@ int stepSizeQuantization()
 {
   int mquant;
 
-  if (q_scale_type)
+  if (qScaleType)
   {
     mquant = (int) floor(2.0*d*31.0/r + 0.5);
 
@@ -256,7 +256,7 @@ int stepSizeQuantization()
       mquant = 112;
 
     /* map to legal quantization level */
-    mquant = non_linear_mquant_table[map_non_linear_mquant[mquant]];
+    mquant = nonLinearMquantTable[mapNonLinearMquant[mquant]];
   }
   else
   {
@@ -287,19 +287,19 @@ int virtualBufferMeasure(int j)
   double dj, Qj, actj, N_actj;
 
   /* measure virtual buffer discrepancy from uniform distribution model */
-  dj = d + (dataCount()-S) - j*(T/(mb_width*mb_height2));
+  dj = d + (dataCount()-S) - j*(T/(macroBlockWidth*mbHeight2));
 
   /* scale against dynamic range of mquant and the bits/picture count */
   Qj = dj*31.0/r;
 /*Qj = dj*(q_scale_type ? 56.0 : 31.0)/r;  */
 
-  actj = mbinfo[j].act;
+  actj = MacroBlockInfo[j].act;
   actsum+= actj;
 
   /* compute normalized activity */
   N_actj = (2.0*actj+avg_act)/(actj+2.0*avg_act);
 
-  if (q_scale_type)
+  if (qScaleType)
   {
     /* modulate mquant with combined buffer and local activity measures */
     mquant = (int) floor(2.0*Qj*N_actj + 0.5);
@@ -311,7 +311,7 @@ int virtualBufferMeasure(int j)
       mquant = 112;
 
     /* map to legal quantization level */
-    mquant = non_linear_mquant_table[map_non_linear_mquant[mquant]];
+    mquant = nonLinearMquantTable[mapNonLinearMquant[mquant]];
   }
   else
   {
@@ -378,49 +378,49 @@ void delayCalc()
   static double decoding_time;
 
   /* number of 1/90000 s ticks until next picture is to be decoded */
-  if (pict_type == B_TYPE)
+  if (pictType == B_TYPE)
   {
-    if (prog_seq)
+    if (progSeq)
     {
-      if (!repeatfirst)
-        picture_delay = 90000.0/frame_rate; /* 1 frame */
+      if (!ifRepeatFirstFlag)
+        picture_delay = 90000.0/frameRate; /* 1 frame */
       else
       {
-        if (!topfirst)
-          picture_delay = 90000.0*2.0/frame_rate; /* 2 frames */
+        if (!topFirstFlag)
+          picture_delay = 90000.0*2.0/frameRate; /* 2 frames */
         else
-          picture_delay = 90000.0*3.0/frame_rate; /* 3 frames */
+          picture_delay = 90000.0*3.0/frameRate; /* 3 frames */
       }
     }
     else
     {
       /* interlaced */
-      if (fieldpic)
-        picture_delay = 90000.0/(2.0*frame_rate); /* 1 field */
+      if (fieldPicFlag)
+        picture_delay = 90000.0/(2.0*frameRate); /* 1 field */
       else
       {
-        if (!repeatfirst)
-          picture_delay = 90000.0*2.0/(2.0*frame_rate); /* 2 flds */
+        if (!ifRepeatFirstFlag)
+          picture_delay = 90000.0*2.0/(2.0*frameRate); /* 2 flds */
         else
-          picture_delay = 90000.0*3.0/(2.0*frame_rate); /* 3 flds */
+          picture_delay = 90000.0*3.0/(2.0*frameRate); /* 3 flds */
       }
     }
   }
   else
   {
     /* I or P picture */
-    if (fieldpic)
+    if (fieldPicFlag)
     {
-      if(topfirst==(pict_struct==TOP_FIELD))
+      if(topFirstFlag==(pictStruct==TOP_FIELD))
       {
         /* first field */
-        picture_delay = 90000.0/(2.0*frame_rate);
+        picture_delay = 90000.0/(2.0*frameRate);
       }
       else
       {
         /* second field */
         /* take frame reordering delay into account */
-        picture_delay = next_ip_delay - 90000.0/(2.0*frame_rate);
+        picture_delay = next_ip_delay - 90000.0/(2.0*frameRate);
       }
     }
     else
@@ -430,31 +430,31 @@ void delayCalc()
       picture_delay = next_ip_delay;
     }
 
-    if (!fieldpic || topfirst!=(pict_struct==TOP_FIELD))
+    if (!fieldPicFlag || topFirstFlag!=(pictStruct==TOP_FIELD))
     {
       /* frame picture or second field */
-      if (prog_seq)
+      if (progSeq)
       {
-        if (!repeatfirst)
-          next_ip_delay = 90000.0/frame_rate;
+        if (!ifRepeatFirstFlag)
+          next_ip_delay = 90000.0/frameRate;
         else
         {
-          if (!topfirst)
-            next_ip_delay = 90000.0*2.0/frame_rate;
+          if (!topFirstFlag)
+            next_ip_delay = 90000.0*2.0/frameRate;
           else
-            next_ip_delay = 90000.0*3.0/frame_rate;
+            next_ip_delay = 90000.0*3.0/frameRate;
         }
       }
       else
       {
-        if (fieldpic)
-          next_ip_delay = 90000.0/(2.0*frame_rate);
+        if (fieldPicFlag)
+          next_ip_delay = 90000.0/(2.0*frameRate);
         else
         {
-          if (!repeatfirst)
-            next_ip_delay = 90000.0*2.0/(2.0*frame_rate);
+          if (!ifRepeatFirstFlag)
+            next_ip_delay = 90000.0*2.0/(2.0*frameRate);
           else
-            next_ip_delay = 90000.0*3.0/(2.0*frame_rate);
+            next_ip_delay = 90000.0*3.0/(2.0*frameRate);
         }
       }
     }
@@ -464,22 +464,22 @@ void delayCalc()
   {
     /* first call of calc_vbv_delay */
     /* we start with a 7/8 filled VBV buffer (12.5% back-off) */
-    picture_delay = ((vbv_buffer_size*16384*7)/8)*90000.0/bit_rate;
-    if (fieldpic)
-      next_ip_delay = (int)(90000.0/frame_rate+0.5);
+    picture_delay = ((VBVBufferSize*16384*7)/8)*90000.0/bitRate;
+    if (fieldPicFlag)
+      next_ip_delay = (int)(90000.0/frameRate+0.5);
   }
 
   /* VBV checks */
 
   /* check for underflow (previous picture) */
-  if (!low_delay && (decoding_time < bitcnt_EOP*90000.0/bit_rate))
+  if (!lowDelayFlag && (decoding_time < bitcnt_EOP*90000.0/bitRate))
   {
     /* picture not completely in buffer at intended decoding time */
     if (!quiet)
       {
         //fprintf(stderr,"vbv_delay underflow! (decoding_time=%.1f, t_EOP=%.1f\n)",
         //decoding_time, bitcnt_EOP*90000.0/bit_rate);
-        warningTextGlobal.append(QString("vbv_delay 下溢。 (解码时间= %1 , t_EOP= %2 )").arg(decoding_time).arg(bitcnt_EOP*90000.0/bit_rate));
+        warningTextGlobal.append(QString("vbv_delay 下溢。 (解码时间= %1 , t_EOP= %2 )").arg(decoding_time).arg(bitcnt_EOP*90000.0/bitRate));
     }
   }
 
@@ -487,11 +487,11 @@ void delayCalc()
   decoding_time += picture_delay;
 
   /* warning: bitcount() may overflow (e.g. after 9 min. at 8 Mbit/s */
-  vbv_delay = (int)(decoding_time - dataCount()*90000.0/bit_rate);
+  VBVDelay = (int)(decoding_time - dataCount()*90000.0/bitRate);
 
   /* check for overflow (current picture) */
-  if ((decoding_time - bitcnt_EOP*90000.0/bit_rate)
-      > (vbv_buffer_size*16384)*90000.0/bit_rate)
+  if ((decoding_time - bitcnt_EOP*90000.0/bitRate)
+      > (VBVBufferSize*16384)*90000.0/bitRate)
   {
     if (!quiet)
       {
@@ -503,28 +503,28 @@ void delayCalc()
   //fprintf(statfile,
     //"\nvbv_delay=%d (bitcount=%d, decoding_time=%.2f, bitcnt_EOP=%d)\n",
     //vbv_delay,bitcount(),decoding_time,bitcnt_EOP);
-  tmpPicture.vbvDelay=vbv_delay;
+  tmpPicture.vbvDelay=VBVDelay;
   tmpPicture.bitcount=dataCount();
   tmpPicture.vbvDcdTime=decoding_time;
   tmpPicture.bitcnt_EOP=bitcnt_EOP;
 
-  if (vbv_delay<0)
+  if (VBVDelay<0)
   {
     if (!quiet)
       {
         //fprintf(stderr,"vbv_delay underflow: %d\n",vbv_delay);
-        warningTextGlobal.append(QString("vbv_delay 下溢: vbv delay: %1").arg(vbv_delay));
+        warningTextGlobal.append(QString("vbv_delay 下溢: vbv delay: %1").arg(VBVDelay));
     }
-    vbv_delay = 0;
+    VBVDelay = 0;
   }
 
-  if (vbv_delay>65535)
+  if (VBVDelay>65535)
   {
     if (!quiet)
       {
         //fprintf(stderr,"vbv_delay overflow: %d\n",vbv_delay);
-        warningTextGlobal.append(QString("vbv_delay 上溢： vbv delay: %1").arg(vbv_delay));
+        warningTextGlobal.append(QString("vbv_delay 上溢： vbv delay: %1").arg(VBVDelay));
     }
-    vbv_delay = 65535;
+    VBVDelay = 65535;
   }
 }

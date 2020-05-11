@@ -14,7 +14,7 @@ static bool dcGenerate(sVLCtable *tab,int val)
 
   absval = (val<0) ? -val : val; /* 生成绝对值 */
 
-  if (absval>2047 || (mpeg1 && absval>255))     //遇到不合法的直流系数，报错
+  if (absval>2047 || (mpeg1Flag && absval>255))     //遇到不合法的直流系数，报错
   {
     sprintf(errortext,"DC value out of range (%d)\n",val);
     {error(errortext);return false;}
@@ -78,7 +78,7 @@ bool acGenerateElse(int run,int signed_level,int vlcformat)
   level = (signed_level<0) ? -signed_level : signed_level; /* 对 signed_level 取绝对值 */
 
   /* 要保证游程和级别（level）有效 */
-  if (run<0 || run>63 || level==0 || level>2047 || (mpeg1 && level>255))     //在越界时报错
+  if (run<0 || run>63 || level==0 || level>2047 || (mpeg1Flag && level>255))     //在越界时报错
   {
     sprintf(errortext,"AC value out of range (run=%d, signed_level=%d)\n",
       run,signed_level);
@@ -91,9 +91,9 @@ bool acGenerateElse(int run,int signed_level,int vlcformat)
   {
     /* 根据vlcformat 选择采用表B-14 还是 B-15 */
 	  if (vlcformat)
-      ptab = &dct_code_tab1a[run][level-1];
+      ptab = &dctCodeTab1a[run][level-1];
     else
-      ptab = &dct_code_tab1[run][level-1];
+      ptab = &dctCodeTab1[run][level-1];
 
     len = ptab->len;
   }
@@ -101,9 +101,9 @@ bool acGenerateElse(int run,int signed_level,int vlcformat)
   {
     /* 根据vlcformat 选择采用表B-14 还是 B-15 */
 	  if (vlcformat)
-      ptab = &dct_code_tab2a[run-2][level-1];
+      ptab = &dctCodeTab2a[run-2][level-1];
     else
-      ptab = &dct_code_tab2[run-2][level-1];
+      ptab = &dctCodeTab2[run-2][level-1];
 
     len = ptab->len;
   }
@@ -118,7 +118,7 @@ bool acGenerateElse(int run,int signed_level,int vlcformat)
         /* 说明对这个中间格式 (run, level) 没有VLC编码:：使用escape编码 */
     writeData(1l,6); /* Escape */
     writeData(run,6); /* 用6 bit 表示游程（run ）*/
-    if (mpeg1)
+    if (mpeg1Flag)
     {
       /* ISO/IEC 11172-2 规定使用 8 或 16 bit 的代码 */
 		if (signed_level>127)

@@ -70,7 +70,7 @@ int innerQuan(short *src,short *dst,int dc_prec,unsigned char *quant_mat,int mqu
 /*若超过上限则进行削波处理*/
     if (y > 255)//对量化结果进行限制，以节约bit，mpeg1和mpeg2有不同的量化限制
     {
-      if (mpeg1)
+      if (mpeg1Flag)
         y = 255;
       else if (y > 2047)
         y = 2047;
@@ -102,7 +102,7 @@ int crossQuan(short *src,short *dst,unsigned char *quant_mat,int mquant)
     /* clip to syntax limits */
     if (y > 255)
     {
-      if (mpeg1)
+      if (mpeg1Flag)
         y = 255;
       else if (y > 2047)
         y = 2047;
@@ -122,7 +122,7 @@ void innerIQuan(short *src,short *dst,int dc_prec,unsigned char *quant_mat,int m
   int i, val, sum;
 
 /*由于要求MPEG-2向下兼容，因此对于MPEG-1量化方式，采取相应的算法*/
-  if (mpeg1)//如果是mpeg1，调用mpeg1的反量化函数
+  if (mpeg1Flag)//如果是mpeg1，调用mpeg1的反量化函数
     innerSubQuan(src,dst,dc_prec,quant_mat,mquant);
   else
       //mpeg2的量化
@@ -149,7 +149,7 @@ void outerIQuan(short *src,short *dst,unsigned char *quant_mat,int mquant)
     //帧间反量化
   int i, val, sum;
 
-  if (mpeg1)//如果是mpeg1,调用mpeg1的帧间反量化函数
+  if (mpeg1Flag)//如果是mpeg1,调用mpeg1的帧间反量化函数
     crossSubQuan(src,dst,quant_mat,mquant);
   else
       //mpeg2的反量化

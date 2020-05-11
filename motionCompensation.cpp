@@ -112,9 +112,9 @@ static void primaryComp(unsigned char *src,unsigned char *dst,int lx,int w,int h
 
 static void diffMotionVectorCalc(int DMV[][2],int *dmvector,int mvx,int mvy)
 {
-  if (pict_struct==FRAME_PICTURE)
+  if (pictStruct==FRAME_PICTURE)
   {
-    if (topfirst)
+    if (topFirstFlag)
     {
       /* vector for prediction of top field from bottom field */
       DMV[0][0] = ((mvx  +(mvx>0))>>1) + dmvector[0];
@@ -142,7 +142,7 @@ static void diffMotionVectorCalc(int DMV[][2],int *dmvector,int mvx,int mvy)
     DMV[0][1] = ((mvy+(mvy>0))>>1) + dmvector[1];
 
     /* correct for vertical field shift */
-    if (pict_struct==TOP_FIELD)
+    if (pictStruct==TOP_FIELD)
       DMV[0][1]--;
     else
       DMV[0][1]++;
@@ -156,45 +156,45 @@ static void blockClear(unsigned char *cur[],int i0,int j0)
   int i, j, w, h;
   unsigned char *p;
 
-  p = cur[0] + ((pict_struct==BOTTOM_FIELD) ? width : 0) + i0 + width2*j0;
+  p = cur[0] + ((pictStruct==BOTTOM_FIELD) ? width : 0) + i0 + pictureWidth*j0;
 
   for (j=0; j<16; j++)
   {
     for (i=0; i<16; i++)
       p[i] = 128;
-    p+= width2;
+    p+= pictureWidth;
   }
 
   w = h = 16;
 
-  if (chroma_format!=CHROMA444)
+  if (chromaFormat!=CHROMA444)
   {
     i0>>=1; w>>=1;
   }
 
-  if (chroma_format==CHROMA420)
+  if (chromaFormat==CHROMA420)
   {
     j0>>=1; h>>=1;
   }
 
-  p = cur[1] + ((pict_struct==BOTTOM_FIELD) ? chrom_width : 0) + i0
-             + chrom_width2*j0;
+  p = cur[1] + ((pictStruct==BOTTOM_FIELD) ? chromWidth : 0) + i0
+             + chromWidth2*j0;
 
   for (j=0; j<h; j++)
   {
     for (i=0; i<w; i++)
       p[i] = 128;
-    p+= chrom_width2;
+    p+= chromWidth2;
   }
 
-  p = cur[2] + ((pict_struct==BOTTOM_FIELD) ? chrom_width : 0) + i0
-             + chrom_width2*j0;
+  p = cur[2] + ((pictStruct==BOTTOM_FIELD) ? chromWidth : 0) + i0
+             + chromWidth2*j0;
 
   for (j=0; j<h; j++)
   {
     for (i=0; i<w; i++)
       p[i] = 128;
-    p+= chrom_width2;
+    p+= chromWidth2;
   }
 }
 
@@ -222,12 +222,12 @@ static void blockPredict(unsigned char *src[],int sfield,unsigned char *dst[],in
     if (cc==1)
     {
       /* scale for color components */
-      if (chroma_format==CHROMA420)
+      if (chromaFormat==CHROMA420)
       {
         /* vertical */
         h >>= 1; y >>= 1; dy /= 2;
       }
-      if (chroma_format!=CHROMA444)
+      if (chromaFormat!=CHROMA444)
       {
         /* horizontal */
         w >>= 1; x >>= 1; dx /= 2;
@@ -469,19 +469,19 @@ static void macroBlockPredict(unsigned char *oldref[],unsigned char *newref[],un
 
  */
 
-void mainPredictCtrl(unsigned char *reff[],unsigned char *refb[],unsigned char *cur[3],int secondfield,struct mbinfo *mbi)
+void mainPredictCtrl(unsigned char *reff[],unsigned char *refb[],unsigned char *cur[3],int secondfield,struct MacroBlockInfo *mbi)
 {
   int i, j, k;
 
   k = 0;
 
   /* 对所有的宏块进行循环 */
-  for (j=0; j<height2; j+=16)
+  for (j=0; j<pictureHeight; j+=16)
     for (i=0; i<width; i+=16)
     {
-      macroBlockPredict(reff,refb,cur,width,i,j,pict_type,pict_struct,
-                 mbi[k].mb_type,mbi[k].motion_type,secondfield,
-                 mbi[k].MV,mbi[k].mv_field_sel,mbi[k].dmvector);
+      macroBlockPredict(reff,refb,cur,width,i,j,pictType,pictStruct,
+                 mbi[k].blockType,mbi[k].motionType,secondfield,
+                 mbi[k].MV,mbi[k].mvFieldSel,mbi[k].dmvector);
 
       k++;
     }

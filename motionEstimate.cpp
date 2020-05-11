@@ -426,7 +426,7 @@ static void framePredict(unsigned char *ref,unsigned char *mb,int i,int j,int im
         /* mvxs and mvys scaling*/
         is<<=1;
         js<<=1;
-        if (topfirst == ppred)
+        if (topFirstFlag == ppred)
         {
           /* second field: scale by 1/3 */
           is = (is>=0) ? (is+1)/3 : -((-is+1)/3);
@@ -437,7 +437,7 @@ static void framePredict(unsigned char *ref,unsigned char *mb,int i,int j,int im
       }
 
       /* vector for prediction from field of opposite 'parity' */
-      if (topfirst)
+      if (topFirstFlag)
       {
         /* vector for prediction of top field from bottom field */
         it0 = ((is+(is>0))>>1);
@@ -633,8 +633,8 @@ static void fieldEstimate(unsigned char *toporg,unsigned char *topref,unsigned c
   int dt, db, imint, jmint, iminb, jminb, notop, nobot;
 
   /* if ipflag is set, predict from field of opposite parity only */
-  notop = ipflag && (pict_struct==TOP_FIELD);
-  nobot = ipflag && (pict_struct==BOTTOM_FIELD);
+  notop = ipflag && (pictStruct==TOP_FIELD);
+  nobot = ipflag && (pictStruct==BOTTOM_FIELD);
 
   /* field prediction */
 
@@ -655,7 +655,7 @@ static void fieldEstimate(unsigned char *toporg,unsigned char *topref,unsigned c
                     &iminb,&jminb);
 
   /* same parity prediction (only valid if ipflag==0) */
-  if (pict_struct==TOP_FIELD)
+  if (pictStruct==TOP_FIELD)
   {
     *iminsp = imint; *jminsp = jmint; *dsp = dt;
   }
@@ -733,7 +733,7 @@ static void fieldEstimate(unsigned char *toporg,unsigned char *topref,unsigned c
 
 
 
-static void frame_ME(unsigned char *oldorg,unsigned char *neworg,unsigned char *oldref,unsigned char *newref,unsigned char *cur,int i,int j,int sxf,int syf,int sxb,int syb,struct mbinfo *mbi)
+static void frame_ME(unsigned char *oldorg,unsigned char *neworg,unsigned char *oldref,unsigned char *newref,unsigned char *cur,int i,int j,int sxf,int syf,int sxb,int syb,struct MacroBlockInfo *mbi)
 {
   int imin,jmin,iminf,jminf,iminr,jminr;
   int imint,jmint,iminb,jminb;
@@ -751,17 +751,17 @@ static void frame_ME(unsigned char *oldorg,unsigned char *neworg,unsigned char *
 
   var = variCalc(mb,width);
 
-  if (pict_type==I_TYPE)
-    mbi->mb_type = MB_INTRA;
-  else if (pict_type==P_TYPE)
+  if (pictType==I_TYPE)
+    mbi->blockType = MB_INTRA;
+  else if (pictType==P_TYPE)
   {
-    if (frame_pred_dct)
+    if (framePredDct)
     {
       dmc = blockSearchMatch(oldorg,oldref,mb,
                        width,i,j,sxf,syf,16,width,height,&imin,&jmin);
       vmc = meanDiffBlock(oldref+(imin>>1)+width*(jmin>>1),mb,
                   width,imin&1,jmin&1,16);
-      mbi->motion_type = MC_FRAME;
+      mbi->motionType = MC_FRAME;
     }
     else
     {
@@ -769,26 +769,26 @@ static void frame_ME(unsigned char *oldorg,unsigned char *neworg,unsigned char *
         &imin,&jmin,&imint,&jmint,&iminb,&jminb,
         &dmc,&dmcfield,&tsel,&bsel,imins,jmins);
 
-      if (M==1)
+      if (IPDistance==1)
         framePredict(oldref,mb,i,j>>1,imins,jmins,
           &imindp,&jmindp,&imindmv,&jmindmv,&dmc_dp,&vmc_dp);
 
       /* select between dual prime, frame and field prediction */
-      if (M==1 && dmc_dp<dmc && dmc_dp<dmcfield)
+      if (IPDistance==1 && dmc_dp<dmc && dmc_dp<dmcfield)
       {
-        mbi->motion_type = MC_DMV;
+        mbi->motionType = MC_DMV;
         dmc = dmc_dp;
         vmc = vmc_dp;
       }
       else if (dmc<=dmcfield)
       {
-        mbi->motion_type = MC_FRAME;
+        mbi->motionType = MC_FRAME;
         vmc = meanDiffBlock(oldref+(imin>>1)+width*(jmin>>1),mb,
                     width,imin&1,jmin&1,16);
       }
       else
       {
-        mbi->motion_type = MC_FIELD;
+        mbi->motionType = MC_FIELD;
         dmc = dmcfield;
         vmc = meanDiffBlock(oldref+(tsel?width:0)+(imint>>1)+(width<<1)*(jmint>>1),
                     mb,width<<1,imint&1,jmint&1,8);
@@ -806,7 +806,7 @@ static void frame_ME(unsigned char *oldorg,unsigned char *neworg,unsigned char *
      * even if variance is smaller (is this reasonable?)
      */
     if (vmc>var && vmc>=9*256)
-      mbi->mb_type = MB_INTRA;
+      mbi->blockType = MB_INTRA;
     else
     {
       /* select between MC / No-MC
@@ -822,13 +822,13 @@ static void frame_ME(unsigned char *oldorg,unsigned char *neworg,unsigned char *
       {
         /* use MC */
         var = vmc;
-        mbi->mb_type = MB_FORWARD;
-        if (mbi->motion_type==MC_FRAME)
+        mbi->blockType = MB_FORWARD;
+        if (mbi->motionType==MC_FRAME)
         {
           mbi->MV[0][0][0] = imin - (i<<1);
           mbi->MV[0][0][1] = jmin - (j<<1);
         }
-        else if (mbi->motion_type==MC_DMV)
+        else if (mbi->motionType==MC_DMV)
         {
           /* these are FRAME vectors */
           /* same parity vector */
@@ -846,16 +846,16 @@ static void frame_ME(unsigned char *oldorg,unsigned char *neworg,unsigned char *
           mbi->MV[0][0][1] = (jmint<<1) - (j<<1);
           mbi->MV[1][0][0] = iminb - (i<<1);
           mbi->MV[1][0][1] = (jminb<<1) - (j<<1);
-          mbi->mv_field_sel[0][0] = tsel;
-          mbi->mv_field_sel[1][0] = bsel;
+          mbi->mvFieldSel[0][0] = tsel;
+          mbi->mvFieldSel[1][0] = bsel;
         }
       }
       else
       {
         /* No-MC */
         var = v0;
-        mbi->mb_type = 0;
-        mbi->motion_type = MC_FRAME;
+        mbi->blockType = 0;
+        mbi->motionType = MC_FRAME;
         mbi->MV[0][0][0] = 0;
         mbi->MV[0][0][1] = 0;
       }
@@ -863,7 +863,7 @@ static void frame_ME(unsigned char *oldorg,unsigned char *neworg,unsigned char *
   }
   else /* if (pict_type==B_TYPE) */
   {
-    if (frame_pred_dct)
+    if (framePredDct)
     {
       /* forward */
       dmcf = blockSearchMatch(oldorg,oldref,mb,
@@ -890,20 +890,20 @@ static void frame_ME(unsigned char *oldorg,unsigned char *neworg,unsigned char *
       if (vmcf<=vmcr && vmcf<=vmci)
       {
         vmc = vmcf;
-        mbi->mb_type = MB_FORWARD;
+        mbi->blockType = MB_FORWARD;
       }
       else if (vmcr<=vmci)
       {
         vmc = vmcr;
-        mbi->mb_type = MB_BACKWARD;
+        mbi->blockType = MB_BACKWARD;
       }
       else
       {
         vmc = vmci;
-        mbi->mb_type = MB_FORWARD|MB_BACKWARD;
+        mbi->blockType = MB_FORWARD|MB_BACKWARD;
       }
 
-      mbi->motion_type = MC_FRAME;
+      mbi->motionType = MC_FRAME;
     }
     else
     {
@@ -942,8 +942,8 @@ static void frame_ME(unsigned char *oldorg,unsigned char *neworg,unsigned char *
           && dmci<dmcr && dmci<dmcfieldr)
       {
         /* frame, interpolated */
-        mbi->mb_type = MB_FORWARD|MB_BACKWARD;
-        mbi->motion_type = MC_FRAME;
+        mbi->blockType = MB_FORWARD|MB_BACKWARD;
+        mbi->motionType = MC_FRAME;
         vmc = blockDualMeanDiff(oldref+(iminf>>1)+width*(jminf>>1),
                      newref+(iminr>>1)+width*(jminr>>1),
                      mb,width,iminf&1,jminf&1,iminr&1,jminr&1,16);
@@ -952,8 +952,8 @@ static void frame_ME(unsigned char *oldorg,unsigned char *neworg,unsigned char *
                && dmcfieldi<dmcr && dmcfieldi<dmcfieldr)
       {
         /* field, interpolated */
-        mbi->mb_type = MB_FORWARD|MB_BACKWARD;
-        mbi->motion_type = MC_FIELD;
+        mbi->blockType = MB_FORWARD|MB_BACKWARD;
+        mbi->motionType = MC_FIELD;
         vmc = blockDualMeanDiff(oldref+(imintf>>1)+(tself?width:0)+(width<<1)*(jmintf>>1),
                      newref+(imintr>>1)+(tselr?width:0)+(width<<1)*(jmintr>>1),
                      mb,width<<1,imintf&1,jmintf&1,imintr&1,jmintr&1,8);
@@ -964,16 +964,16 @@ static void frame_ME(unsigned char *oldorg,unsigned char *neworg,unsigned char *
       else if (dmcf<dmcfieldf && dmcf<dmcr && dmcf<dmcfieldr)
       {
         /* frame, forward */
-        mbi->mb_type = MB_FORWARD;
-        mbi->motion_type = MC_FRAME;
+        mbi->blockType = MB_FORWARD;
+        mbi->motionType = MC_FRAME;
         vmc = meanDiffBlock(oldref+(iminf>>1)+width*(jminf>>1),mb,
                     width,iminf&1,jminf&1,16);
       }
       else if (dmcfieldf<dmcr && dmcfieldf<dmcfieldr)
       {
         /* field, forward */
-        mbi->mb_type = MB_FORWARD;
-        mbi->motion_type = MC_FIELD;
+        mbi->blockType = MB_FORWARD;
+        mbi->motionType = MC_FIELD;
         vmc = meanDiffBlock(oldref+(tself?width:0)+(imintf>>1)+(width<<1)*(jmintf>>1),
                     mb,width<<1,imintf&1,jmintf&1,8);
         vmc+= meanDiffBlock(oldref+(bself?width:0)+(iminbf>>1)+(width<<1)*(jminbf>>1),
@@ -982,16 +982,16 @@ static void frame_ME(unsigned char *oldorg,unsigned char *neworg,unsigned char *
       else if (dmcr<dmcfieldr)
       {
         /* frame, backward */
-        mbi->mb_type = MB_BACKWARD;
-        mbi->motion_type = MC_FRAME;
+        mbi->blockType = MB_BACKWARD;
+        mbi->motionType = MC_FRAME;
         vmc = meanDiffBlock(newref+(iminr>>1)+width*(jminr>>1),mb,
                     width,iminr&1,jminr&1,16);
       }
       else
       {
         /* field, backward */
-        mbi->mb_type = MB_BACKWARD;
-        mbi->motion_type = MC_FIELD;
+        mbi->blockType = MB_BACKWARD;
+        mbi->motionType = MC_FIELD;
         vmc = meanDiffBlock(newref+(tselr?width:0)+(imintr>>1)+(width<<1)*(jmintr>>1),
                     mb,width<<1,imintr&1,jmintr&1,8);
         vmc+= meanDiffBlock(newref+(bselr?width:0)+(iminbr>>1)+(width<<1)*(jminbr>>1),
@@ -1008,11 +1008,11 @@ static void frame_ME(unsigned char *oldorg,unsigned char *neworg,unsigned char *
      * even if variance is smaller (is this reasonable?)
      */
     if (vmc>var && vmc>=9*256)
-      mbi->mb_type = MB_INTRA;
+      mbi->blockType = MB_INTRA;
     else
     {
       var = vmc;
-      if (mbi->motion_type==MC_FRAME)
+      if (mbi->motionType==MC_FRAME)
       {
         /* forward */
         mbi->MV[0][0][0] = iminf - (i<<1);
@@ -1029,15 +1029,15 @@ static void frame_ME(unsigned char *oldorg,unsigned char *neworg,unsigned char *
         mbi->MV[0][0][1] = (jmintf<<1) - (j<<1);
         mbi->MV[1][0][0] = iminbf - (i<<1);
         mbi->MV[1][0][1] = (jminbf<<1) - (j<<1);
-        mbi->mv_field_sel[0][0] = tself;
-        mbi->mv_field_sel[1][0] = bself;
+        mbi->mvFieldSel[0][0] = tself;
+        mbi->mvFieldSel[1][0] = bself;
         /* backward */
         mbi->MV[0][1][0] = imintr - (i<<1);
         mbi->MV[0][1][1] = (jmintr<<1) - (j<<1);
         mbi->MV[1][1][0] = iminbr - (i<<1);
         mbi->MV[1][1][1] = (jminbr<<1) - (j<<1);
-        mbi->mv_field_sel[0][1] = tselr;
-        mbi->mv_field_sel[1][1] = bselr;
+        mbi->mvFieldSel[0][1] = tselr;
+        mbi->mvFieldSel[1][1] = bselr;
       }
     }
   }
@@ -1055,7 +1055,7 @@ static void dpfield_estimate(unsigned char *topref,unsigned char *botref,unsigne
 
 
   /* Assign opposite and same reference pointer */
-  if (pict_struct==TOP_FIELD)
+  if (pictStruct==TOP_FIELD)
   {
     sameref = topref;
     oppref = botref;
@@ -1075,7 +1075,7 @@ static void dpfield_estimate(unsigned char *topref,unsigned char *botref,unsigne
   mvyo0 = (mvys+(mvys>0)) >> 1;  /* mvys // 2 */
 
   /* vertical field shift correction */
-  if (pict_struct==TOP_FIELD)
+  if (pictStruct==TOP_FIELD)
     mvyo0--;
   else
     mvyo0++;
@@ -1096,14 +1096,14 @@ static void dpfield_estimate(unsigned char *topref,unsigned char *botref,unsigne
       jo = jo0 + delta_y;
 
       if (io >= 0 && io <= (width-16)<<1 &&
-          jo >= 0 && jo <= (height2-16)<<1)
+          jo >= 0 && jo <= (pictureHeight-16)<<1)
       {
         /* compute prediction error */
         local_dist = blockDualMeanDiff(
-          sameref + (imins>>1) + width2*(jmins>>1),
-          oppref  + (io>>1)    + width2*(jo>>1),
+          sameref + (imins>>1) + pictureWidth*(jmins>>1),
+          oppref  + (io>>1)    + pictureWidth*(jo>>1),
           mb,             /* current mb location */
-          width2,         /* adjacent line distance */
+          pictureWidth,         /* adjacent line distance */
           imins&1, jmins&1, io&1, jo&1, /* half-pel flags */
           16);            /* block height */
 
@@ -1122,10 +1122,10 @@ static void dpfield_estimate(unsigned char *topref,unsigned char *botref,unsigne
 
   /* Compute L1 error for decision purposes */
   *dmcp = dualAbsDiff(
-    sameref + (imins>>1) + width2*(jmins>>1),
-    oppref  + (imino>>1) + width2*(jmino>>1),
+    sameref + (imins>>1) + pictureWidth*(jmins>>1),
+    oppref  + (imino>>1) + pictureWidth*(jmino>>1),
     mb,             /* current mb location */
-    width2,         /* adjacent line distance */
+    pictureWidth,         /* adjacent line distance */
     imins&1, jmins&1, imino&1, jmino&1, /* half-pel flags */
     16);            /* block height */
 
@@ -1160,7 +1160,7 @@ static void dpfield_estimate(unsigned char *topref,unsigned char *botref,unsigne
 
  */
 static void field_ME(unsigned char *oldorg,unsigned char *neworg,unsigned char *oldref,unsigned char *newref,unsigned char *cur,unsigned char *curref,int i,int j,
-  int sxf,int syf,int sxb,int syb,struct mbinfo *mbi,int secondfield,int ipflag)
+  int sxf,int syf,int sxb,int syb,struct MacroBlockInfo *mbi,int secondfield,int ipflag)
 {
   int w2;
   unsigned char *mb, *toporg, *topref, *botorg, *botref;
@@ -1173,14 +1173,14 @@ static void field_ME(unsigned char *oldorg,unsigned char *neworg,unsigned char *
   w2 = width<<1;
 
   mb = cur + i + w2*j;
-  if (pict_struct==BOTTOM_FIELD)
+  if (pictStruct==BOTTOM_FIELD)
     mb += width;
 
   var = variCalc(mb,w2);
 
-  if (pict_type==I_TYPE)
-    mbi->mb_type = MB_INTRA;
-  else if (pict_type==P_TYPE)
+  if (pictType==I_TYPE)
+    mbi->blockType = MB_INTRA;
+  else if (pictType==P_TYPE)
   {
     toporg = oldorg;
     topref = oldref;
@@ -1190,7 +1190,7 @@ static void field_ME(unsigned char *oldorg,unsigned char *neworg,unsigned char *
     if (secondfield)
     {
       /* opposite parity field is in same frame */
-      if (pict_struct==TOP_FIELD)
+      if (pictStruct==TOP_FIELD)
       {
         /* current is top field */
         botorg = cur + width;
@@ -1208,15 +1208,15 @@ static void field_ME(unsigned char *oldorg,unsigned char *neworg,unsigned char *
                    &imin,&jmin,&imin8u,&jmin8u,&imin8l,&jmin8l,
                    &dmcfield,&dmc8,&sel,&sel8u,&sel8l,&imins,&jmins,&ds);
 
-    if (M==1 && !ipflag)  /* generic condition which permits Dual Prime */
+    if (IPDistance==1 && !ipflag)  /* generic condition which permits Dual Prime */
       dpfield_estimate(topref,botref,mb,i,j,imins,jmins,&imindmv,&jmindmv,
         &dmc_dp,&vmc_dp);
 
     /* select between dual prime, field and 16x8 prediction */
-    if (M==1 && !ipflag && dmc_dp<dmc8 && dmc_dp<dmcfield)
+    if (IPDistance==1 && !ipflag && dmc_dp<dmc8 && dmc_dp<dmcfield)
     {
       /* Dual Prime prediction */
-      mbi->motion_type = MC_DMV;
+      mbi->motionType = MC_DMV;
       dmc = dmc_dp;     /* L1 metric */
       vmc = vmc_dp;     /* we already calculated L2 error for Dual */
 
@@ -1224,7 +1224,7 @@ static void field_ME(unsigned char *oldorg,unsigned char *neworg,unsigned char *
     else if (dmc8<dmcfield)
     {
       /* 16x8 prediction */
-      mbi->motion_type = MC_16X8;
+      mbi->motionType = MC_16X8;
       /* upper half block */
       vmc = meanDiffBlock((sel8u?botref:topref) + (imin8u>>1) + w2*(jmin8u>>1),
                   mb,w2,imin8u&1,jmin8u&1,8);
@@ -1235,33 +1235,33 @@ static void field_ME(unsigned char *oldorg,unsigned char *neworg,unsigned char *
     else
     {
       /* field prediction */
-      mbi->motion_type = MC_FIELD;
+      mbi->motionType = MC_FIELD;
       vmc = meanDiffBlock((sel?botref:topref) + (imin>>1) + w2*(jmin>>1),
                   mb,w2,imin&1,jmin&1,16);
     }
 
     /* select between intra and non-intra coding */
     if (vmc>var && vmc>=9*256)
-      mbi->mb_type = MB_INTRA;
+      mbi->blockType = MB_INTRA;
     else
     {
       /* zero MV field prediction from same parity ref. field
        * (not allowed if ipflag is set)
        */
       if (!ipflag)
-        v0 = meanDiffBlock(((pict_struct==BOTTOM_FIELD)?botref:topref) + i + w2*j,
+        v0 = meanDiffBlock(((pictStruct==BOTTOM_FIELD)?botref:topref) + i + w2*j,
                    mb,w2,0,0,16);
       if (ipflag || (4*v0>5*vmc && v0>=9*256))
       {
         var = vmc;
-        mbi->mb_type = MB_FORWARD;
-        if (mbi->motion_type==MC_FIELD)
+        mbi->blockType = MB_FORWARD;
+        if (mbi->motionType==MC_FIELD)
         {
           mbi->MV[0][0][0] = imin - (i<<1);
           mbi->MV[0][0][1] = jmin - (j<<1);
-          mbi->mv_field_sel[0][0] = sel;
+          mbi->mvFieldSel[0][0] = sel;
         }
-        else if (mbi->motion_type==MC_DMV)
+        else if (mbi->motionType==MC_DMV)
         {
           /* same parity vector */
           mbi->MV[0][0][0] = imins - (i<<1);
@@ -1277,19 +1277,19 @@ static void field_ME(unsigned char *oldorg,unsigned char *neworg,unsigned char *
           mbi->MV[0][0][1] = jmin8u - (j<<1);
           mbi->MV[1][0][0] = imin8l - (i<<1);
           mbi->MV[1][0][1] = jmin8l - ((j+8)<<1);
-          mbi->mv_field_sel[0][0] = sel8u;
-          mbi->mv_field_sel[1][0] = sel8l;
+          mbi->mvFieldSel[0][0] = sel8u;
+          mbi->mvFieldSel[1][0] = sel8l;
         }
       }
       else
       {
         /* No MC */
         var = v0;
-        mbi->mb_type = 0;
-        mbi->motion_type = MC_FIELD;
+        mbi->blockType = 0;
+        mbi->motionType = MC_FIELD;
         mbi->MV[0][0][0] = 0;
         mbi->MV[0][0][1] = 0;
-        mbi->mv_field_sel[0][0] = (pict_struct==BOTTOM_FIELD);
+        mbi->mvFieldSel[0][0] = (pictStruct==BOTTOM_FIELD);
       }
     }
   }
@@ -1328,8 +1328,8 @@ static void field_ME(unsigned char *oldorg,unsigned char *neworg,unsigned char *
         && dmcfieldi<dmcfieldr && dmcfieldi<dmc8r)
     {
       /* field, interpolated */
-      mbi->mb_type = MB_FORWARD|MB_BACKWARD;
-      mbi->motion_type = MC_FIELD;
+      mbi->blockType = MB_FORWARD|MB_BACKWARD;
+      mbi->motionType = MC_FIELD;
       vmc = blockDualMeanDiff(oldref + (self?width:0) + (iminf>>1) + w2*(jminf>>1),
                    newref + (selr?width:0) + (iminr>>1) + w2*(jminr>>1),
                    mb,w2,iminf&1,jminf&1,iminr&1,jminr&1,16);
@@ -1338,8 +1338,8 @@ static void field_ME(unsigned char *oldorg,unsigned char *neworg,unsigned char *
              && dmc8i<dmcfieldr && dmc8i<dmc8r)
     {
       /* 16x8, interpolated */
-      mbi->mb_type = MB_FORWARD|MB_BACKWARD;
-      mbi->motion_type = MC_16X8;
+      mbi->blockType = MB_FORWARD|MB_BACKWARD;
+      mbi->motionType = MC_16X8;
 
       /* upper half block */
       vmc = blockDualMeanDiff(oldref + (sel8uf?width:0) + (imin8uf>>1) + w2*(jmin8uf>>1),
@@ -1354,16 +1354,16 @@ static void field_ME(unsigned char *oldorg,unsigned char *neworg,unsigned char *
     else if (dmcfieldf<dmc8f && dmcfieldf<dmcfieldr && dmcfieldf<dmc8r)
     {
       /* field, forward */
-      mbi->mb_type = MB_FORWARD;
-      mbi->motion_type = MC_FIELD;
+      mbi->blockType = MB_FORWARD;
+      mbi->motionType = MC_FIELD;
       vmc = meanDiffBlock(oldref + (self?width:0) + (iminf>>1) + w2*(jminf>>1),
                   mb,w2,iminf&1,jminf&1,16);
     }
     else if (dmc8f<dmcfieldr && dmc8f<dmc8r)
     {
       /* 16x8, forward */
-      mbi->mb_type = MB_FORWARD;
-      mbi->motion_type = MC_16X8;
+      mbi->blockType = MB_FORWARD;
+      mbi->motionType = MC_16X8;
 
       /* upper half block */
       vmc = meanDiffBlock(oldref + (sel8uf?width:0) + (imin8uf>>1) + w2*(jmin8uf>>1),
@@ -1376,16 +1376,16 @@ static void field_ME(unsigned char *oldorg,unsigned char *neworg,unsigned char *
     else if (dmcfieldr<dmc8r)
     {
       /* field, backward */
-      mbi->mb_type = MB_BACKWARD;
-      mbi->motion_type = MC_FIELD;
+      mbi->blockType = MB_BACKWARD;
+      mbi->motionType = MC_FIELD;
       vmc = meanDiffBlock(newref + (selr?width:0) + (iminr>>1) + w2*(jminr>>1),
                   mb,w2,iminr&1,jminr&1,16);
     }
     else
     {
       /* 16x8, backward */
-      mbi->mb_type = MB_BACKWARD;
-      mbi->motion_type = MC_16X8;
+      mbi->blockType = MB_BACKWARD;
+      mbi->motionType = MC_16X8;
 
       /* upper half block */
       vmc = meanDiffBlock(newref + (sel8ur?width:0) + (imin8ur>>1) + w2*(jmin8ur>>1),
@@ -1398,37 +1398,37 @@ static void field_ME(unsigned char *oldorg,unsigned char *neworg,unsigned char *
 
     /* select between intra and non-intra coding */
     if (vmc>var && vmc>=9*256)
-      mbi->mb_type = MB_INTRA;
+      mbi->blockType = MB_INTRA;
     else
     {
       var = vmc;
-      if (mbi->motion_type==MC_FIELD)
+      if (mbi->motionType==MC_FIELD)
       {
         /* forward */
         mbi->MV[0][0][0] = iminf - (i<<1);
         mbi->MV[0][0][1] = jminf - (j<<1);
-        mbi->mv_field_sel[0][0] = self;
+        mbi->mvFieldSel[0][0] = self;
         /* backward */
         mbi->MV[0][1][0] = iminr - (i<<1);
         mbi->MV[0][1][1] = jminr - (j<<1);
-        mbi->mv_field_sel[0][1] = selr;
+        mbi->mvFieldSel[0][1] = selr;
       }
       else /* MC_16X8 */
       {
         /* forward */
         mbi->MV[0][0][0] = imin8uf - (i<<1);
         mbi->MV[0][0][1] = jmin8uf - (j<<1);
-        mbi->mv_field_sel[0][0] = sel8uf;
+        mbi->mvFieldSel[0][0] = sel8uf;
         mbi->MV[1][0][0] = imin8lf - (i<<1);
         mbi->MV[1][0][1] = jmin8lf - ((j+8)<<1);
-        mbi->mv_field_sel[1][0] = sel8lf;
+        mbi->mvFieldSel[1][0] = sel8lf;
         /* backward */
         mbi->MV[0][1][0] = imin8ur - (i<<1);
         mbi->MV[0][1][1] = jmin8ur - (j<<1);
-        mbi->mv_field_sel[0][1] = sel8ur;
+        mbi->mvFieldSel[0][1] = sel8ur;
         mbi->MV[1][1][0] = imin8lr - (i<<1);
         mbi->MV[1][1][1] = jmin8lr - ((j+8)<<1);
-        mbi->mv_field_sel[1][1] = sel8lr;
+        mbi->mvFieldSel[1][1] = sel8lr;
       }
     }
   }
@@ -1458,17 +1458,17 @@ static void field_ME(unsigned char *oldorg,unsigned char *neworg,unsigned char *
 void motionEstimation (unsigned char *oldorg, unsigned char *neworg,
   unsigned char *oldref, unsigned char *newref, unsigned char *cur,
   unsigned char *curref, int sxf, int syf, int sxb, int syb,
-  struct mbinfo *mbi, int secondfield, int ipflag)
+  struct MacroBlockInfo *mbi, int secondfield, int ipflag)
 {
   int i, j;
 
     /* 对所有的宏块进行循环操作 */
-  for (j=0; j<height2; j+=16)
+  for (j=0; j<pictureHeight; j+=16)
   {
     for (i=0; i<width; i+=16)
     {
          /*根据图像结构的类型来判断是进行帧预测还是场预测*/
-      if (pict_struct==FRAME_PICTURE)
+      if (pictStruct==FRAME_PICTURE)
         frame_ME(oldorg,neworg,oldref,newref,cur,i,j,sxf,syf,sxb,syb,mbi);
       //采用帧预测
       else

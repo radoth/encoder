@@ -34,7 +34,7 @@ static void from444to422(unsigned char *src,unsigned char *dst)
 {
   int i, j, im5, im4, im3, im2, im1, ip1, ip2, ip3, ip4, ip5, ip6;
 
-  if (mpeg1)
+  if (mpeg1Flag)
   {
     for (j=0; j<height; j++)
     {
@@ -96,7 +96,7 @@ static void from422to420(unsigned char *src,unsigned char *dst)
 
   w = width>>1;
 
-  if (prog_frame)
+  if (progFrame)
   {
     /* intra frame */
     for (i=0; i<w; i++)
@@ -251,10 +251,10 @@ static bool YUVFileRead(char *fname,unsigned char *frame[],int framenum)
   char name[128];
   FILE *fd;
 
-  chrom_hsize = (chroma_format==CHROMA444) ? horizontal_size
-                                           : horizontal_size>>1;
-  chrom_vsize = (chroma_format!=CHROMA420) ? vertical_size
-                                           : vertical_size>>1;
+  chrom_hsize = (chromaFormat==CHROMA444) ? horiSize
+                                           : horiSize>>1;
+  chrom_vsize = (chromaFormat!=CHROMA420) ? vertiSize
+                                           : vertiSize>>1;
   sprintf(name, "%s.yuv", fname);
 
   if (!(fd = fopen(name,"rb")))
@@ -262,22 +262,22 @@ static bool YUVFileRead(char *fname,unsigned char *frame[],int framenum)
     sprintf(errortext,"Couldn't open %s\n",name);
     {error(errortext);return false;}
   }
-  fseek(fd, framenum*horizontal_size*vertical_size * 3 / 2, SEEK_SET);
+  fseek(fd, framenum*horiSize*vertiSize * 3 / 2, SEEK_SET);
 
   /* Y */
-  for (i=0; i<vertical_size; i++)
-    fread(frame[0]+i*width,1,horizontal_size,fd);
-  rangeCalc(frame[0],horizontal_size,vertical_size,width,height);
+  for (i=0; i<vertiSize; i++)
+    fread(frame[0]+i*width,1,horiSize,fd);
+  rangeCalc(frame[0],horiSize,vertiSize,width,height);
 
   /* Cb */
   for (i=0; i<chrom_vsize; i++)
-    fread(frame[1]+i*chrom_width,1,chrom_hsize,fd);
-  rangeCalc(frame[1],chrom_hsize,chrom_vsize,chrom_width,chrom_height);
+    fread(frame[1]+i*chromWidth,1,chrom_hsize,fd);
+  rangeCalc(frame[1],chrom_hsize,chrom_vsize,chromWidth,chromHeight);
 
   /* Cr */
   for (i=0; i<chrom_vsize; i++)
-    fread(frame[2]+i*chrom_width,1,chrom_hsize,fd);
-  rangeCalc(frame[2],chrom_hsize,chrom_vsize,chrom_width,chrom_height);
+    fread(frame[2]+i*chromWidth,1,chrom_hsize,fd);
+  rangeCalc(frame[2],chrom_hsize,chrom_vsize,chromWidth,chromHeight);
 
   fclose(fd);
   return true;
@@ -302,7 +302,7 @@ static bool PPMFileRead(char *fname,unsigned char *frame[])
     {0.299, 0.587, 0.114},  /* SMPTE 170M */
     {0.212, 0.701, 0.087}}; /* SMPTE 240M (1987) */
 
-  i = matrix_coefficients;
+  i = matrixCoefficients;
   if (i>8)
     i = 3;
 
@@ -312,7 +312,7 @@ static bool PPMFileRead(char *fname,unsigned char *frame[])
   cu = 0.5/(1.0-cb);
   cv = 0.5/(1.0-cr);
 
-  if (chroma_format==CHROMA444)
+  if (chromaFormat==CHROMA444)
   {
     u444 = frame[1];
     v444 = frame[2];
@@ -325,7 +325,7 @@ static bool PPMFileRead(char *fname,unsigned char *frame[])
         {error("malloc failed");return false;}
       if (!(v444 = (unsigned char *)malloc(width*height)))
         {error("malloc failed");return false;}
-      if (chroma_format==CHROMA420)
+      if (chromaFormat==CHROMA420)
       {
         if (!(u422 = (unsigned char *)malloc((width>>1)*height)))
           {error("malloc failed");return false;}
@@ -347,13 +347,13 @@ static bool PPMFileRead(char *fname,unsigned char *frame[])
   getc(fd); getc(fd); /* magic number (P6) */
   pbm_getint(fd); pbm_getint(fd); pbm_getint(fd); /* width height maxcolors */
 
-  for (i=0; i<vertical_size; i++)
+  for (i=0; i<vertiSize; i++)
   {
     yp = frame[0] + i*width;
     up = u444 + i*width;
     vp = v444 + i*width;
 
-    for (j=0; j<horizontal_size; j++)
+    for (j=0; j<horiSize; j++)
     {
       r=getc(fd); g=getc(fd); b=getc(fd);
       /* convert to YUV */
@@ -367,17 +367,17 @@ static bool PPMFileRead(char *fname,unsigned char *frame[])
   }
   fclose(fd);
 
-  rangeCalc(frame[0],horizontal_size,vertical_size,width,height);
-  rangeCalc(u444,horizontal_size,vertical_size,width,height);
-  rangeCalc(v444,horizontal_size,vertical_size,width,height);
+  rangeCalc(frame[0],horiSize,vertiSize,width,height);
+  rangeCalc(u444,horiSize,vertiSize,width,height);
+  rangeCalc(v444,horiSize,vertiSize,width,height);
 
-  if (chroma_format==CHROMA422)
+  if (chromaFormat==CHROMA422)
   {
     from444to422(u444,frame[1]);
     from444to422(v444,frame[2]);
   }
 
-  if (chroma_format==CHROMA420)
+  if (chromaFormat==CHROMA420)
   {
     from444to422(u444,u422);
     from444to422(v444,v422);

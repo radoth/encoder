@@ -12,11 +12,11 @@ bool reconstructPicture(char *fname,unsigned char *frame[])
   char name[128];
   FILE *fd;
 
-  chrom_hsize = (chroma_format==CHROMA444) ? horizontal_size
-                                           : horizontal_size>>1;
+  chrom_hsize = (chromaFormat==CHROMA444) ? horiSize
+                                           : horiSize>>1;
 
-  chrom_vsize = (chroma_format!=CHROMA420) ? vertical_size
-                                           : vertical_size>>1;
+  chrom_vsize = (chromaFormat!=CHROMA420) ? vertiSize
+                                           : vertiSize>>1;
 
   if (fname[0]=='-')
     return true;
@@ -28,7 +28,7 @@ bool reconstructPicture(char *fname,unsigned char *frame[])
      sprintf(errortext,"Couldn't create %s\n",name);
      {error(errortext);return false;}
    }
-   fwrite(frame[0],1,horizontal_size*vertical_size,fd);
+   fwrite(frame[0],1,horiSize*vertiSize,fd);
    fclose(fd);
  
    /* Cb */

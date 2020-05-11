@@ -92,13 +92,13 @@ bool Display::parameterPrepare()
 
     if(ui->useDefaultInMatrix->isChecked())
     {
-        load_iquant = 0;
+        ifLoadIntraQuantFlag = 0;
         for (i=0; i<64; i++)
-          intra_q[i] = default_intra_quantizer_matrix[i];
+          intra_q[i] = defaultIntraQuantizerMatrix[i];
     }
     else{
         qDebug()<<"ready!!!!!!!";
-        load_iquant = 1;
+        ifLoadIntraQuantFlag = 1;
         intra_q[0]=ui->xq0->value();
         intra_q[1]=ui->xq1->value();
         intra_q[2]=ui->xq2->value();
@@ -167,12 +167,12 @@ bool Display::parameterPrepare()
 
     if(ui->useDefaultOutMatrix->isChecked())
     {
-        load_niquant = 0;
+        ifLoadCrossQuantFlag = 0;
         for (i=0; i<64; i++)
           inter_q[i] = 16;
     }
     else{
-        load_niquant = 1;
+        ifLoadCrossQuantFlag = 1;
         inter_q[0]=ui->xq0_4->value();
         inter_q[1]=ui->xq1_4->value();
         inter_q[2]=ui->xq2_4->value();
@@ -243,28 +243,28 @@ bool Display::parameterPrepare()
         inputtype=1;
     else inputtype=2;
 
-    nframes=ui->frameNumber->value();
+    framesCount=ui->frameNumber->value();
     frame0=ui->firstFrameNumber->value();
     h=ui->timecode1->value();
     m=ui->timecode2->value();
     s=ui->timecode3->value();
     f=ui->timecode4->value();
-    N=ui->framesInGOP->value();
-    M=ui->IPDistance->value();
-    qDebug()<<"M="<<M;
+    framePerGOP=ui->framesInGOP->value();
+    IPDistance=ui->IPDistance->value();
+    qDebug()<<"M="<<IPDistance;
     if(ui->stream1->isChecked())
-        mpeg1=1;
-    else mpeg1=0;
+        mpeg1Flag=1;
+    else mpeg1Flag=0;
     if(ui->fieldPictures->isChecked())
-        fieldpic=1;
-    else fieldpic=0;
-    horizontal_size=ui->horizontalSize->value();
-    vertical_size=ui->VerticalSize->value();
-    aspectratio=(ui->aspectRatio->currentIndex())+1;
-    frame_rate_code=(ui->frameRate->currentIndex())+1;
-    bit_rate=ui->bitRates->value();
-    vbv_buffer_size=ui->vbvBufferSize->value();
-    low_delay=0;
+        fieldPicFlag=1;
+    else fieldPicFlag=0;
+    horiSize=ui->horizontalSize->value();
+    vertiSize=ui->VerticalSize->value();
+    aspRatio=(ui->aspectRatio->currentIndex())+1;
+    frameRateCode=(ui->frameRate->currentIndex())+1;
+    bitRate=ui->bitRates->value();
+    VBVBufferSize=ui->vbvBufferSize->value();
+    lowDelayFlag=0;
     if(ui->constrainedParameter->isChecked())
         constrparms=1;
     else constrparms=0;
@@ -280,98 +280,98 @@ bool Display::parameterPrepare()
     default:qDebug()<<"wrong option";
     }
     if(ui->ProgressiveISeq->isChecked())
-        prog_seq=0;
-    else prog_seq=1;
-    chroma_format=1;
-    video_format=ui->videoFormat->currentIndex();
+        progSeq=0;
+    else progSeq=1;
+    chromaFormat=1;
+    videoFormat=ui->videoFormat->currentIndex();
     switch(ui->colorPrimary->currentIndex())
     {
-    case 0:color_primaries=1;break;
-    case 1:color_primaries=2;break;
-    case 2:color_primaries=4;break;
-    case 3:color_primaries=5;break;
-    case 4:color_primaries=6;break;
-    case 5:color_primaries=7;break;
+    case 0:colorPrimaries=1;break;
+    case 1:colorPrimaries=2;break;
+    case 2:colorPrimaries=4;break;
+    case 3:colorPrimaries=5;break;
+    case 4:colorPrimaries=6;break;
+    case 5:colorPrimaries=7;break;
     default:qDebug()<<"wrong";
     }
     switch(ui->transferCo->currentIndex())
     {
-    case 0:transfer_characteristics=1;break;
-    case 1:transfer_characteristics=2;break;
-    case 2:transfer_characteristics=4;break;
-    case 3:transfer_characteristics=5;break;
-    case 4:transfer_characteristics=6;break;
-    case 5:transfer_characteristics=7;break;
-    case 6:transfer_characteristics=8;break;
+    case 0:transferCharacteristics=1;break;
+    case 1:transferCharacteristics=2;break;
+    case 2:transferCharacteristics=4;break;
+    case 3:transferCharacteristics=5;break;
+    case 4:transferCharacteristics=6;break;
+    case 5:transferCharacteristics=7;break;
+    case 6:transferCharacteristics=8;break;
     default:qDebug()<<"wrong";
     }
     switch(ui->matrixCo->currentIndex())
     {
-    case 0:matrix_coefficients=1;break;
-    case 1:matrix_coefficients=2;break;
-    case 2:matrix_coefficients=4;break;
-    case 3:matrix_coefficients=5;break;
-    case 4:matrix_coefficients=6;break;
-    case 5:matrix_coefficients=7;break;
+    case 0:matrixCoefficients=1;break;
+    case 1:matrixCoefficients=2;break;
+    case 2:matrixCoefficients=4;break;
+    case 3:matrixCoefficients=5;break;
+    case 4:matrixCoefficients=6;break;
+    case 5:matrixCoefficients=7;break;
     default:qDebug()<<"wrong";
     }
-    display_horizontal_size=ui->dispHorizontalSize->value();
-    display_vertical_size=ui->dispVerticalSize->value();
-    dc_prec=ui->intraDCPrecision->currentIndex();
+    displayHorizontalSize=ui->dispHorizontalSize->value();
+    displayVerticalSize=ui->dispVerticalSize->value();
+    DCPrec=ui->intraDCPrecision->currentIndex();
     if(ui->topFieldFirstNew->isChecked())
-        topfirst=1;
-    else topfirst=0;
+        topFirstFlag=1;
+    else topFirstFlag=0;
     if(ui->framePredFrameI->isChecked())
-        frame_pred_dct_tab[0]=1;
-    else frame_pred_dct_tab[0]=0;
+        framePredDctTab[0]=1;
+    else framePredDctTab[0]=0;
     if(ui->framePredFrameP->isChecked())
-        frame_pred_dct_tab[1]=1;
-    else frame_pred_dct_tab[1]=0;
+        framePredDctTab[1]=1;
+    else framePredDctTab[1]=0;
     if(ui->framePredFrameB->isChecked())
-        frame_pred_dct_tab[2]=1;
-    else frame_pred_dct_tab[2]=0;
+        framePredDctTab[2]=1;
+    else framePredDctTab[2]=0;
 
-    conceal_tab[0]=0;
-    conceal_tab[1]=0;
-    conceal_tab[2]=0;
+    concealTab[0]=0;
+    concealTab[1]=0;
+    concealTab[2]=0;
 
     if(ui->qScaleTypeI->isChecked())
-        qscale_tab[0]=1;
-    else qscale_tab[0]=0;
+        qscaleTab[0]=1;
+    else qscaleTab[0]=0;
     if(ui->qScaleTypeP->isChecked())
-        qscale_tab[1]=1;
-    else qscale_tab[1]=0;
+        qscaleTab[1]=1;
+    else qscaleTab[1]=0;
     if(ui->qScaleTypeB->isChecked())
-        qscale_tab[2]=1;
-    else qscale_tab[2]=0;
+        qscaleTab[2]=1;
+    else qscaleTab[2]=0;
 
     if(ui->intraVLCFormatI->isChecked())
-        intravlc_tab[0]=1;
-    else intravlc_tab[0]=0;
+        intravlcTab[0]=1;
+    else intravlcTab[0]=0;
     if(ui->intraVLCFormatP->isChecked())
-        intravlc_tab[1]=1;
-    else intravlc_tab[1]=0;
+        intravlcTab[1]=1;
+    else intravlcTab[1]=0;
     if(ui->intraVLCFormatB->isChecked())
-        intravlc_tab[2]=1;
-    else intravlc_tab[2]=0;
+        intravlcTab[2]=1;
+    else intravlcTab[2]=0;
 
     if(ui->alternateScanI->isChecked())
-        altscan_tab[0]=1;
-    else altscan_tab[0]=0;
+        altscanTab[0]=1;
+    else altscanTab[0]=0;
     if(ui->alternateScanP->isChecked())
-        altscan_tab[1]=1;
-    else altscan_tab[1]=0;
+        altscanTab[1]=1;
+    else altscanTab[1]=0;
     if(ui->alternateScanB->isChecked())
-        altscan_tab[2]=1;
-    else altscan_tab[2]=0;
+        altscanTab[2]=1;
+    else altscanTab[2]=0;
 
     if(ui->repeatFirstField->isChecked())
-        repeatfirst=1;
-    else repeatfirst=0;
+        ifRepeatFirstFlag=1;
+    else ifRepeatFirstFlag=0;
 
     if(ui->progressiveI->isChecked())
-        prog_frame=1;
-    else prog_frame=0;
+        progFrame=1;
+    else progFrame=0;
 
     P=0;
 
@@ -385,36 +385,36 @@ bool Display::parameterPrepare()
     d0b=ui->rcd0b->value();
 
 
-    if (N<1)
+    if (framePerGOP<1)
       {error("N must be positive");return false;}
-    if (M<1)
+    if (IPDistance<1)
       {error("M must be positive");return false;}
-    if (N%M != 0)
+    if (framePerGOP%IPDistance != 0)
       {error("N must be an integer multiple of M");return false;}
 
-    motion_data = (struct motion_data *)malloc(M*sizeof(struct motion_data));
-    if (!motion_data)
+    motionData = (struct motionData *)malloc(IPDistance*sizeof(struct motionData));
+    if (!motionData)
       {error("malloc failed\n");return false;}
 
-    motion_data[0].forw_hor_f_code=((((QComboBox *)(ui->searchTable->cellWidget(0,0)))->currentIndex()))+1;
-    motion_data[0].forw_vert_f_code=((((QComboBox *)(ui->searchTable->cellWidget(0,1)))->currentIndex()))+1;
-    motion_data[0].sxf=((QSpinBox *)(ui->searchTable->cellWidget(0,2)))->value();
-    motion_data[0].syf=((QSpinBox *)(ui->searchTable->cellWidget(0,3)))->value();
+    motionData[0].forwHorFCode=((((QComboBox *)(ui->searchTable->cellWidget(0,0)))->currentIndex()))+1;
+    motionData[0].forwVertFCode=((((QComboBox *)(ui->searchTable->cellWidget(0,1)))->currentIndex()))+1;
+    motionData[0].sxf=((QSpinBox *)(ui->searchTable->cellWidget(0,2)))->value();
+    motionData[0].syf=((QSpinBox *)(ui->searchTable->cellWidget(0,3)))->value();
 
-    for(int i=1;i<2*M-1;i++)
+    for(int i=1;i<2*IPDistance-1;i++)
     {
         if(i%2==1)
         {
-            motion_data[i/2+1].forw_hor_f_code=(((QComboBox *)(ui->searchTable->cellWidget(i,0)))->currentIndex())+1;
-            motion_data[i/2+1].forw_vert_f_code=(((QComboBox *)(ui->searchTable->cellWidget(i,1)))->currentIndex())+1;
-            motion_data[i/2+1].sxf=((QSpinBox *)(ui->searchTable->cellWidget(i,2)))->value();
-            motion_data[i/2+1].syf=((QSpinBox *)(ui->searchTable->cellWidget(i,3)))->value();
+            motionData[i/2+1].forwHorFCode=(((QComboBox *)(ui->searchTable->cellWidget(i,0)))->currentIndex())+1;
+            motionData[i/2+1].forwVertFCode=(((QComboBox *)(ui->searchTable->cellWidget(i,1)))->currentIndex())+1;
+            motionData[i/2+1].sxf=((QSpinBox *)(ui->searchTable->cellWidget(i,2)))->value();
+            motionData[i/2+1].syf=((QSpinBox *)(ui->searchTable->cellWidget(i,3)))->value();
         }
         else{
-            motion_data[i/2].back_hor_f_code=((QComboBox *)(ui->searchTable->cellWidget(i,0)))->currentIndex()+1;
-            motion_data[i/2].back_vert_f_code=((QComboBox *)(ui->searchTable->cellWidget(i,1)))->currentIndex()+1;
-            motion_data[i/2].sxb=((QSpinBox *)(ui->searchTable->cellWidget(i,2)))->value();
-            motion_data[i/2].syb=((QSpinBox *)(ui->searchTable->cellWidget(i,3)))->value();
+            motionData[i/2].backHorFCode=((QComboBox *)(ui->searchTable->cellWidget(i,0)))->currentIndex()+1;
+            motionData[i/2].backVertFCode=((QComboBox *)(ui->searchTable->cellWidget(i,1)))->currentIndex()+1;
+            motionData[i/2].sxb=((QSpinBox *)(ui->searchTable->cellWidget(i,2)))->value();
+            motionData[i/2].syb=((QSpinBox *)(ui->searchTable->cellWidget(i,3)))->value();
         }
     }
 
@@ -427,39 +427,39 @@ bool Display::parameterPrepare()
     qDebug()<<"tplorg="<<tplorg;
     qDebug()<<"tplref="<<tplref;
     qDebug()<<"inputtype="<<inputtype;
-    qDebug()<<"nframes="<<nframes;
+    qDebug()<<"nframes="<<framesCount;
     qDebug()<<"frame0"<<frame0;
-    qDebug()<<"N="<<N;
-    qDebug()<<"M="<<M;
-    qDebug()<<"mpeg1"<<mpeg1;
-    qDebug()<<"fieldPic="<<fieldpic;
-    qDebug()<<"horizontalsize="<<horizontal_size;
-    qDebug()<<"verticalSize="<<vertical_size;
-    qDebug()<<"aspectratio="<<aspectratio;
-    qDebug()<<"frameratecode="<<frame_rate_code;
-    qDebug()<<"bitrate="<<bit_rate;
-    qDebug()<<"vbvbuffersize="<<vbv_buffer_size;
-    qDebug()<<"lowdelay="<<low_delay;
+    qDebug()<<"N="<<framePerGOP;
+    qDebug()<<"M="<<IPDistance;
+    qDebug()<<"mpeg1"<<mpeg1Flag;
+    qDebug()<<"fieldPic="<<fieldPicFlag;
+    qDebug()<<"horizontalsize="<<horiSize;
+    qDebug()<<"verticalSize="<<vertiSize;
+    qDebug()<<"aspectratio="<<aspRatio;
+    qDebug()<<"frameratecode="<<frameRateCode;
+    qDebug()<<"bitrate="<<bitRate;
+    qDebug()<<"vbvbuffersize="<<VBVBufferSize;
+    qDebug()<<"lowdelay="<<lowDelayFlag;
     qDebug()<<"constrparams="<<constrparms;
     qDebug()<<"profile"<<profile;
     qDebug()<<"level="<<level;
-    qDebug()<<"prog_seq"<<prog_seq;
-    qDebug()<<"chroma_format"<<chroma_format;
-    qDebug()<<"cideo_format"<<video_format;
-    qDebug()<<"color_primary"<<color_primaries;
-    qDebug()<<"transfer_charac="<<transfer_characteristics;
-    qDebug()<<"matrixCoeffi"<<matrix_coefficients;
-    qDebug()<<"displayhorizontal"<<display_horizontal_size;
-    qDebug()<<"displayvertical"<<display_vertical_size;
-    qDebug()<<"dc_prec="<<dc_prec;
-    qDebug()<<"topfirst="<<topfirst;
-    qDebug()<<"fram_pred_dct_tab"<<frame_pred_dct_tab[0]<<frame_pred_dct_tab[1]<<frame_pred_dct_tab[2];
-    qDebug()<<"conceal_tab"<<conceal_tab[0]<<conceal_tab[1]<<conceal_tab[2];
-    qDebug()<<"qscale_tab"<<qscale_tab[0]<<qscale_tab[1]<<qscale_tab[2];
-    qDebug()<<"intravlc_tab"<<intravlc_tab[0]<<intravlc_tab[1]<<intravlc_tab[2];
-    qDebug()<<"altscan_tab"<<altscan_tab[0]<<altscan_tab[1]<<altscan_tab[2];
-    qDebug()<<"repeatfirst="<<repeatfirst;
-    qDebug()<<"prog_frame="<<prog_frame;
+    qDebug()<<"prog_seq"<<progSeq;
+    qDebug()<<"chroma_format"<<chromaFormat;
+    qDebug()<<"cideo_format"<<videoFormat;
+    qDebug()<<"color_primary"<<colorPrimaries;
+    qDebug()<<"transfer_charac="<<transferCharacteristics;
+    qDebug()<<"matrixCoeffi"<<matrixCoefficients;
+    qDebug()<<"displayhorizontal"<<displayHorizontalSize;
+    qDebug()<<"displayvertical"<<displayVerticalSize;
+    qDebug()<<"dc_prec="<<DCPrec;
+    qDebug()<<"topfirst="<<topFirstFlag;
+    qDebug()<<"fram_pred_dct_tab"<<framePredDctTab[0]<<framePredDctTab[1]<<framePredDctTab[2];
+    qDebug()<<"conceal_tab"<<concealTab[0]<<concealTab[1]<<concealTab[2];
+    qDebug()<<"qscale_tab"<<qscaleTab[0]<<qscaleTab[1]<<qscaleTab[2];
+    qDebug()<<"intravlc_tab"<<intravlcTab[0]<<intravlcTab[1]<<intravlcTab[2];
+    qDebug()<<"altscan_tab"<<altscanTab[0]<<altscanTab[1]<<altscanTab[2];
+    qDebug()<<"repeatfirst="<<ifRepeatFirstFlag;
+    qDebug()<<"prog_frame="<<progFrame;
     qDebug()<<"P="<<P;
     qDebug()<<"r="<<r;
     qDebug()<<"avgact="<<avg_act;
@@ -469,12 +469,12 @@ bool Display::parameterPrepare()
     qDebug()<<"d0i"<<d0i;
     qDebug()<<"d0p"<<d0p;
     qDebug()<<"d0b="<<d0b;
-    for(int i=0;i<M;i++)
+    for(int i=0;i<IPDistance;i++)
     {
-        qDebug()<<"motion_data="<<motion_data[i].forw_hor_f_code<<"    "<<motion_data[i].forw_vert_f_code<<"    "<<motion_data[i].sxf<<"    "<<motion_data[i].syf;
+        qDebug()<<"motion_data="<<motionData[i].forwHorFCode<<"    "<<motionData[i].forwVertFCode<<"    "<<motionData[i].sxf<<"    "<<motionData[i].syf;
         if(i!=0)
         {
-            qDebug()<<"motion_data="<<motion_data[i].back_hor_f_code<<"    "<<motion_data[i].back_vert_f_code<<"    "<<motion_data[i].sxb<<"    "<<motion_data[i].syb;
+            qDebug()<<"motion_data="<<motionData[i].backHorFCode<<"    "<<motionData[i].backVertFCode<<"    "<<motionData[i].sxb<<"    "<<motionData[i].syb;
         }
     }
 
@@ -487,23 +487,23 @@ bool Display::parameterPrepare()
 
 
 
-    mpeg1 = !!mpeg1;
-    fieldpic = !!fieldpic;
-    low_delay = !!low_delay;
+    mpeg1Flag = !!mpeg1Flag;
+    fieldPicFlag = !!fieldPicFlag;
+    lowDelayFlag = !!lowDelayFlag;
     constrparms = !!constrparms;
-    prog_seq = !!prog_seq;
-    topfirst = !!topfirst;
+    progSeq = !!progSeq;
+    topFirstFlag = !!topFirstFlag;
 
     for (int i=0; i<3; i++)
     {
-      frame_pred_dct_tab[i] = !!frame_pred_dct_tab[i];
-      conceal_tab[i] = !!conceal_tab[i];
-      qscale_tab[i] = !!qscale_tab[i];
-      intravlc_tab[i] = !!intravlc_tab[i];
-      altscan_tab[i] = !!altscan_tab[i];
+      framePredDctTab[i] = !!framePredDctTab[i];
+      concealTab[i] = !!concealTab[i];
+      qscaleTab[i] = !!qscaleTab[i];
+      intravlcTab[i] = !!intravlcTab[i];
+      altscanTab[i] = !!altscanTab[i];
     }
-    repeatfirst = !!repeatfirst;
-    prog_frame = !!prog_frame;
+    ifRepeatFirstFlag = !!ifRepeatFirstFlag;
+    progFrame = !!progFrame;
 
     if(rangeChecks()==false)
         return false;
@@ -511,14 +511,14 @@ bool Display::parameterPrepare()
     static double ratetab[8]=
       {24000.0/1001.0,24.0,25.0,30000.0/1001.0,30.0,50.0,60000.0/1001.0,60.0};
 
-    frame_rate = ratetab[frame_rate_code-1];
+    frameRate = ratetab[frameRateCode-1];
 
     tc0 = h;
     tc0 = 60*tc0 + m;
     tc0 = 60*tc0 + s;
-    tc0 = (int)(frame_rate+0.5)*tc0 + f;
+    tc0 = (int)(frameRate+0.5)*tc0 + f;
 
-    if (!mpeg1)
+    if (!mpeg1Flag)
     {
       if(profileAndLevelChecks()==false)
           return false;
@@ -528,11 +528,11 @@ bool Display::parameterPrepare()
       /* MPEG-1 */
       if (constrparms)
       {
-        if (horizontal_size>768
-            || vertical_size>576
-            || ((horizontal_size+15)/16)*((vertical_size+15)/16)>396
-            || ((horizontal_size+15)/16)*((vertical_size+15)/16)*frame_rate>396*25.0
-            || frame_rate>30.0)
+        if (horiSize>768
+            || vertiSize>576
+            || ((horiSize+15)/16)*((vertiSize+15)/16)>396
+            || ((horiSize+15)/16)*((vertiSize+15)/16)*frameRate>396*25.0
+            || frameRate>30.0)
         {
           if (!quiet)
             {
@@ -545,9 +545,9 @@ bool Display::parameterPrepare()
 
       if (constrparms)
       {
-        for (i=0; i<M; i++)
+        for (i=0; i<IPDistance; i++)
         {
-          if (motion_data[i].forw_hor_f_code>4)
+          if (motionData[i].forwHorFCode>4)
           {
             if (!quiet)
               {
@@ -558,7 +558,7 @@ bool Display::parameterPrepare()
             break;
           }
 
-          if (motion_data[i].forw_vert_f_code>4)
+          if (motionData[i].forwVertFCode>4)
           {
             if (!quiet)
               {
@@ -571,7 +571,7 @@ bool Display::parameterPrepare()
 
           if (i!=0)
           {
-            if (motion_data[i].back_hor_f_code>4)
+            if (motionData[i].backHorFCode>4)
             {
               if (!quiet)
                 {
@@ -582,7 +582,7 @@ bool Display::parameterPrepare()
               break;
             }
 
-            if (motion_data[i].back_vert_f_code>4)
+            if (motionData[i].backVertFCode>4)
             {
               if (!quiet)
                 {
@@ -599,73 +599,73 @@ bool Display::parameterPrepare()
 
     /* relational checks */
 
-    if (mpeg1)
+    if (mpeg1Flag)
     {
-      if (!prog_seq)
+      if (!progSeq)
       {
         if (!quiet)
           {
             //fprintf(stderr,"Warning: setting progressive_sequence = 1\n");
             warningTextGlobal.append("警告：设置 progressive_sequence = 1");
         }
-        prog_seq = 1;
+        progSeq = 1;
       }
 
-      if (chroma_format!=CHROMA420)
+      if (chromaFormat!=CHROMA420)
       {
         if (!quiet)
           {
             //fprintf(stderr,"Warning: setting chroma_format = 1 (4:2:0)\n");
             warningTextGlobal.append("警告：设置 chroma_format = 1 (4:2:0)");
         }
-        chroma_format = CHROMA420;
+        chromaFormat = CHROMA420;
       }
 
-      if (dc_prec!=0)
+      if (DCPrec!=0)
       {
         if (!quiet)
           {
             //fprintf(stderr,"Warning: setting intra_dc_precision = 0\n");
             warningTextGlobal.append("警告：设置 intra_dc_precision = 0");
         }
-        dc_prec = 0;
+        DCPrec = 0;
       }
 
       for (i=0; i<3; i++)
-        if (qscale_tab[i])
+        if (qscaleTab[i])
         {
           if (!quiet)
             {
               //fprintf(stderr,"Warning: setting qscale_tab[%d] = 0\n",i);
               warningTextGlobal.append(QString("警告：设置 qscale_tab[%1] = 0").arg(i));
           }
-          qscale_tab[i] = 0;
+          qscaleTab[i] = 0;
         }
 
       for (i=0; i<3; i++)
-        if (intravlc_tab[i])
+        if (intravlcTab[i])
         {
           if (!quiet)
             {
               //fprintf(stderr,"Warning: setting intravlc_tab[%d] = 0\n",i);
               warningTextGlobal.append(QString("警告：设置 intravlc_tab[%1] = 0").arg(i));
           }
-          intravlc_tab[i] = 0;
+          intravlcTab[i] = 0;
         }
 
       for (i=0; i<3; i++)
-        if (altscan_tab[i])
+        if (altscanTab[i])
         {
           if (!quiet)
             {
               //fprintf(stderr,"Warning: setting altscan_tab[%d] = 0\n",i);
               warningTextGlobal.append(QString("警告：设置 altscan_tab[%1] = 0").arg(i));
           }
-          altscan_tab[i] = 0;
+          altscanTab[i] = 0;
         }
     }
 
-    if (!mpeg1 && constrparms)
+    if (!mpeg1Flag && constrparms)
     {
       if (!quiet)
         {
@@ -675,111 +675,111 @@ bool Display::parameterPrepare()
       constrparms = 0;
     }
 
-    if (prog_seq && !prog_frame)
+    if (progSeq && !progFrame)
     {
       if (!quiet)
         {
           //fprintf(stderr,"Warning: setting progressive_frame = 1\n");
           warningTextGlobal.append("警告：设置 progressive_frame = 1");
       }
-      prog_frame = 1;
+      progFrame = 1;
     }
 
-    if (prog_frame && fieldpic)
+    if (progFrame && fieldPicFlag)
     {
       if (!quiet)
         {
           //fprintf(stderr,"Warning: setting field_pictures = 0\n");
           warningTextGlobal.append("警告：设置 field_pictures = 0");
       }
-      fieldpic = 0;
+      fieldPicFlag = 0;
     }
 
-    if (!prog_frame && repeatfirst)
+    if (!progFrame && ifRepeatFirstFlag)
     {
       if (!quiet)
         {
           //fprintf(stderr,"Warning: setting repeat_first_field = 0\n");
           warningTextGlobal.append("警告：设置 repeat_first_field = 0");
       }
-      repeatfirst = 0;
+      ifRepeatFirstFlag = 0;
     }
 
-    if (prog_frame)
+    if (progFrame)
     {
       for (i=0; i<3; i++)
-        if (!frame_pred_dct_tab[i])
+        if (!framePredDctTab[i])
         {
           if (!quiet)
             {
               //fprintf(stderr,"Warning: setting frame_pred_frame_dct[%d] = 1\n",i);
               warningTextGlobal.append(QString("警告：设置 frame_pred_frame_dct[%1] = 1").arg(i));
           }
-          frame_pred_dct_tab[i] = 1;
+          framePredDctTab[i] = 1;
         }
     }
 
-    if (prog_seq && !repeatfirst && topfirst)
+    if (progSeq && !ifRepeatFirstFlag && topFirstFlag)
     {
       if (!quiet)
         {
           //fprintf(stderr,"Warning: setting top_field_first = 0\n");
           warningTextGlobal.append("警告：设置 top_field_first = 0");
       }
-      topfirst = 0;
+      topFirstFlag = 0;
     }
 
     /* search windows */
-    for (i=0; i<M; i++)
+    for (i=0; i<IPDistance; i++)
     {
-      if (motion_data[i].sxf > (4<<motion_data[i].forw_hor_f_code)-1)
+      if (motionData[i].sxf > (4<<motionData[i].forwHorFCode)-1)
       {
         if (!quiet)
           {
             //fprintf(stderr,
             //"Warning: reducing forward horizontal search width to %d\n",
             //(4<<motion_data[i].forw_hor_f_code)-1);
-            warningTextGlobal.append(QString("警告：将向前的水平搜索宽度减小到 %1").arg((4<<motion_data[i].forw_hor_f_code)-1));
+            warningTextGlobal.append(QString("警告：将向前的水平搜索宽度减小到 %1").arg((4<<motionData[i].forwHorFCode)-1));
         }
-        motion_data[i].sxf = (4<<motion_data[i].forw_hor_f_code)-1;
+        motionData[i].sxf = (4<<motionData[i].forwHorFCode)-1;
       }
 
-      if (motion_data[i].syf > (4<<motion_data[i].forw_vert_f_code)-1)
+      if (motionData[i].syf > (4<<motionData[i].forwVertFCode)-1)
       {
         if (!quiet)
           {
             //fprintf(stderr,
             //"Warning: reducing forward vertical search width to %d\n",
             //(4<<motion_data[i].forw_vert_f_code)-1);
-            warningTextGlobal.append(QString("警告：将向前的垂直搜索宽度减小到 %1").arg((4<<motion_data[i].forw_vert_f_code)-1));
+            warningTextGlobal.append(QString("警告：将向前的垂直搜索宽度减小到 %1").arg((4<<motionData[i].forwVertFCode)-1));
         }
-        motion_data[i].syf = (4<<motion_data[i].forw_vert_f_code)-1;
+        motionData[i].syf = (4<<motionData[i].forwVertFCode)-1;
       }
 
       if (i!=0)
       {
-        if (motion_data[i].sxb > (4<<motion_data[i].back_hor_f_code)-1)
+        if (motionData[i].sxb > (4<<motionData[i].backHorFCode)-1)
         {
           if (!quiet)
             {
               //fprintf(stderr,
               //"Warning: reducing backward horizontal search width to %d\n",
               //(4<<motion_data[i].back_hor_f_code)-1);
-              warningTextGlobal.append(QString("警告：将向后的水平搜索宽度减小到 %1").arg((4<<motion_data[i].back_hor_f_code)-1));
+              warningTextGlobal.append(QString("警告：将向后的水平搜索宽度减小到 %1").arg((4<<motionData[i].backHorFCode)-1));
           }
-          motion_data[i].sxb = (4<<motion_data[i].back_hor_f_code)-1;
+          motionData[i].sxb = (4<<motionData[i].backHorFCode)-1;
         }
 
-        if (motion_data[i].syb > (4<<motion_data[i].back_vert_f_code)-1)
+        if (motionData[i].syb > (4<<motionData[i].backVertFCode)-1)
         {
           if (!quiet)
             {
               //fprintf(stderr,
               //"Warning: reducing backward vertical search width to %d\n",
               //(4<<motion_data[i].back_vert_f_code)-1);
-              warningTextGlobal.append(QString("警告：将向后的垂直搜索宽度减小到 %1").arg((4<<motion_data[i].back_vert_f_code)-1));
+              warningTextGlobal.append(QString("警告：将向后的垂直搜索宽度减小到 %1").arg((4<<motionData[i].backVertFCode)-1));
           }
-          motion_data[i].syb = (4<<motion_data[i].back_vert_f_code)-1;
+          motionData[i].syb = (4<<motionData[i].backVertFCode)-1;
         }
       }
     }
@@ -1048,9 +1048,9 @@ void Display::on_sourceBrowse_clicked()
 
 void Display::on_IPDistance_valueChanged(int arg1)
 {
-    M=arg1;
+    IPDistance=arg1;
 
-    ui->searchTable->setRowCount(2*M-1);
+    ui->searchTable->setRowCount(2*IPDistance-1);
     ui->searchTable->setColumnCount(4);
     QStringList header;
     header<<"水平向量长度"<<"垂直向量长度"<<"搜索宽度"<<"搜索高度";
@@ -1085,14 +1085,14 @@ void Display::on_IPDistance_valueChanged(int arg1)
     QSpinBox *tmpspin2=new QSpinBox();
     ui->searchTable->setCellWidget(0,3,tmpspin2);
 
-    for(int i=1;i<M;i++)
+    for(int i=1;i<IPDistance;i++)
     {
         QString tmp="B"+QString::number(i);
         vheader<<tmp+"前向";
         vheader<<tmp+"后向";
     }
 
-    for(int i=1;i<2*M-1;i++)
+    for(int i=1;i<2*IPDistance-1;i++)
     {
         QComboBox *tmpCombo1=new QComboBox();
         tmpCombo1->addItem("[-8,7]");

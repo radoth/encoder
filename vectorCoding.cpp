@@ -5,19 +5,13 @@
 #include "timeSettings.h"
 #include "commonData.h"
 
-/* output motion vectors (6.2.5.2, 6.3.16.2)
- *
- * this routine also updates the predictions for motion vectors (PMV)
- */
-
 static void vectorCode(int MV[2][2][2],int PMV[2][2][2],int mv_field_sel[2][2],int dmvector[2],int s,int motion_type,
   int hor_f_code,int vert_f_code)
 {
-  if (pict_struct==FRAME_PICTURE)
+  if (pictStruct==FRAME_PICTURE)
   {
     if (motion_type==MC_FRAME)
     {
-      /* frame prediction */
       motionVectorCodeCtrl(MV[0][s][0]-PMV[0][s][0],hor_f_code);
       motionVectorCodeCtrl(MV[0][s][1]-PMV[0][s][1],vert_f_code);
       PMV[0][s][0]=PMV[1][s][0]=MV[0][s][0];
@@ -25,7 +19,6 @@ static void vectorCode(int MV[2][2][2],int PMV[2][2][2],int mv_field_sel[2][2],i
     }
     else if (motion_type==MC_FIELD)
     {
-      /* field prediction */
       writeData(mv_field_sel[0][s],1);
       motionVectorCodeCtrl(MV[0][s][0]-PMV[0][s][0],hor_f_code);
       motionVectorCodeCtrl((MV[0][s][1]>>1)-(PMV[0][s][1]>>1),vert_f_code);
@@ -39,7 +32,6 @@ static void vectorCode(int MV[2][2][2],int PMV[2][2][2],int mv_field_sel[2][2],i
     }
     else
     {
-      /* dual prime prediction */
       motionVectorCodeCtrl(MV[0][s][0]-PMV[0][s][0],hor_f_code);
       DMVectorCodeGene(dmvector[0]);
       motionVectorCodeCtrl((MV[0][s][1]>>1)-(PMV[0][s][1]>>1),vert_f_code);
@@ -50,10 +42,8 @@ static void vectorCode(int MV[2][2][2],int PMV[2][2][2],int mv_field_sel[2][2],i
   }
   else
   {
-    /* field picture */
     if (motion_type==MC_FIELD)
     {
-      /* field prediction */
       writeData(mv_field_sel[0][s],1);
       motionVectorCodeCtrl(MV[0][s][0]-PMV[0][s][0],hor_f_code);
       motionVectorCodeCtrl(MV[0][s][1]-PMV[0][s][1],vert_f_code);
@@ -62,7 +52,6 @@ static void vectorCode(int MV[2][2][2],int PMV[2][2][2],int mv_field_sel[2][2],i
     }
     else if (motion_type==MC_16X8)
     {
-      /* 16x8 prediction */
       writeData(mv_field_sel[0][s],1);
       motionVectorCodeCtrl(MV[0][s][0]-PMV[0][s][0],hor_f_code);
       motionVectorCodeCtrl(MV[0][s][1]-PMV[0][s][1],vert_f_code);
@@ -76,7 +65,6 @@ static void vectorCode(int MV[2][2][2],int PMV[2][2][2],int mv_field_sel[2][2],i
     }
     else
     {
-      /* dual prime prediction */
       motionVectorCodeCtrl(MV[0][s][0]-PMV[0][s][0],hor_f_code);
       DMVectorCodeGene(dmvector[0]);
       motionVectorCodeCtrl(MV[0][s][1]-PMV[0][s][1],vert_f_code);
@@ -87,8 +75,6 @@ static void vectorCode(int MV[2][2][2],int PMV[2][2][2],int mv_field_sel[2][2],i
   }
 }
 
-
-/* quantization / variable length encoding of a complete picture */
 bool putpict(unsigned char *frame)
 {
   int i, j, k, comp, cc;
@@ -97,45 +83,39 @@ bool putpict(unsigned char *frame)
   int prev_mquant;
   int cbp, MBAinc;
 
-  picControlInit(frame); /* set up rate control */
+  picControlInit(frame);
 
-  /* picture header and picture coding extension */
   picHeaderAdd();
 
-  if (!mpeg1)
+  if (!mpeg1Flag)
     picCodeExtHeaderAdd();
 
-  prev_mquant = stepSizeQuantization(); /* initialize quantization parameter */
+  prev_mquant = stepSizeQuantization();
 
   k = 0;
 
-  for (j=0; j<mb_height2; j++)
+  for (j=0; j<mbHeight2; j++)
   {
-    /* macroblock row loop */
 
-    for (i=0; i<mb_width; i++)
+    for (i=0; i<macroBlockWidth; i++)
     {
-      /* macroblock loop */
       if (i==0)
       {
-        /* slice header (6.2.4) */
         dataAlign();
 
-        if (mpeg1 || vertical_size<=2800)
-          writeData(SLICE_MIN_START+j,32); /* slice_start_code */
+        if (mpeg1Flag || vertiSize<=2800)
+          writeData(SLICE_MIN_START+j,32);
         else
         {
-          writeData(SLICE_MIN_START+(j&127),32); /* slice_start_code */
-          writeData(j>>7,3); /* slice_vertical_position_extension */
+          writeData(SLICE_MIN_START+(j&127),32);
+          writeData(j>>7,3);
         }
   
-        /* quantiser_scale_code */
-        writeData(q_scale_type ? map_non_linear_mquant[prev_mquant]
+        writeData(qScaleType ? mapNonLinearMquant[prev_mquant]
                              : prev_mquant >> 1, 5);
   
-        writeData(0,1); /* extra_bit_slice */
+        writeData(0,1);
   
-        /* reset predictors */
 
         for (cc=0; cc<3; cc++)
           dc_dct_pred[cc] = 0;
@@ -143,50 +123,42 @@ bool putpict(unsigned char *frame)
         PMV[0][0][0]=PMV[0][0][1]=PMV[1][0][0]=PMV[1][0][1]=0;
         PMV[0][1][0]=PMV[0][1][1]=PMV[1][1][0]=PMV[1][1][1]=0;
   
-        MBAinc = i + 1; /* first MBAinc denotes absolute position */
+        MBAinc = i + 1;
       }
 
-      mb_type = mbinfo[k].mb_type;
+      mb_type = MacroBlockInfo[k].blockType;
 
-      /* determine mquant (rate control) */
-      mbinfo[k].mquant = virtualBufferMeasure(k);
+      MacroBlockInfo[k].mquant = virtualBufferMeasure(k);
 
-      /* quantize macroblock */
       if (mb_type & MB_INTRA)
       {
-        for (comp=0; comp<block_count; comp++)
-          innerQuan(blocks[k*block_count+comp],blocks[k*block_count+comp],
-                      dc_prec,intra_q,mbinfo[k].mquant);
-        mbinfo[k].cbp = cbp = (1<<block_count) - 1;
+        for (comp=0; comp<blockCount; comp++)
+          innerQuan(blocks[k*blockCount+comp],blocks[k*blockCount+comp],
+                      DCPrec,intra_q,MacroBlockInfo[k].mquant);
+        MacroBlockInfo[k].cbp = cbp = (1<<blockCount) - 1;
       }
       else
       {
         cbp = 0;
-        for (comp=0;comp<block_count;comp++)
-          cbp = (cbp<<1) | crossQuan(blocks[k*block_count+comp],
-                                           blocks[k*block_count+comp],
-                                           inter_q,mbinfo[k].mquant);
+        for (comp=0;comp<blockCount;comp++)
+          cbp = (cbp<<1) | crossQuan(blocks[k*blockCount+comp],
+                                           blocks[k*blockCount+comp],
+                                           inter_q,MacroBlockInfo[k].mquant);
 
-        mbinfo[k].cbp = cbp;
+        MacroBlockInfo[k].cbp = cbp;
 
         if (cbp)
           mb_type|= MB_PATTERN;
       }
 
-      /* output mquant if it has changed */
-      if (cbp && prev_mquant!=mbinfo[k].mquant)
+      if (cbp && prev_mquant!=MacroBlockInfo[k].mquant)
         mb_type|= MB_QUANT;
 
-      /* check if macroblock can be skipped */
-      if (i!=0 && i!=mb_width-1 && !cbp)
+      if (i!=0 && i!=macroBlockWidth-1 && !cbp)
       {
-        /* no DCT coefficients and neither first nor last macroblock of slice */
 
-        if (pict_type==P_TYPE && !(mb_type&MB_FORWARD))
+        if (pictType==P_TYPE && !(mb_type&MB_FORWARD))
         {
-          /* P picture, no motion vectors -> skip */
-
-          /* reset predictors */
 
           for (cc=0; cc<3; cc++)
             dc_dct_pred[cc] = 0;
@@ -194,145 +166,120 @@ bool putpict(unsigned char *frame)
           PMV[0][0][0]=PMV[0][0][1]=PMV[1][0][0]=PMV[1][0][1]=0;
           PMV[0][1][0]=PMV[0][1][1]=PMV[1][1][0]=PMV[1][1][1]=0;
 
-          mbinfo[k].mb_type = mb_type;
-          mbinfo[k].skipped = 1;
+          MacroBlockInfo[k].blockType = mb_type;
+          MacroBlockInfo[k].skipped = 1;
           MBAinc++;
           k++;
           continue;
         }
 
-        if (pict_type==B_TYPE && pict_struct==FRAME_PICTURE
-            && mbinfo[k].motion_type==MC_FRAME
-            && ((mbinfo[k-1].mb_type^mb_type)&(MB_FORWARD|MB_BACKWARD))==0
+        if (pictType==B_TYPE && pictStruct==FRAME_PICTURE
+            && MacroBlockInfo[k].motionType==MC_FRAME
+            && ((MacroBlockInfo[k-1].blockType^mb_type)&(MB_FORWARD|MB_BACKWARD))==0
             && (!(mb_type&MB_FORWARD) ||
-                (PMV[0][0][0]==mbinfo[k].MV[0][0][0] &&
-                 PMV[0][0][1]==mbinfo[k].MV[0][0][1]))
+                (PMV[0][0][0]==MacroBlockInfo[k].MV[0][0][0] &&
+                 PMV[0][0][1]==MacroBlockInfo[k].MV[0][0][1]))
             && (!(mb_type&MB_BACKWARD) ||
-                (PMV[0][1][0]==mbinfo[k].MV[0][1][0] &&
-                 PMV[0][1][1]==mbinfo[k].MV[0][1][1])))
+                (PMV[0][1][0]==MacroBlockInfo[k].MV[0][1][0] &&
+                 PMV[0][1][1]==MacroBlockInfo[k].MV[0][1][1])))
         {
-          /* conditions for skipping in B frame pictures:
-           * - must be frame predicted
-           * - must be the same prediction type (forward/backward/interp.)
-           *   as previous macroblock
-           * - relevant vectors (forward/backward/both) have to be the same
-           *   as in previous macroblock
-           */
-
-          mbinfo[k].mb_type = mb_type;
-          mbinfo[k].skipped = 1;
+          MacroBlockInfo[k].blockType = mb_type;
+          MacroBlockInfo[k].skipped = 1;
           MBAinc++;
           k++;
           continue;
         }
 
-        if (pict_type==B_TYPE && pict_struct!=FRAME_PICTURE
-            && mbinfo[k].motion_type==MC_FIELD
-            && ((mbinfo[k-1].mb_type^mb_type)&(MB_FORWARD|MB_BACKWARD))==0
+        if (pictType==B_TYPE && pictStruct!=FRAME_PICTURE
+            && MacroBlockInfo[k].motionType==MC_FIELD
+            && ((MacroBlockInfo[k-1].blockType^mb_type)&(MB_FORWARD|MB_BACKWARD))==0
             && (!(mb_type&MB_FORWARD) ||
-                (PMV[0][0][0]==mbinfo[k].MV[0][0][0] &&
-                 PMV[0][0][1]==mbinfo[k].MV[0][0][1] &&
-                 mbinfo[k].mv_field_sel[0][0]==(pict_struct==BOTTOM_FIELD)))
+                (PMV[0][0][0]==MacroBlockInfo[k].MV[0][0][0] &&
+                 PMV[0][0][1]==MacroBlockInfo[k].MV[0][0][1] &&
+                 MacroBlockInfo[k].mvFieldSel[0][0]==(pictStruct==BOTTOM_FIELD)))
             && (!(mb_type&MB_BACKWARD) ||
-                (PMV[0][1][0]==mbinfo[k].MV[0][1][0] &&
-                 PMV[0][1][1]==mbinfo[k].MV[0][1][1] &&
-                 mbinfo[k].mv_field_sel[0][1]==(pict_struct==BOTTOM_FIELD))))
+                (PMV[0][1][0]==MacroBlockInfo[k].MV[0][1][0] &&
+                 PMV[0][1][1]==MacroBlockInfo[k].MV[0][1][1] &&
+                 MacroBlockInfo[k].mvFieldSel[0][1]==(pictStruct==BOTTOM_FIELD))))
         {
-          /* conditions for skipping in B field pictures:
-           * - must be field predicted
-           * - must be the same prediction type (forward/backward/interp.)
-           *   as previous macroblock
-           * - relevant vectors (forward/backward/both) have to be the same
-           *   as in previous macroblock
-           * - relevant motion_vertical_field_selects have to be of same
-           *   parity as current field
-           */
 
-          mbinfo[k].mb_type = mb_type;
-          mbinfo[k].skipped = 1;
+          MacroBlockInfo[k].blockType = mb_type;
+          MacroBlockInfo[k].skipped = 1;
           MBAinc++;
           k++;
           continue;
         }
       }
 
-      /* macroblock cannot be skipped */
-      mbinfo[k].skipped = 0;
+      MacroBlockInfo[k].skipped = 0;
 
-      /* there's no VLC for 'No MC, Not Coded':
-       * we have to transmit (0,0) motion vectors
-       */
-      if (pict_type==P_TYPE && !cbp && !(mb_type&MB_FORWARD))
+      if (pictType==P_TYPE && !cbp && !(mb_type&MB_FORWARD))
         mb_type|= MB_FORWARD;
 
-      addressCodeGenerate(MBAinc); /* macroblock_address_increment */
+      addressCodeGenerate(MBAinc);
       MBAinc = 1;
 
-      macroTypeCodeGene(pict_type,mb_type); /* macroblock type */
+      macroTypeCodeGene(pictType,mb_type);
 
-      if (mb_type & (MB_FORWARD|MB_BACKWARD) && !frame_pred_dct)
-        writeData(mbinfo[k].motion_type,2);
+      if (mb_type & (MB_FORWARD|MB_BACKWARD) && !framePredDct)
+        writeData(MacroBlockInfo[k].motionType,2);
 
-      if (pict_struct==FRAME_PICTURE && cbp && !frame_pred_dct)
-        writeData(mbinfo[k].dct_type,1);
+      if (pictStruct==FRAME_PICTURE && cbp && !framePredDct)
+        writeData(MacroBlockInfo[k].DCTType,1);
 
       if (mb_type & MB_QUANT)
       {
-        writeData(q_scale_type ? map_non_linear_mquant[mbinfo[k].mquant]
-                             : mbinfo[k].mquant>>1,5);
-        prev_mquant = mbinfo[k].mquant;
+        writeData(qScaleType ? mapNonLinearMquant[MacroBlockInfo[k].mquant]
+                             : MacroBlockInfo[k].mquant>>1,5);
+        prev_mquant = MacroBlockInfo[k].mquant;
       }
 
       if (mb_type & MB_FORWARD)
       {
-        /* forward motion vectors, update predictors */
-        vectorCode(mbinfo[k].MV,PMV,mbinfo[k].mv_field_sel,mbinfo[k].dmvector,0,
-          mbinfo[k].motion_type,forw_hor_f_code,forw_vert_f_code);
+        vectorCode(MacroBlockInfo[k].MV,PMV,MacroBlockInfo[k].mvFieldSel,MacroBlockInfo[k].dmvector,0,
+          MacroBlockInfo[k].motionType,forwHorFCode,forwVertFCode);
       }
 
       if (mb_type & MB_BACKWARD)
       {
-        /* backward motion vectors, update predictors */
-        vectorCode(mbinfo[k].MV,PMV,mbinfo[k].mv_field_sel,mbinfo[k].dmvector,1,
-          mbinfo[k].motion_type,back_hor_f_code,back_vert_f_code);
+        vectorCode(MacroBlockInfo[k].MV,PMV,MacroBlockInfo[k].mvFieldSel,MacroBlockInfo[k].dmvector,1,
+          MacroBlockInfo[k].motionType,backHorFCode,backVertFCode);
       }
 
       if (mb_type & MB_PATTERN)
       {
-        codedBlockPatternCodeGene((cbp >> (block_count-6)) & 63);
-        if (chroma_format!=CHROMA420)
-          writeData(cbp,block_count-6);
+        codedBlockPatternCodeGene((cbp >> (blockCount-6)) & 63);
+        if (chromaFormat!=CHROMA420)
+          writeData(cbp,blockCount-6);
       }
 
-      for (comp=0; comp<block_count; comp++)
+      for (comp=0; comp<blockCount; comp++)
       {
-        /* block loop */
-        if (cbp & (1<<(block_count-1-comp)))
+        if (cbp & (1<<(blockCount-1-comp)))
         {
           if (mb_type & MB_INTRA)
           {
             cc = (comp<4) ? 0 : (comp&1)+1;
-            if(innerBlockCodeCtrl(blocks[k*block_count+comp],cc)==false)
+            if(innerBlockCodeCtrl(blocks[k*blockCount+comp],cc)==false)
                 return false;
           }
           else
-            if(crossBlockCodeCtrl(blocks[k*block_count+comp])==false)
+            if(crossBlockCodeCtrl(blocks[k*blockCount+comp])==false)
                 return false;
         }
       }
 
-      /* reset predictors */
       if (!(mb_type & MB_INTRA))
         for (cc=0; cc<3; cc++)
           dc_dct_pred[cc] = 0;
 
-      if (mb_type & MB_INTRA || (pict_type==P_TYPE && !(mb_type & MB_FORWARD)))
+      if (mb_type & MB_INTRA || (pictType==P_TYPE && !(mb_type & MB_FORWARD)))
       {
         PMV[0][0][0]=PMV[0][0][1]=PMV[1][0][0]=PMV[1][0][1]=0;
         PMV[0][1][0]=PMV[0][1][1]=PMV[1][1][0]=PMV[1][1][1]=0;
       }
 
-      mbinfo[k].mb_type = mb_type;
+      MacroBlockInfo[k].blockType = mb_type;
       k++;
     }
   }

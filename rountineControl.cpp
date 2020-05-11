@@ -22,7 +22,7 @@ bool routineCtrl()
 
   /* sequence header, sequence extension and sequence display extension */
   mainHeaderAdd();
-  if (!mpeg1)
+  if (!mpeg1Flag)
   {
     seqExtHeaderAdd();
     seqDispExtHeaderAdd();
@@ -33,7 +33,7 @@ bool routineCtrl()
     usrDataHeaderAdd(id_string);
 
   /* loop through all frames in encoding/decoding order */
-  for (i=0; i<nframes; i++)
+  for (i=0; i<framesCount; i++)
   {
     gettimeofday(&tv_start, NULL);
 
@@ -49,12 +49,12 @@ bool routineCtrl()
      * first GOP contains N-(M-1) frames,
      * all other GOPs contain N frames
      */
-    f0 = N*((i+(M-1))/N) - (M-1);
+    f0 = framePerGOP*((i+(IPDistance-1))/framePerGOP) - (IPDistance-1);
 
     if (f0<0)
       f0=0;
 
-    if (i==0 || (i-1)%M==0)
+    if (i==0 || (i-1)%IPDistance==0)
     {
       /* I or P frame */
       for (j=0; j<3; j++)
@@ -69,32 +69,32 @@ bool routineCtrl()
       }
 
       /* f: frame number in display order */
-      f = (i==0) ? 0 : i+M-1;
-      if (f>=nframes)
-        f = nframes - 1;
+      f = (i==0) ? 0 : i+IPDistance-1;
+      if (f>=framesCount)
+        f = framesCount - 1;
 
       if (i==f0) /* first displayed frame in GOP is I */
       {
         /* I frame */
-        pict_type = I_TYPE;
-        forw_hor_f_code = forw_vert_f_code = 15;
-        back_hor_f_code = back_vert_f_code = 15;
+        pictType = I_TYPE;
+        forwHorFCode = forwVertFCode = 15;
+        backHorFCode = backVertFCode = 15;
 
         /* n: number of frames in current GOP
          *
          * first GOP contains (M-1) less (B) frames
          */
-        n = (i==0) ? N-(M-1) : N;
+        n = (i==0) ? framePerGOP-(IPDistance-1) : framePerGOP;
 
         /* last GOP may contain less frames */
-        if (n > nframes-f0)
-          n = nframes-f0;
+        if (n > framesCount-f0)
+          n = framesCount-f0;
 
         /* number of P frames */
         if (i==0)
-          np = (n + 2*(M-1))/M - 1; /* first GOP */
+          np = (n + 2*(IPDistance-1))/IPDistance - 1; /* first GOP */
         else
-          np = (n + (M-1))/M - 1;
+          np = (n + (IPDistance-1))/IPDistance - 1;
 
         /* number of B frames */
         nb = n - np - 1;
@@ -106,12 +106,12 @@ bool routineCtrl()
       else
       {
         /* P frame */
-        pict_type = P_TYPE;
-        forw_hor_f_code = motion_data[0].forw_hor_f_code;
-        forw_vert_f_code = motion_data[0].forw_vert_f_code;
-        back_hor_f_code = back_vert_f_code = 15;
-        sxf = motion_data[0].sxf;
-        syf = motion_data[0].syf;
+        pictType = P_TYPE;
+        forwHorFCode = motionData[0].forwHorFCode;
+        forwVertFCode = motionData[0].forwVertFCode;
+        backHorFCode = backVertFCode = 15;
+        sxf = motionData[0].sxf;
+        syf = motionData[0].syf;
       }
     }
     else
@@ -125,23 +125,23 @@ bool routineCtrl()
 
       /* f: frame number in display order */
       f = i - 1;
-      pict_type = B_TYPE;
-      n = (i-2)%M + 1; /* first B: n=1, second B: n=2, ... */
-      forw_hor_f_code = motion_data[n].forw_hor_f_code;
-      forw_vert_f_code = motion_data[n].forw_vert_f_code;
-      back_hor_f_code = motion_data[n].back_hor_f_code;
-      back_vert_f_code = motion_data[n].back_vert_f_code;
-      sxf = motion_data[n].sxf;
-      syf = motion_data[n].syf;
-      sxb = motion_data[n].sxb;
-      syb = motion_data[n].syb;
+      pictType = B_TYPE;
+      n = (i-2)%IPDistance + 1; /* first B: n=1, second B: n=2, ... */
+      forwHorFCode = motionData[n].forwHorFCode;
+      forwVertFCode = motionData[n].forwVertFCode;
+      backHorFCode = motionData[n].backHorFCode;
+      backVertFCode = motionData[n].backVertFCode;
+      sxf = motionData[n].sxf;
+      syf = motionData[n].syf;
+      sxb = motionData[n].sxb;
+      syb = motionData[n].syb;
     }
 
-    temp_ref = f - f0;
-    frame_pred_dct = frame_pred_dct_tab[pict_type-1];
-    q_scale_type = qscale_tab[pict_type-1];
-    intravlc = intravlc_tab[pict_type-1];
-    altscan = altscan_tab[pict_type-1];
+    tempRef = f - f0;
+    framePredDct = framePredDctTab[pictType-1];
+    qScaleType = qscaleTab[pictType-1];
+    intravlc = intravlcTab[pictType-1];
+    altscan = altscanTab[pictType-1];
 
     //fprintf(statfile,"\nFrame %d (#%d in display order):\n",i,f);
     //fprintf(statfile," picture_type=%c\n",ipb[pict_type]);
@@ -156,14 +156,14 @@ bool routineCtrl()
     tmpPicture.quantmap.clear();
     tmpPicture.no=i;
     tmpPicture.dispNo=f;
-    tmpPicture.picType=ipb[pict_type];
-    tmpPicture.tempRef=temp_ref;
-    tmpPicture.framePredDct=frame_pred_dct;
-    tmpPicture.qScaleType=q_scale_type;
+    tmpPicture.picType=ipb[pictType];
+    tmpPicture.tempRef=tempRef;
+    tmpPicture.framePredDct=framePredDct;
+    tmpPicture.qScaleType=qScaleType;
     tmpPicture.intravlc=intravlc;
     tmpPicture.altscan=altscan;
 
-    if (pict_type!=I_TYPE)
+    if (pictType!=I_TYPE)
     {
       //fprintf(statfile," forward search window: %d...%d / %d...%d\n",
        // -sxf,sxf,-syf,syf);
@@ -172,11 +172,11 @@ bool routineCtrl()
         //-(4<<forw_vert_f_code),(4<<forw_vert_f_code)-1);
       tmpPicture.sxf=sxf;
       tmpPicture.syf=syf;
-      tmpPicture.forw_hor_f_code=forw_hor_f_code;
-      tmpPicture.forw_vert_f_code=forw_vert_f_code;
+      tmpPicture.forw_hor_f_code=forwHorFCode;
+      tmpPicture.forw_vert_f_code=forwVertFCode;
     }
 
-    if (pict_type==B_TYPE)
+    if (pictType==B_TYPE)
     {
       //fprintf(statfile," backward search window: %d...%d / %d...%d\n",
         //-sxb,sxb,-syb,syb);
@@ -185,15 +185,15 @@ bool routineCtrl()
         //-(4<<back_vert_f_code),(4<<back_vert_f_code)-1);
       tmpPicture.sxb=sxb;
       tmpPicture.syb=syb;
-      tmpPicture.back_hor_f_code=back_hor_f_code;
-      tmpPicture.back_vert_f_code=back_vert_f_code;
+      tmpPicture.back_hor_f_code=backHorFCode;
+      tmpPicture.back_vert_f_code=backVertFCode;
     }
 
     sprintf(name,tplorg,f+frame0);
     if(frameReadControl(name, neworg, f + frame0)==false)
         return false;
 
-    if (fieldpic)
+    if (fieldPicFlag)
     {
       if (!quiet)
       {
@@ -202,33 +202,33 @@ bool routineCtrl()
         currentField=1;
       }
 
-      pict_struct = topfirst ? TOP_FIELD : BOTTOM_FIELD;
+      pictStruct = topFirstFlag ? TOP_FIELD : BOTTOM_FIELD;
 
       motionEstimation(oldorgframe[0],neworgframe[0],
                         oldrefframe[0],newrefframe[0],
                         neworg[0],newref[0],
-                        sxf,syf,sxb,syb,mbinfo,0,0);
+                        sxf,syf,sxb,syb,MacroBlockInfo,0,0);
 
-      mainPredictCtrl(oldrefframe,newrefframe,predframe,0,mbinfo);
-      chooseDCT(predframe[0],neworg[0],mbinfo);
-      matrixTransform(predframe,neworg,mbinfo,blocks);
+      mainPredictCtrl(oldrefframe,newrefframe,predframe,0,MacroBlockInfo);
+      chooseDCT(predframe[0],neworg[0],MacroBlockInfo);
+      matrixTransform(predframe,neworg,MacroBlockInfo,blocks);
 
       if(putpict(neworg[0])==false)
           return false;
 
-      for (k=0; k<mb_height2*mb_width; k++)
+      for (k=0; k<mbHeight2*macroBlockWidth; k++)
       {
-        if (mbinfo[k].mb_type & MB_INTRA)
-          for (j=0; j<block_count; j++)
-            innerIQuan(blocks[k*block_count+j],blocks[k*block_count+j],
-                         dc_prec,intra_q,mbinfo[k].mquant);
+        if (MacroBlockInfo[k].blockType & MB_INTRA)
+          for (j=0; j<blockCount; j++)
+            innerIQuan(blocks[k*blockCount+j],blocks[k*blockCount+j],
+                         DCPrec,intra_q,MacroBlockInfo[k].mquant);
         else
-          for (j=0;j<block_count;j++)
-            outerIQuan(blocks[k*block_count+j],blocks[k*block_count+j],
-                             inter_q,mbinfo[k].mquant);
+          for (j=0;j<blockCount;j++)
+            outerIQuan(blocks[k*blockCount+j],blocks[k*blockCount+j],
+                             inter_q,MacroBlockInfo[k].mquant);
       }
 
-      matrixInverseTransform(predframe,newref,mbinfo,blocks);
+      matrixInverseTransform(predframe,newref,MacroBlockInfo,blocks);
       calcRatio(neworg,newref);
       insertStatistics();
 
@@ -239,51 +239,51 @@ bool routineCtrl()
         currentField=2;
       }
 
-      pict_struct = topfirst ? BOTTOM_FIELD : TOP_FIELD;
+      pictStruct = topFirstFlag ? BOTTOM_FIELD : TOP_FIELD;
 
-      ipflag = (pict_type==I_TYPE);
+      ipflag = (pictType==I_TYPE);
       if (ipflag)
       {
         /* first field = I, second field = P */
-        pict_type = P_TYPE;
-        forw_hor_f_code = motion_data[0].forw_hor_f_code;
-        forw_vert_f_code = motion_data[0].forw_vert_f_code;
-        back_hor_f_code = back_vert_f_code = 15;
-        sxf = motion_data[0].sxf;
-        syf = motion_data[0].syf;
+        pictType = P_TYPE;
+        forwHorFCode = motionData[0].forwHorFCode;
+        forwVertFCode = motionData[0].forwVertFCode;
+        backHorFCode = backVertFCode = 15;
+        sxf = motionData[0].sxf;
+        syf = motionData[0].syf;
       }
 
       motionEstimation(oldorgframe[0],neworgframe[0],
                         oldrefframe[0],newrefframe[0],
                         neworg[0],newref[0],
-                        sxf,syf,sxb,syb,mbinfo,1,ipflag);
+                        sxf,syf,sxb,syb,MacroBlockInfo,1,ipflag);
 
-      mainPredictCtrl(oldrefframe,newrefframe,predframe,1,mbinfo);
-      chooseDCT(predframe[0],neworg[0],mbinfo);
-      matrixTransform(predframe,neworg,mbinfo,blocks);
+      mainPredictCtrl(oldrefframe,newrefframe,predframe,1,MacroBlockInfo);
+      chooseDCT(predframe[0],neworg[0],MacroBlockInfo);
+      matrixTransform(predframe,neworg,MacroBlockInfo,blocks);
 
       if(putpict(neworg[0])==false)
           return false;
 
-      for (k=0; k<mb_height2*mb_width; k++)
+      for (k=0; k<mbHeight2*macroBlockWidth; k++)
       {
-        if (mbinfo[k].mb_type & MB_INTRA)
-          for (j=0; j<block_count; j++)
-            innerIQuan(blocks[k*block_count+j],blocks[k*block_count+j],
-                         dc_prec,intra_q,mbinfo[k].mquant);
+        if (MacroBlockInfo[k].blockType & MB_INTRA)
+          for (j=0; j<blockCount; j++)
+            innerIQuan(blocks[k*blockCount+j],blocks[k*blockCount+j],
+                         DCPrec,intra_q,MacroBlockInfo[k].mquant);
         else
-          for (j=0;j<block_count;j++)
-            outerIQuan(blocks[k*block_count+j],blocks[k*block_count+j],
-                             inter_q,mbinfo[k].mquant);
+          for (j=0;j<blockCount;j++)
+            outerIQuan(blocks[k*blockCount+j],blocks[k*blockCount+j],
+                             inter_q,MacroBlockInfo[k].mquant);
       }
 
-      matrixInverseTransform(predframe,newref,mbinfo,blocks);
+      matrixInverseTransform(predframe,newref,MacroBlockInfo,blocks);
       calcRatio(neworg,newref);
       insertStatistics();
     }
     else
     {
-      pict_struct = FRAME_PICTURE;
+      pictStruct = FRAME_PICTURE;
 
       /* do motion_estimation
        *
@@ -294,28 +294,28 @@ bool routineCtrl()
       motionEstimation(oldorgframe[0],neworgframe[0],
                         oldrefframe[0],newrefframe[0],
                         neworg[0],newref[0],
-                        sxf,syf,sxb,syb,mbinfo,0,0);
+                        sxf,syf,sxb,syb,MacroBlockInfo,0,0);
 
-      mainPredictCtrl(oldrefframe,newrefframe,predframe,0,mbinfo);
-      chooseDCT(predframe[0],neworg[0],mbinfo);
-      matrixTransform(predframe,neworg,mbinfo,blocks);
+      mainPredictCtrl(oldrefframe,newrefframe,predframe,0,MacroBlockInfo);
+      chooseDCT(predframe[0],neworg[0],MacroBlockInfo);
+      matrixTransform(predframe,neworg,MacroBlockInfo,blocks);
 
       if(putpict(neworg[0])==false)
           return false;
 
-      for (k=0; k<mb_height*mb_width; k++)
+      for (k=0; k<macroBlockHeight*macroBlockWidth; k++)
       {
-        if (mbinfo[k].mb_type & MB_INTRA)
-          for (j=0; j<block_count; j++)
-            innerIQuan(blocks[k*block_count+j],blocks[k*block_count+j],
-                         dc_prec,intra_q,mbinfo[k].mquant);
+        if (MacroBlockInfo[k].blockType & MB_INTRA)
+          for (j=0; j<blockCount; j++)
+            innerIQuan(blocks[k*blockCount+j],blocks[k*blockCount+j],
+                         DCPrec,intra_q,MacroBlockInfo[k].mquant);
         else
-          for (j=0;j<block_count;j++)
-            outerIQuan(blocks[k*block_count+j],blocks[k*block_count+j],
-                             inter_q,mbinfo[k].mquant);
+          for (j=0;j<blockCount;j++)
+            outerIQuan(blocks[k*blockCount+j],blocks[k*blockCount+j],
+                             inter_q,MacroBlockInfo[k].mquant);
       }
 
-      matrixInverseTransform(predframe,newref,mbinfo,blocks);
+      matrixInverseTransform(predframe,newref,MacroBlockInfo,blocks);
       calcRatio(neworg,newref);
       insertStatistics();
     }
@@ -336,8 +336,8 @@ bool routineCtrl()
 
   //printf("mpeg2 encoded: eclapsed %f us, %d frames, %f fps\n",total_time,nframes,nframes*1000000/total_time);
     globalDATA.totalTime=total_time;
-    globalDATA.nframes=nframes;
-    globalDATA.fps=nframes*1000000/total_time;
+    globalDATA.nframes=framesCount;
+    globalDATA.fps=framesCount*1000000/total_time;
 
   fileEndAdd();
 

@@ -29,7 +29,7 @@ bool innerBlockCodeCtrl(short *blk,int cc)
   for (n=1; n<64; n++)
   {
     /* use appropriate entropy scanning pattern */
-    signed_level = blk[(altscan ? alternate_scan : zig_zag_scan)[n]];
+    signed_level = blk[(altscan ? alternateScanTable : ZZScanTable)[n]];
     if (signed_level!=0)
     {
       if(acGenerateElse(run,signed_level,intravlc)==false)
@@ -60,7 +60,7 @@ bool crossBlockCodeCtrl(short *blk)
   for (n=0; n<64; n++)
   {
     /* use appropriate entropy scanning pattern */
-    signed_level = blk[(altscan ? alternate_scan : zig_zag_scan)[n]];
+    signed_level = blk[(altscan ? alternateScanTable : ZZScanTable)[n]];
 
     if (signed_level!=0)
     {

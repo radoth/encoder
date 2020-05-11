@@ -9,7 +9,7 @@ checkDataThread::checkDataThread()
 
 void checkDataThread::run()
 {    currentFrame=0;
-     frameAll=nframes;
+     frameAll=framesCount;
      currentGroup=1;
      currentField=1;
     putSeqStatus=routineCtrl();

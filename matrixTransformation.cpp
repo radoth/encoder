@@ -38,22 +38,22 @@ static void restorePrediction(unsigned char *pred,unsigned char *cur,int lx,shor
 }
 
 /* subtract prediction and transform prediction error */
-void matrixTransform(unsigned char *pred[],unsigned char *cur[],struct mbinfo *mbi,short blocks[][64])
+void matrixTransform(unsigned char *pred[],unsigned char *cur[],struct MacroBlockInfo *mbi,short blocks[][64])
 {
   int i, j, i1, j1, k, n, cc, offs, lx;
 
   k = 0;
 
-  for (j=0; j<height2; j+=16)
+  for (j=0; j<pictureHeight; j+=16)
     for (i=0; i<width; i+=16)
     {
-      for (n=0; n<block_count; n++)
+      for (n=0; n<blockCount; n++)
       {
         cc = (n<4) ? 0 : (n&1)+1; /* color component index */
         if (cc==0)
         {
           /* luminance */
-          if ((pict_struct==FRAME_PICTURE) && mbi[k].dct_type)
+          if ((pictStruct==FRAME_PICTURE) && mbi[k].DCTType)
           {
             /* field DCT */
             offs = i + ((n&1)<<3) + width*(j+((n&2)>>1));
@@ -62,11 +62,11 @@ void matrixTransform(unsigned char *pred[],unsigned char *cur[],struct mbinfo *m
           else
           {
             /* frame DCT */
-            offs = i + ((n&1)<<3) + width2*(j+((n&2)<<2));
-            lx = width2;
+            offs = i + ((n&1)<<3) + pictureWidth*(j+((n&2)<<2));
+            lx = pictureWidth;
           }
 
-          if (pict_struct==BOTTOM_FIELD)
+          if (pictStruct==BOTTOM_FIELD)
             offs += width;
         }
         else
@@ -74,29 +74,29 @@ void matrixTransform(unsigned char *pred[],unsigned char *cur[],struct mbinfo *m
           /* chrominance */
 
           /* scale coordinates */
-          i1 = (chroma_format==CHROMA444) ? i : i>>1;
-          j1 = (chroma_format!=CHROMA420) ? j : j>>1;
+          i1 = (chromaFormat==CHROMA444) ? i : i>>1;
+          j1 = (chromaFormat!=CHROMA420) ? j : j>>1;
 
-          if ((pict_struct==FRAME_PICTURE) && mbi[k].dct_type
-              && (chroma_format!=CHROMA420))
+          if ((pictStruct==FRAME_PICTURE) && mbi[k].DCTType
+              && (chromaFormat!=CHROMA420))
           {
             /* field DCT */
-            offs = i1 + (n&8) + chrom_width*(j1+((n&2)>>1));
-            lx = chrom_width<<1;
+            offs = i1 + (n&8) + chromWidth*(j1+((n&2)>>1));
+            lx = chromWidth<<1;
           }
           else
           {
             /* frame DCT */
-            offs = i1 + (n&8) + chrom_width2*(j1+((n&2)<<2));
-            lx = chrom_width2;
+            offs = i1 + (n&8) + chromWidth2*(j1+((n&2)<<2));
+            lx = chromWidth2;
           }
 
-          if (pict_struct==BOTTOM_FIELD)
-            offs += chrom_width;
+          if (pictStruct==BOTTOM_FIELD)
+            offs += chromWidth;
         }
 
-        restorePrediction(pred[cc]+offs,cur[cc]+offs,lx,blocks[k*block_count+n]);
-        fDCTCalc(blocks[k*block_count+n]);
+        restorePrediction(pred[cc]+offs,cur[cc]+offs,lx,blocks[k*blockCount+n]);
+        fDCTCalc(blocks[k*blockCount+n]);
       }
 
       k++;
@@ -104,23 +104,23 @@ void matrixTransform(unsigned char *pred[],unsigned char *cur[],struct mbinfo *m
 }
 
 /* inverse transform prediction error and add prediction */
-void matrixInverseTransform(unsigned char *pred[],unsigned char *cur[],struct mbinfo *mbi,short blocks[][64])
+void matrixInverseTransform(unsigned char *pred[],unsigned char *cur[],struct MacroBlockInfo *mbi,short blocks[][64])
 {
   int i, j, i1, j1, k, n, cc, offs, lx;
 
   k = 0;
 
-  for (j=0; j<height2; j+=16)
+  for (j=0; j<pictureHeight; j+=16)
     for (i=0; i<width; i+=16)
     {
-      for (n=0; n<block_count; n++)
+      for (n=0; n<blockCount; n++)
       {
         cc = (n<4) ? 0 : (n&1)+1; /* color component index */
 
         if (cc==0)
         {
           /* luminance */
-          if ((pict_struct==FRAME_PICTURE) && mbi[k].dct_type)
+          if ((pictStruct==FRAME_PICTURE) && mbi[k].DCTType)
           {
             /* field DCT */
             offs = i + ((n&1)<<3) + width*(j+((n&2)>>1));
@@ -129,11 +129,11 @@ void matrixInverseTransform(unsigned char *pred[],unsigned char *cur[],struct mb
           else
           {
             /* frame DCT */
-            offs = i + ((n&1)<<3) + width2*(j+((n&2)<<2));
-            lx = width2;
+            offs = i + ((n&1)<<3) + pictureWidth*(j+((n&2)<<2));
+            lx = pictureWidth;
           }
 
-          if (pict_struct==BOTTOM_FIELD)
+          if (pictStruct==BOTTOM_FIELD)
             offs += width;
         }
         else
@@ -141,29 +141,29 @@ void matrixInverseTransform(unsigned char *pred[],unsigned char *cur[],struct mb
           /* chrominance */
 
           /* scale coordinates */
-          i1 = (chroma_format==CHROMA444) ? i : i>>1;
-          j1 = (chroma_format!=CHROMA420) ? j : j>>1;
+          i1 = (chromaFormat==CHROMA444) ? i : i>>1;
+          j1 = (chromaFormat!=CHROMA420) ? j : j>>1;
 
-          if ((pict_struct==FRAME_PICTURE) && mbi[k].dct_type
-              && (chroma_format!=CHROMA420))
+          if ((pictStruct==FRAME_PICTURE) && mbi[k].DCTType
+              && (chromaFormat!=CHROMA420))
           {
             /* field DCT */
-            offs = i1 + (n&8) + chrom_width*(j1+((n&2)>>1));
-            lx = chrom_width<<1;
+            offs = i1 + (n&8) + chromWidth*(j1+((n&2)>>1));
+            lx = chromWidth<<1;
           }
           else
           {
             /* frame DCT */
-            offs = i1 + (n&8) + chrom_width2*(j1+((n&2)<<2));
-            lx = chrom_width2;
+            offs = i1 + (n&8) + chromWidth2*(j1+((n&2)<<2));
+            lx = chromWidth2;
           }
 
-          if (pict_struct==BOTTOM_FIELD)
-            offs += chrom_width;
+          if (pictStruct==BOTTOM_FIELD)
+            offs += chromWidth;
         }
 
-        idct(blocks[k*block_count+n]);
-        processPrediction(pred[cc]+offs,cur[cc]+offs,lx,blocks[k*block_count+n]);
+        idct(blocks[k*blockCount+n]);
+        processPrediction(pred[cc]+offs,cur[cc]+offs,lx,blocks[k*blockCount+n]);
       }
 
       k++;
@@ -176,7 +176,7 @@ void matrixInverseTransform(unsigned char *pred[],unsigned char *cur[],struct mb
  *
  * preliminary version: based on inter-field correlation
  */
-void chooseDCT(unsigned char *pred,unsigned char *cur,struct mbinfo *mbi)
+void chooseDCT(unsigned char *pred,unsigned char *cur,struct MacroBlockInfo *mbi)
 {
   short blk0[128], blk1[128];
   int i, j, i0, j0, k, offs, s0, s1, sq0, sq1, s01;
@@ -184,11 +184,11 @@ void chooseDCT(unsigned char *pred,unsigned char *cur,struct mbinfo *mbi)
 
   k = 0;
 
-  for (j0=0; j0<height2; j0+=16)
+  for (j0=0; j0<pictureHeight; j0+=16)
     for (i0=0; i0<width; i0+=16)
     {
-      if (frame_pred_dct || pict_struct!=FRAME_PICTURE)
-        mbi[k].dct_type = 0;
+      if (framePredDct || pictStruct!=FRAME_PICTURE)
+        mbi[k].DCTType = 0;
       else
       {
         /* interlaced frame picture */
@@ -224,12 +224,12 @@ void chooseDCT(unsigned char *pred,unsigned char *cur,struct mbinfo *mbi)
         {
           r = (s01-(s0*s1)/128.0)/sqrt(d);
           if (r>0.5)
-            mbi[k].dct_type = 0; /* frame DCT */
+            mbi[k].DCTType = 0; /* frame DCT */
           else
-            mbi[k].dct_type = 1; /* field DCT */
+            mbi[k].DCTType = 1; /* field DCT */
         }
         else
-          mbi[k].dct_type = 1; /* field DCT */
+          mbi[k].DCTType = 1; /* field DCT */
       }
       k++;
     }
