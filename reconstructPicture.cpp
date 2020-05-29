@@ -21,7 +21,6 @@ bool reconstructPicture(char *fname,unsigned char *frame[])
   if (fname[0]=='-')
     return true;
 
-   /* Y */
    sprintf(name,"%s.Y",fname);
    if (!(fd = fopen(name,"wb")))
    {
@@ -31,7 +30,6 @@ bool reconstructPicture(char *fname,unsigned char *frame[])
    fwrite(frame[0],1,horiSize*vertiSize,fd);
    fclose(fd);
  
-   /* Cb */
    sprintf(name,"%s.U",fname);
    if (!(fd = fopen(name,"wb")))
    {
@@ -41,7 +39,6 @@ bool reconstructPicture(char *fname,unsigned char *frame[])
    fwrite(frame[1],1,chrom_hsize*chrom_vsize,fd);
    fclose(fd);
  
-   /* Cr */
    sprintf(name,"%s.V",fname);
    if (!(fd = fopen(name,"wb")))
    {
