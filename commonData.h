@@ -217,7 +217,7 @@ bool routineCtrl (void);
 bool dcYGenerate (int val);
 bool dcUVGenerate (int val);
 bool acGenerateBegin (int run, int val);
-bool acGenerateElse (int run, int signed_level, int vlcformat);
+bool acGenerateElse (int runCode, int checkLevel, int vlcformat);
 void addressCodeGenerate (int addrinc);
 void macroTypeCodeGene (int pictType, int mb_type);
 void motionCodeGenerate (int motion_code);

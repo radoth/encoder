@@ -1,109 +1,105 @@
 /* 变长编码程序*/
 
-
-
 #include <cstdio>
 #include "timeSettings.h"
 #include "commonData.h"
 #include "presetTables.h"
 
 //为DC系数产生可变长的编码
-static bool dcGenerate(sVLCtable *tab,int val)
+static bool dcGenerate(currentVLCt *tab,int inputValue)
 {
-  int absval, size;
+  int absoluteValue = (inputValue<0) ? -inputValue : inputValue; /* 生成绝对值 */
 
-  absval = (val<0) ? -val : val; /* 生成绝对值 */
-
-  if (absval>2047 || (mpeg1Flag && absval>255))     //遇到不合法的直流系数，报错
+  if (absoluteValue>2047 || (mpeg1Flag && absoluteValue>255))     //遇到不合法的直流系数，报错
   {
-    sprintf(errortext,"DC value out of range (%d)\n",val);
+    sprintf(errortext,"DC value out of range (%d)\n",inputValue);
     {error(errortext);return false;}
   }
 
   /* 计算dct_dc_size */
-  size = 0;
+  int dctDCSize = 0;
 
-  while (absval)
+  while (absoluteValue)
   {
-    absval >>= 1;
-    size++;
+    absoluteValue >>= 1;
+    dctDCSize++;
   }
 
   /*根据表B-12 或B-13为dct_dc_size 产生VLC */
-  writeData(tab[size].code,tab[size].len);
+  writeData(tab[dctDCSize].code,tab[dctDCSize].len);
 
   /* 附加固定长度的代码 (dc_dct_differential) */
-  if (size!=0)
+  if (dctDCSize!=0)
   {
-    if (val>=0)
-      absval = val;
+    if (inputValue>=0)
+      absoluteValue = inputValue;
     else
-      absval = val + (1<<size) - 1; /* val + (2 ^ size) - 1 */
-    writeData(absval,size);
+      absoluteValue = inputValue + (1<<dctDCSize) - 1; /* val + (2 ^ size) - 1 */
+    writeData(absoluteValue,dctDCSize);
   }
   return true;
 }
 
 /* 为亮度DC系数产生可变长编码 */
-bool dcYGenerate(int val)
+bool dcYGenerate(int inputValue)
 {
-  return dcGenerate(DClumtab,val);
+  return dcGenerate(DClumtab,inputValue);
 }
 
 /* 为色度DC系数产生可变长编码 */
-bool dcUVGenerate(int val)
+bool dcUVGenerate(int inputValue)
 {
-  return dcGenerate(DCchromtab,val);
+  return dcGenerate(DCchromtab,inputValue);
 }
 
 
 
 /*为非帧内方式的块的第一个AC系数进行VLC编码*/
-bool acGenerateBegin(int run,int val)
+bool acGenerateBegin(int runCode,int currentValue)
 {
-  if (run==0 && (val==1 || val==-1)) /* 对这两个条件下的值要区别对待*/
-    writeData(2|(val<0),2);
+  if (runCode==0 && (currentValue==1 || currentValue==-1)) /* 对这两个条件下的值要区别对待*/
+    writeData(2|(currentValue<0),2);
   else
-    if(acGenerateElse(run,val,0)==false)
+    if(acGenerateElse(runCode,currentValue,0)==false)
         return false;
   return true;
 }
 
 /*对其他的DCT系数进行编码。*/
-bool acGenerateElse(int run,int signed_level,int vlcformat)
+bool acGenerateElse(int runCode,int checkLevel,int VLCFlag)
 {
   int level, len;
   VLCtable *ptab = NULL;
 
-  level = (signed_level<0) ? -signed_level : signed_level; /* 对 signed_level 取绝对值 */
+  level = (checkLevel<0) ? -checkLevel : checkLevel; /* 对 signed_level 取绝对值 */
 
   /* 要保证游程和级别（level）有效 */
-  if (run<0 || run>63 || level==0 || level>2047 || (mpeg1Flag && level>255))     //在越界时报错
+  if (runCode<0 || runCode>63 || level==0 || level>2047 || (mpeg1Flag && level>255))     //在越界时报错
   {
     sprintf(errortext,"AC value out of range (run=%d, signed_level=%d)\n",
-      run,signed_level);
+      runCode,checkLevel);
     {error(errortext);return false;}
   }
 
   len = 0;     //初始化长度为0
 
-  if (run<2 && level<41)     //两种可以查表的情况
+  if (runCode<2 && level<41)     //两种可以查表的情况
   {
     /* 根据vlcformat 选择采用表B-14 还是 B-15 */
-	  if (vlcformat)
-      ptab = &dctCodeTab1a[run][level-1];
+      if (VLCFlag)
+      ptab = &dctCodeTab1a[runCode][level-1];
     else
-      ptab = &dctCodeTab1[run][level-1];
+      ptab = &dctCodeTab1[runCode][level-1];
 
     len = ptab->len;
   }
-  else if (run<32 && level<6)
+  else if (runCode<32 && level<6)
   {
     /* 根据vlcformat 选择采用表B-14 还是 B-15 */
-	  if (vlcformat)
-      ptab = &dctCodeTab2a[run-2][level-1];
+      if (VLCFlag)
+      ptab = &dctCodeTab2a[runCode-2][level-1];
     else
-      ptab = &dctCodeTab2[run-2][level-1];
+      ptab = &dctCodeTab2[runCode-2][level-1];
 
     len = ptab->len;
   }
@@ -111,26 +107,26 @@ bool acGenerateElse(int run,int signed_level,int vlcformat)
   if (len!=0) /* 说明存在一个VLC 编码 */
   {
     writeData(ptab->code,len);
-    writeData(signed_level<0,1); /* 设标识 */
+    writeData(checkLevel<0,1); /* 设标识 */
   }
   else
   {
         /* 说明对这个中间格式 (run, level) 没有VLC编码:：使用escape编码 */
     writeData(1l,6); /* Escape */
-    writeData(run,6); /* 用6 bit 表示游程（run ）*/
+    writeData(runCode,6); /* 用6 bit 表示游程（run ）*/
     if (mpeg1Flag)
     {
       /* ISO/IEC 11172-2 规定使用 8 或 16 bit 的代码 */
-		if (signed_level>127)
+        if (checkLevel>127)
         writeData(0,8);
-      if (signed_level<-127)
+      if (checkLevel<-127)
         writeData(128,8);
-      writeData(signed_level,8);
+      writeData(checkLevel,8);
     }
     else
     {
       /* ISO/IEC 13818-2 规定使用12 bit 代码根据表B-16 */
-        writeData(signed_level,12);
+        writeData(checkLevel,12);
     }
   }
   return true;
