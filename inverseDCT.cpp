@@ -1,20 +1,18 @@
 /* 反向快速离散余弦变换*/
 
 #include "timeSettings.h"
-void initIdct (void);
-void idct (short *block);
 static short clipTable[1024];
 static short *clipPointer;
-static void rowIDCT(short *blk)
+static void rowIDCT(short *current)
 {
   int x0, x1, x2, x3, x4, x5, x6, x7, x8;
-  if (!((x1 = blk[4]<<11) | (x2 = blk[6]) | (x3 = blk[2]) |
-        (x4 = blk[1]) | (x5 = blk[7]) | (x6 = blk[5]) | (x7 = blk[3])))
+  if (!((x1 = current[4]<<11) | (x2 = current[6]) | (x3 = current[2]) |
+        (x4 = current[1]) | (x5 = current[7]) | (x6 = current[5]) | (x7 = current[3])))
   {
-    blk[0]=blk[1]=blk[2]=blk[3]=blk[4]=blk[5]=blk[6]=blk[7]=blk[0]<<3;
+    current[0]=current[1]=current[2]=current[3]=current[4]=current[5]=current[6]=current[7]=current[0]<<3;
     return;
   }
-  x0 = (blk[0]<<11) + 128;
+  x0 = (current[0]<<11) + 128;
   x8 = 565*(x4+x5);
   x4 = x8 + (2841-565)*x4;
   x5 = x8 - (2841+565)*x5;
@@ -36,14 +34,14 @@ static void rowIDCT(short *blk)
   x0 -= x2;
   x2 = (181*(x4+x5)+128)>>8;
   x4 = (181*(x4-x5)+128)>>8;
-  blk[0] = (x7+x1)>>8;
-  blk[1] = (x3+x2)>>8;
-  blk[2] = (x0+x4)>>8;
-  blk[3] = (x8+x6)>>8;
-  blk[4] = (x8-x6)>>8;
-  blk[5] = (x0-x4)>>8;
-  blk[6] = (x3-x2)>>8;
-  blk[7] = (x7-x1)>>8;
+  current[0] = (x7+x1)>>8;
+  current[1] = (x3+x2)>>8;
+  current[2] = (x0+x4)>>8;
+  current[3] = (x8+x6)>>8;
+  current[4] = (x8-x6)>>8;
+  current[5] = (x0-x4)>>8;
+  current[6] = (x3-x2)>>8;
+  current[7] = (x7-x1)>>8;
 }
 
 static void idctcol(short *blk)

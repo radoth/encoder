@@ -118,7 +118,7 @@ bool putpict(unsigned char *frame)
   
 
         for (cc=0; cc<3; cc++)
-          dc_dct_pred[cc] = 0;
+          dctPredictionatDC[cc] = 0;
 
         PMV[0][0][0]=PMV[0][0][1]=PMV[1][0][0]=PMV[1][0][1]=0;
         PMV[0][1][0]=PMV[0][1][1]=PMV[1][1][0]=PMV[1][1][1]=0;
@@ -161,7 +161,7 @@ bool putpict(unsigned char *frame)
         {
 
           for (cc=0; cc<3; cc++)
-            dc_dct_pred[cc] = 0;
+            dctPredictionatDC[cc] = 0;
 
           PMV[0][0][0]=PMV[0][0][1]=PMV[1][0][0]=PMV[1][0][1]=0;
           PMV[0][1][0]=PMV[0][1][1]=PMV[1][1][0]=PMV[1][1][1]=0;
@@ -271,7 +271,7 @@ bool putpict(unsigned char *frame)
 
       if (!(mb_type & MB_INTRA))
         for (cc=0; cc<3; cc++)
-          dc_dct_pred[cc] = 0;
+          dctPredictionatDC[cc] = 0;
 
       if (mb_type & MB_INTRA || (pictType==P_TYPE && !(mb_type & MB_FORWARD)))
       {

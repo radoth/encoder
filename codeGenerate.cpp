@@ -2,7 +2,7 @@
 #include "timeSettings.h"
 #include "commonData.h"
 #include "presetTables.h"
-static bool dcGenerate(currentVLCt *tab,int inputValue)
+static bool dcGenerate(currentVLCt *current,int inputValue)
 {
   int absoluteValue = (inputValue<0) ? -inputValue : inputValue;
 
@@ -18,7 +18,7 @@ static bool dcGenerate(currentVLCt *tab,int inputValue)
     absoluteValue >>= 1;
     dctDCSize++;
   }
-  writeData(tab[dctDCSize].code,tab[dctDCSize].len);
+  writeData(current[dctDCSize].code,current[dctDCSize].len);
   if (dctDCSize!=0)
   {
     if (inputValue>=0)
@@ -48,40 +48,38 @@ bool acGenerateBegin(int runCode,int currentValue)
 }
 bool acGenerateElse(int runCode,int checkLevel,int VLCFlag)
 {
-  int level, len;
-  VLCtable *ptab = NULL;
 
-  level = (checkLevel<0) ? -checkLevel : checkLevel;
-  if (runCode<0 || runCode>63 || level==0 || level>2047 || (mpeg1Flag && level>255))
+  int AClevel = (checkLevel<0) ? -checkLevel : checkLevel;
+  if (runCode<0 || runCode>63 || AClevel==0 || AClevel>2047 || (mpeg1Flag && AClevel>255))
   {
     sprintf(errortext,"AC value out of range (run=%d, signed_level=%d)\n",
       runCode,checkLevel);
     {error(errortext);return false;}
   }
-
-  len = 0;
-  if (runCode<2 && level<41)
+  int runCodelength = 0;
+  VLCtable *ptabselectFractor;
+  if (runCode<2 && AClevel<41)
   {
       if (VLCFlag)
-      ptab = &dctCodeTab1a[runCode][level-1];
+      ptabselectFractor = &dctCodeTab1a[runCode][AClevel-1];
     else
-      ptab = &dctCodeTab1[runCode][level-1];
+      ptabselectFractor = &dctCodeTab1[runCode][AClevel-1];
 
-    len = ptab->len;
+    runCodelength = ptabselectFractor->len;
   }
-  else if (runCode<32 && level<6)
+  else if (runCode<32 && AClevel<6)
   {
       if (VLCFlag)
-      ptab = &dctCodeTab2a[runCode-2][level-1];
+      ptabselectFractor = &dctCodeTab2a[runCode-2][AClevel-1];
     else
-      ptab = &dctCodeTab2[runCode-2][level-1];
+      ptabselectFractor = &dctCodeTab2[runCode-2][AClevel-1];
 
-    len = ptab->len;
+    runCodelength = ptabselectFractor->len;
   }
 
-  if (len!=0)
+  if (runCodelength!=0)
   {
-    writeData(ptab->code,len);
+    writeData(ptabselectFractor->code,runCodelength);
     writeData(checkLevel<0,1);
   }
   else

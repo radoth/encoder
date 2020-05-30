@@ -9,7 +9,7 @@ typedef struct
 {
   unsigned short code;
   char len;
-} sVLCtable;
+} currentVLCt;
 
 
 
@@ -81,14 +81,14 @@ static VLCtable motionvectab[17]=
   {0x0c,10}
 };
 
-static sVLCtable DClumtab[12]=
+static currentVLCt DClumtab[12]=
 {
   {0x0004,3}, {0x0000,2}, {0x0001,2}, {0x0005,3}, {0x0006,3}, {0x000e,4},
   {0x001e,5}, {0x003e,6}, {0x007e,7}, {0x00fe,8}, {0x01fe,9}, {0x01ff,9}
 };
 
 
-static sVLCtable DCchromtab[12]=
+static currentVLCt DCchromtab[12]=
 {
   {0x0000,2}, {0x0001,2}, {0x0002,2}, {0x0006,3}, {0x000e,4}, {0x001e,5},
   {0x003e,6}, {0x007e,7}, {0x00fe,8}, {0x01fe,9}, {0x03fe,10},{0x03ff,10}

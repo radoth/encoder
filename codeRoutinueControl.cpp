@@ -4,123 +4,102 @@
 #include <cstdio>
 #include "commonData.h"
 
-/* generate variable length codes for an intra-coded block (6.2.6, 6.3.17) */
-bool innerBlockCodeCtrl(short *blk,int cc)
+
+bool innerBlockCodeCtrl(short *current,int count)
 {
-  int n, dct_diff, run, signed_level;
-
-  /* DC coefficient (7.2.1) */
-  dct_diff = blk[0] - dc_dct_pred[cc]; /* difference to previous block */
-  dc_dct_pred[cc] = blk[0];
-
-  if (cc==0)
+  int altORZScan;
+  int fracNumber = current[0] - dctPredictionatDC[count];
+  dctPredictionatDC[count] = current[0];
+  if (!count)
     {
-      if(dcYGenerate(dct_diff)==false)
+      if(!dcYGenerate(fracNumber))
         return false;
   }
   else
     {
-        if(dcUVGenerate(dct_diff)==false)
+        if(!dcUVGenerate(fracNumber))
         return false;
     }
-
-  /* AC coefficients (7.2.2) */
-  run = 0;
-  for (n=1; n<64; n++)
+  int runCodeLength = 0;
+  for (int n=1; n<64; n++)
   {
-    /* use appropriate entropy scanning pattern */
-    signed_level = blk[(altscan ? alternateScanTable : ZZScanTable)[n]];
-    if (signed_level!=0)
+    altORZScan = current[(altscan ? alternateScanTable : ZZScanTable)[n]];
+    if (altORZScan!=0)
     {
-      if(acGenerateElse(run,signed_level,intravlc)==false)
+      if(acGenerateElse(runCodeLength,altORZScan,intravlc)==false)
           return false;
-      run = 0;
+      runCodeLength = 0;
     }
     else
-      run++; /* count zero coefficients */
+      runCodeLength++;
   }
-
-  /* End of Block -- normative block punctuation */
   if (intravlc)
-    writeData(6,4); /* 0110 (Table B-15) */
+    writeData(6,4);
   else
-    writeData(2,2); /* 10 (Table B-14) */
-
+    writeData(2,2);
   return true;
 }
 
-/* generate variable length codes for a non-intra-coded block (6.2.6, 6.3.17) */
-bool crossBlockCodeCtrl(short *blk)
+bool crossBlockCodeCtrl(short *current)
 {
-  int n, run, signed_level, first;
+  int altORScan;
+  int runCodeLength = 0;
+  int firststartPoint = 1;
 
-  run = 0;
-  first = 1;
-
-  for (n=0; n<64; n++)
+  for (int n=0; n<64; n++)
   {
-    /* use appropriate entropy scanning pattern */
-    signed_level = blk[(altscan ? alternateScanTable : ZZScanTable)[n]];
+    altORScan = current[(altscan ? alternateScanTable : ZZScanTable)[n]];
 
-    if (signed_level!=0)
+    if (altORScan!=0)
     {
-      if (first)
+      if (firststartPoint)
       {
-        /* first coefficient in non-intra block */
-        if(acGenerateBegin(run,signed_level)==false)
+        if(acGenerateBegin(runCodeLength,altORScan)==false)
             return false;
-        first = 0;
+        firststartPoint = 0;
       }
       else
-        if(acGenerateElse(run,signed_level,0)==false)
+        if(acGenerateElse(runCodeLength,altORScan,0)==false)
             return false;
 
-      run = 0;
+      runCodeLength = 0;
     }
     else
-      run++; /* count zero coefficients */
+      runCodeLength++;
   }
 
-  /* End of Block -- normative block punctuation  */
   writeData(2,2);
 
   return true;
 }
 
-/* generate variable length code for a motion vector component (7.6.3.1) */
 void motionVectorCodeCtrl(int dmv,int f_code)
 {
   int r_size, f, vmin, vmax, dv, temp, motion_code, motion_residual;
 
-  r_size = f_code - 1; /* number of fixed length code ('residual') bits */
+  r_size = f_code - 1;
   f = 1<<r_size;
-  vmin = -16*f; /* lower range limit */
-  vmax = 16*f - 1; /* upper range limit */
+  vmin = -16*f;
+  vmax = 16*f - 1;
   dv = 32*f;
-
-  /* fold vector difference into [vmin...vmax] */
   if (dmv>vmax)
     dmv-= dv;
   else if (dmv<vmin)
     dmv+= dv;
-
-  /* check value */
   if (dmv<vmin || dmv>vmax)
     if (!quiet)
       {
-        //fprintf(stderr,"invalid motion vector\n");
         warningTextGlobal.append("运动类型无效");
     }
 
-  /* split dmv into motion_code and motion_residual */
   temp = ((dmv<0) ? -dmv : dmv) + f - 1;
   motion_code = temp>>r_size;
   if (dmv<0)
     motion_code = -motion_code;
   motion_residual = temp & (f-1);
 
-  motionCodeGenerate(motion_code); /* variable length code */
+  motionCodeGenerate(motion_code);
 
   if (r_size!=0 && motion_code!=0)
-    writeData(motion_residual,r_size); /* fixed length code */
+    writeData(motion_residual,r_size);
 }
