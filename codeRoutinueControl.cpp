@@ -42,10 +42,10 @@ bool innerBlockCodeCtrl(short *current,int count)
 
 bool crossBlockCodeCtrl(short *current)
 {
-  int altORScan;
+
   int runCodeLength = 0;
   int firststartPoint = 1;
-
+  int altORScan;
   for (int n=0; n<64; n++)
   {
     altORScan = current[(altscan ? alternateScanTable : ZZScanTable)[n]];

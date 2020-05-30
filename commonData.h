@@ -75,7 +75,7 @@ EXTERN unsigned char *predframe[3];
 EXTERN short (*blocks)[64];
 EXTERN unsigned char intra_q[64], inter_q[64];
 EXTERN unsigned char chrom_intra_q[64],chrom_inter_q[64];
-EXTERN int dc_dct_pred[3];
+EXTERN int dctPredictionatDC[3];
 EXTERN struct MacroBlockInfo *MacroBlockInfo;
 EXTERN struct motionData *motionData;
 EXTERN unsigned char *clp;
